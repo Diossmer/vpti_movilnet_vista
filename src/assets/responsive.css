@@ -1,0 +1,5 @@
+@media (320px <= width <= 768px ) {
+    .wrapper{
+        grid-template-columns: 1fr;
+    }
+}
