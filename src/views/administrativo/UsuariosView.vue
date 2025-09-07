@@ -3,11 +3,16 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { dataTable } from '@/components/utils/dataTableUtils';
 import { Modal } from 'bootstrap/dist/js/bootstrap.min';
 import UsuariosServicios from '@/components/services/administrativo/UsuariosServicios';
-import { validacionesUtils } from '@/components/utils/validacionesUtils';
-import AlertComponents from '@/components/AlertComponents.vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router'
+import AgregarModalUsuarios from '@/components/modales/administrativo/usuariosModal/AgregarModalUsuarios.vue';
+import EditarModalUsuarios from '@/components/modales/administrativo/usuariosModal/EditarModalUsuarios.vue';
+import MostrarModalUsuarios from '@/components/modales/administrativo/usuariosModal/MostrarModalUsuarios.vue';
+import ImportarModalUsuarios from '@/components/modales/administrativo/usuariosModal/ImportarModalUsuarios.vue';
+import PdfModalUsuarios from '@/components/modales/administrativo/usuariosModal/PdfModalUsuarios.vue';
+
+//variables
 const router = useRouter();
 const { columns, sortTable } = dataTable();
 const rowData = ref([]);
@@ -23,15 +28,14 @@ const selectedRows = ref([]);
 const selectedRowsAll = ref([]);
 const paramsA = ref({})
 const paramsE = ref({})
-const passwordVisible = ref(false);
-const passwordshow = ref(false);
 const avisos = ref(null);
-const avisosAlert = ref(null);
 const isLoadingImport = ref(false);
 const modalAgregar = ref(null);
 const modalEditar = ref(null);
 const store = useLoginStore()
 const { dataPerfil } = storeToRefs(store);
+
+//Filtro de busqueda
 const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
     if (globalSearchQuery.value) {
@@ -62,6 +66,8 @@ const filteredAndPaginatedData = computed(() => {
 watch([globalSearchQuery, searchQueries, currentPage, rowsPerPage], () => {
   totalOfPage.value = Math.ceil(filteredData.value?.length / rowsPerPage.value);
 });
+
+//Acciones
 const handleData = async (action, data = null) => {
   try {
     let response;
@@ -79,6 +85,8 @@ const handleData = async (action, data = null) => {
       paramsE.value = await UsuariosServicios('fetch', data);
     }
     avisos.value=response
+
+    //Tiempo de modal
     let timeoutId
     if(response?.error){
       avisos.value = response?.error;
@@ -96,6 +104,7 @@ const handleData = async (action, data = null) => {
         modalInstance.hide();
       }, 1000);
     }
+
   } catch (error) {
     console.error('Error al manejar los datos:', error);
   } finally {
@@ -115,6 +124,8 @@ const handleData = async (action, data = null) => {
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };
+
+//Paginacion
 const visiblePages = computed(() => {
   const total = Math.ceil(filteredData.value?.length / rowsPerPage.value) || Math.ceil(rowData.value?.length / rowsPerPage.value);
   const current = currentPage.value;
@@ -134,134 +145,8 @@ const visiblePages = computed(() => {
 
   return [1, 2, '...', current - 1, current, current + 1, '...', total - 1, total];
 });
-watch([
-  () => paramsA.value?.nombre,
-  () => paramsA.value?.apellido,
-  () => paramsA.value?.cedula,
-  () => paramsA.value?.usuario,
-  () => paramsA.value?.correo,
-  () => paramsA.value?.password,
-  () => paramsA.value?.ciudad,
-  () => paramsA.value?.estado,
-  () => paramsA.value?.telefono_casa,
-  () => paramsA.value?.telefono_celular,
-  () => paramsA.value?.telefono_alternativo,
-  () => paramsA.value?.codigo_postal,
-  () => paramsA.value?.direccion,
-],
-  ([
-  nombre, apellido, cedula,
-  usuario, correo, password,
-  ciudad, estado, telefono_casa,
-  telefono_celular, telefono_alternativo, codigo_postal,
-  direccion,
-  ]) => {
-  const errors = [];
-  const nombreError = validacionesUtils().textValid(nombre);
-  if (nombreError) errors.push(nombreError);
-  const apellidoError = validacionesUtils().textValid(apellido);
-  if (apellidoError) errors.push(apellidoError);
-  const usuarioError = validacionesUtils().usuariosValid(usuario);
-  if (usuarioError) errors.push(usuarioError);
-  const cedulaError = validacionesUtils().cedulaValid(cedula);
-  if (cedulaError) errors.push(cedulaError);
-  const correoError = validacionesUtils().emailValid(correo);
-  if (correoError) errors.push(correoError);
-  const passwordError = validacionesUtils().passwordValid(password);
-  if (passwordError) errors.push(passwordError);
-  const ciudadError = validacionesUtils().textValid(ciudad);
-  if (ciudadError) errors.push(ciudadError);
-  const estadoError = validacionesUtils().textValid(estado);
-  if (estadoError) errors.push(estadoError);
-  const telefono_casaError = validacionesUtils().phoneLocalValid(telefono_casa);
-  if (telefono_casaError) errors.push(telefono_casaError);
-  const telefono_celularError = validacionesUtils().phoneValid(telefono_celular);
-  if (telefono_celularError) errors.push(telefono_celularError);
-  const telefono_alternativoError = validacionesUtils().phoneAlternativeValid(telefono_alternativo);
-  if (telefono_alternativoError) errors.push(telefono_alternativoError);
-  const codigo_postalError = validacionesUtils().numberValid(codigo_postal);
-  if (codigo_postalError) errors.push(codigo_postalError);
-  const direccionError = validacionesUtils().textareaValid(direccion);
-  if (direccionError) errors.push(direccionError);
-  avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((nombre==='' || nombre===undefined)
-  && (apellido==='' || apellido===undefined)
-  && (usuario==='' || usuario===undefined)
-  && (cedula==='' || cedula===undefined)
-  && (correo==='' || correo===undefined)
-  && (ciudad==='' || ciudad===undefined)
-  && (estado==='' || estado===undefined)
-  && (telefono_celular==='' || telefono_celular===undefined)
-  && (telefono_alternativo==='' || telefono_alternativo===undefined)
-  && (codigo_postal==='' || codigo_postal===undefined)
-  && (direccion==='' || direccion===undefined)
-  && (telefono_casa==='' || telefono_casa===undefined))
-  avisosAlert.value="";
-});
-watch([
-  () => paramsE.value?.nombre,
-  () => paramsE.value?.apellido,
-  () => paramsE.value?.cedula,
-  () => paramsE.value?.usuario,
-  () => paramsE.value?.correo,
-  () => paramsE.value?.password,
-  () => paramsE.value?.ciudad,
-  () => paramsE.value?.estado,
-  () => paramsE.value?.telefono_casa,
-  () => paramsE.value?.telefono_celular,
-  () => paramsE.value?.telefono_alternativo,
-  () => paramsE.value?.codigo_postal,
-  () => paramsE.value?.direccion,
-],
-  ([
-  nombre, apellido, cedula,
-  usuario, correo, password,
-  ciudad, estado, telefono_casa,
-  telefono_celular, telefono_alternativo, codigo_postal,
-  direccion,
-  ]) => {
-  const errors = [];
-  const nombreError = validacionesUtils().textValid(nombre);
-  if (nombreError) errors.push(nombreError);
-  const apellidoError = validacionesUtils().textValid(apellido);
-  if (apellidoError) errors.push(apellidoError);
-  const usuarioError = validacionesUtils().usuariosValid(usuario);
-  if (usuarioError) errors.push(usuarioError);
-  const cedulaError = validacionesUtils().cedulaValid(cedula);
-  if (cedulaError) errors.push(cedulaError);
-  const correoError = validacionesUtils().emailValid(correo);
-  if (correoError) errors.push(correoError);
-  const passwordError = validacionesUtils().passwordValid(password);
-  if (passwordError) errors.push(passwordError);
-  const ciudadError = validacionesUtils().textValid(ciudad);
-  if (ciudadError) errors.push(ciudadError);
-  const estadoError = validacionesUtils().textValid(estado);
-  if (estadoError) errors.push(estadoError);
-  const telefono_casaError = validacionesUtils().phoneLocalValid(telefono_casa);
-  if (telefono_casaError) errors.push(telefono_casaError);
-  const telefono_celularError = validacionesUtils().phoneValid(telefono_celular);
-  if (telefono_celularError) errors.push(telefono_celularError);
-  const telefono_alternativoError = validacionesUtils().phoneAlternativeValid(telefono_alternativo);
-  if (telefono_alternativoError) errors.push(telefono_alternativoError);
-  const codigo_postalError = validacionesUtils().numberValid(codigo_postal);
-  if (codigo_postalError) errors.push(codigo_postalError);
-  const direccionError = validacionesUtils().textareaValid(direccion);
-  if (direccionError) errors.push(direccionError);
-  avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((nombre==='' || nombre===undefined)
-  && (apellido==='' || apellido===undefined)
-  && (usuario==='' || usuario===undefined)
-  && (cedula==='' || cedula===undefined)
-  && (correo==='' || correo===undefined)
-  && (ciudad==='' || ciudad===undefined)
-  && (estado==='' || estado===undefined)
-  && (telefono_celular==='' || telefono_celular===undefined)
-  && (telefono_alternativo==='' || telefono_alternativo===undefined)
-  && (codigo_postal==='' || codigo_postal===undefined)
-  && (direccion==='' || direccion===undefined)
-  && (telefono_casa==='' || telefono_casa===undefined))
-  avisosAlert.value="";
-});
+
+//Archivos
 const fileData = async (fileEvent,format,nameFile) => {
   switch (format) {
     case 'pdf':
@@ -291,6 +176,8 @@ const fileData = async (fileEvent,format,nameFile) => {
       console.error('Formato no soportado');
   }
 };
+
+//Eliminacion data total
 const manejadorEliminar=async(type)=>{
   try {
     if (type === 'individual' && selectedRows.value?.length > 0) {
@@ -315,6 +202,8 @@ const manejadorEliminar=async(type)=>{
     console.error('Error en eliminación:', error);
   }
 }
+
+//eliminicacion de fila individual
 const filaIndividual=(row)=>{
   const index = selectedRows.value.findIndex(r => r.id === row.id);
   index === -1 ? selectedRows.value.push(row) : selectedRows.value.splice(index, 1);
@@ -322,6 +211,8 @@ const filaIndividual=(row)=>{
 const handleMasivoDelete=async(e)=>{
   selectedRowsAll.value = e.target.checked ? [...rowData.value] : [];
 }
+
+//retroceder de pagina
 const goBack = () => {router.go(-1)}
 onMounted(async()=>{await handleData()})
 </script>
@@ -332,8 +223,7 @@ onMounted(async()=>{await handleData()})
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
-        <h5 class="text-dark fs-6 badge"><i class="bi bi-people"></i> Usuarios</h5>
-        <hr class="border-2 border-red-m opacity-75">
+        
         <div class="w-100 d-flex justify-content-end" v-if="dataPerfil.rol.id !== 2">
           <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticAgregar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px; height: 20px;">
@@ -470,387 +360,17 @@ onMounted(async()=>{await handleData()})
           </div>
       </div>
     </div>
-    <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="handleData('create')">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">roles<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.rol_id" required>
-                        <option v-for="(rol, index) in relations[1]" :key="index" :value="rol.id">{{ rol.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">nombre<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.nombre)}" v-model="paramsA.nombre" placeholder="Nombre" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Apellido<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsA.apellido && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.apellido),'is-valid':paramsA.apellido && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.apellido)}" v-model="paramsA.apellido" placeholder="Apellido" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Cedula<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="10" pattern="^[a-zA-Z]?(-?)\d{7,10}$" class="form-control" :class="{'is-invalid':paramsA.cedula && !/^[a-zA-Z]?(-?)\d{7,10}$/.test(paramsA.cedula),'is-valid':paramsA.cedula && /^[a-zA-Z]?(-?)\d{7,10}$/.test(paramsA.cedula)}" v-model="paramsA.cedula" placeholder="Cedula" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Usuario<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="15" pattern="^[a-zA-Z0-9]{4,}$" class="form-control" :class="{'is-invalid':paramsA.usuario && !/^[a-zA-Z0-9]{4,}$/.test(paramsA.usuario),'is-valid':paramsA.usuario && /^[a-zA-Z0-9]{4,}$/.test(paramsA.usuario)}" v-model="paramsA.usuario" placeholder="Usuario" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Correo<span class="text-danger">*</span></label>
-                      <input type="email" maxlength="35" pattern="^\S+@\S+\.\S+$" class="form-control" :class="{'is-invalid':paramsA.correo && !/^\S+@\S+\.\S+$/.test(paramsA.correo),'is-valid':paramsA.correo && /^\S+@\S+\.\S+$/.test(paramsA.correo)}" v-model="paramsA.correo" placeholder="Correo" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <div class="row">
-                        <div class="col-12">
-                          <label for="" class="badge text-secondary">Contraseña<span class="text-danger">*</span></label>
-                        </div>
-                        <div class="col-8 m-0 ms-3 p-0">
-                          <input :type="passwordVisible?'text':'password'" maxlength="20" pattern="^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$" class="form-control" :class="{'is-invalid':paramsA.password && !/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(paramsA.password),'is-valid':paramsA.password && /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(paramsA.password)}" v-model="paramsA.password" placeholder="Contraseña" required autocomplete="on"/>
-                        </div>
-                        <div class="col-3 m-0 p-0">
-                          <button type="button" @click="passwordVisible = !passwordVisible" class="icono btn btn-outline-secondary">
-                            <span  v-if="passwordVisible">👁️</span>
-                            <span v-else>👁️‍🗨️</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Ciudad</label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsA.ciudad && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.ciudad),'is-valid':paramsA.ciudad && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.ciudad)}" v-model="paramsA.ciudad" placeholder="Ciudad capital" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Estado</label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsA.estado && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.estado),'is-valid':paramsA.estado && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.estado)}" v-model="paramsA.estado" placeholder="Estado geográfico" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Telefono de casa</label>
-                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?212)-?\d{7}$" class="form-control" :class="{'is-invalid': paramsA.telefono_casa && !/^(0?212)-?\d{7}$/.test(paramsA.telefono_casa),'is-valid': paramsA.telefono_casa && /^(0?212)-?\d{7}$/.test(paramsA.telefono_casa)}" v-model="paramsA.telefono_casa" placeholder="Telefono de casa" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Telefono de celular<span class="text-danger">*</span></label>
-                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?41[246]|0?42[46])-?\d{7}$" class="form-control" :class="{'is-invalid': paramsA.telefono_celular && !/^(0?41[246]|0?42[46])-?\d{7}$/.test(paramsA.telefono_celular),'is-valid': paramsA.telefono_celular && /^(0?41[246]|0?42[46])-?\d{7}$/.test(paramsA.telefono_celular)}" v-model="paramsA.telefono_celular" placeholder="Telefono de celular" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Telefono de alternativo</label>
-                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?41[246]|0?42[46]|0?212)-?\d{7}$" class="form-control" :class="{'is-invalid': paramsA.telefono_alternativo && !/^(0?41[246]|0?42[46]|0?212)-?\d{7}$/.test(paramsA.telefono_alternativo),'is-valid': paramsA.telefono_alternativo && /^(0?41[246]|0?42[46]|0?212)-?\d{7}$/.test(paramsA.telefono_alternativo)}" v-model="paramsA.telefono_alternativo" placeholder="Telefono de alternativo" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Codigo postal</label>
-                      <input type="text" inputmode="numeric" maxlength="4" pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsA.codigo_postal && !/^\d+(^\.\d+)?$/.test(paramsA.codigo_postal),'is-valid': paramsA.codigo_postal && /^\d+(^\.\d+)?$/.test(paramsA.codigo_postal)}" v-model="paramsA.codigo_postal" placeholder="Codigo postal" autocomplete="on"/>
-                    </div>
-                    <div class="col-12">
-                      <label for="" class="badge text-secondary">Dirección</label>
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsA.direccion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.direccion), 'is-valid':paramsA.direccion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.direccion) }" placeholder="Dirección" v-model="paramsA.direccion" autocomplete="on"></textarea>
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="paramsA = {}, avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
-                    <span v-if="!isLoadingImport">Agregar</span>
-                    <span v-else>
-                    <span class="spinner-border spinner-border-sm" role="status"></span>
-                      Procesando...
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalEditar" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="handleData('update', paramsE.id)">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">estatus actual<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">roles actual<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.rol?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.rol_id" required>
-                        <option v-for="(rol, index) in relations[1]" :key="index" :value="rol.id">{{ rol.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">nombre<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsE.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.nombre),'is-valid':paramsE.nombre && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.nombre)}" v-model="paramsE.nombre" placeholder="Nombre" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Apellido<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsE.apellido && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.apellido),'is-valid':paramsE.apellido && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.apellido)}" v-model="paramsE.apellido" placeholder="Apellido" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Cedula<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="10" pattern="^[a-zA-Z]?(-?)\d{7,10}$" class="form-control" :class="{'is-invalid':paramsE.cedula && !/^[a-zA-Z]?(-?)\d{7,10}$/.test(paramsE.cedula),'is-valid':paramsE.cedula && /^[a-zA-Z]?(-?)\d{7,10}$/.test(paramsE.cedula)}" v-model="paramsE.cedula" placeholder="Cedula" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Usuario<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="15" pattern="^[a-zA-Z0-9]{4,}$" class="form-control" :class="{'is-invalid':paramsE.usuario && !/^[a-zA-Z0-9]{4,}$/.test(paramsE.usuario),'is-valid':paramsE.usuario && /^[a-zA-Z0-9]{4,}$/.test(paramsE.usuario)}" v-model="paramsE.usuario" placeholder="Usuario" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Correo<span class="text-danger">*</span></label>
-                      <input type="email" maxlength="35" pattern="^\S+@\S+\.\S+$" class="form-control" :class="{'is-invalid':paramsE.correo && !/^\S+@\S+\.\S+$/.test(paramsE.correo),'is-valid':paramsE.correo && /^\S+@\S+\.\S+$/.test(paramsE.correo)}" v-model="paramsE.correo" placeholder="Correo" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <div class="row">
-                        <div class="col-12">
-                          <label for="" class="badge text-secondary">Contraseña<span class="text-danger">*</span></label>
-                        </div>
-                        <div class="col-8 m-0 ms-3 p-0">
-                          <input :type="passwordshow?'text':'password'" maxlength="20" pattern="^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$" class="form-control" :class="{'is-invalid':paramsE.password && !/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(paramsE.password),'is-valid':paramsE.password && /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(paramsE.password)}" v-model="paramsE.password" placeholder="Contraseña" required autocomplete="on"/>
-                        </div>
-                        <div class="col-3 m-0 p-0">
-                          <button type="button" @click="passwordshow = !passwordshow" class="icono btn btn-outline-secondary">
-                            <span  v-if="passwordshow">👁️</span>
-                            <span v-else>👁️‍🗨️</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Ciudad</label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsE.ciudad && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.ciudad),'is-valid':paramsE.ciudad && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.ciudad)}" v-model="paramsE.ciudad" placeholder="Ciudad capital" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Estado</label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsE.estado && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.estado),'is-valid':paramsE.estado && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsE.estado)}" v-model="paramsE.estado" placeholder="Estado geográfico" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Telefono de casa</label>
-                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?212)-?\d{7}$" class="form-control" :class="{'is-invalid': paramsE.telefono_casa && !/^(0?212)-?\d{7}$/.test(paramsE.telefono_casa),'is-valid': paramsE.telefono_casa && /^(0?212)-?\d{7}$/.test(paramsE.telefono_casa)}" v-model="paramsE.telefono_casa" placeholder="Telefono de casa" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Telefono de celular<span class="text-danger">*</span></label>
-                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?41[246]|0?42[46])-?\d{7}$" class="form-control" :class="{'is-invalid': paramsE.telefono_celular && !/^(0?41[246]|0?42[46])-?\d{7}$/.test(paramsE.telefono_celular),'is-valid': paramsE.telefono_celular && /^(0?41[246]|0?42[46])-?\d{7}$/.test(paramsE.telefono_celular)}" v-model="paramsE.telefono_celular" placeholder="Telefono de celular" required autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Telefono de alternativo</label>
-                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?41[246]|0?42[46]|0?212)-?\d{7}$" class="form-control" :class="{'is-invalid': paramsE.telefono_alternativo && !/^(0?41[246]|0?42[46]|0?212)-?\d{7}$/.test(paramsE.telefono_alternativo),'is-valid': paramsE.telefono_alternativo && /^(0?41[246]|0?42[46]|0?212)-?\d{7}$/.test(paramsE.telefono_alternativo)}" v-model="paramsE.telefono_alternativo" placeholder="Telefono de alternativo" autocomplete="on"/>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Codigo postal</label>
-                      <input type="text" inputmode="numeric" maxlength="4" pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsE.codigo_postal && !/^\d+(^\.\d+)?$/.test(paramsE.codigo_postal),'is-valid': paramsE.codigo_postal && /^\d+(^\.\d+)?$/.test(paramsE.codigo_postal)}" v-model="paramsE.codigo_postal" placeholder="Codigo postal" autocomplete="on"/>
-                    </div>
-                    <div class="col-12">
-                      <label for="" class="badge text-secondary">Dirección</label>
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.direccion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.direccion), 'is-valid':paramsE.direccion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.direccion) }" placeholder="Dirección" v-model="paramsE.direccion" autocomplete="on"></textarea>
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="paramsE = {}, avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
-                    <span v-if="!isLoadingImport">Actualizar</span>
-                      <span v-else>
-                      <span class="spinner-border spinner-border-sm" role="status"></span>
-                        Procesando...
-                      </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Usuario</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-6">
-                <p><b>nombre: </b>{{ paramsE.nombre }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>apellido: </b>{{ paramsE.apellido }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>cedula: </b>{{ paramsE.cedula }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>correo: </b>{{ paramsE.correo }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>usuario: </b>{{ paramsE.usuario }}</p>
-              </div>
-              <hr class="border-2 border-success opacity-75">
-              <div class="col-6">
-                <p><b>telefono_casa: </b>{{ paramsE.telefono_casa }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>telefono_celular: </b>{{ paramsE.telefono_celular }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>telefono_alternativo: </b>{{ paramsE.telefono_alternativo }}</p>
-              </div>
-              <hr class="border-2 border-success opacity-75">
-              <div class="col-6">
-                <p><b>ciudad: </b>{{ paramsE.ciudad }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>estado: </b>{{ paramsE.estado }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>codigo_postal: </b>{{ paramsE.codigo_postal }}</p>
-              </div>
-              <div class="col-12">
-                <p><b>direccion: </b>{{ paramsE.direccion }}</p>
-              </div>
-            </div>
-            <hr class="border-4 border-primary opacity-75">
-            <div class="row">
-              <div class="col-4">
-                <p><b class="text-red fw-bolder">estatus: </b>{{ paramsE.estatus?.nombre }}</p>
-              </div>
-              <div class="col-4">
-                <p><b class="text-red fw-bolder">rol: </b>{{ paramsE.rol?.nombre }}</p>
-              </div>
-              <div class="col-4">
-                <p><b class="text-red fw-bolder">productos: </b>{{ paramsE.productos?.length }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="paramsE = {}, avisos = null, avisosAlert =''">Regresar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticImportar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Importar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="(e)=>fileData(e,'import')">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="border-3 border">
-                        <input class="form-control form-control-sm" type="file" name="file" id="formFileMultiple" multiple>
-                      </div>
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport"><span v-if="!isLoadingImport">Aceptar</span>
-                    <span v-else>
-                      <span class="spinner-border spinner-border-sm" role="status"></span>
-                      Procesando...
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticPDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">PDF</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12">
-                <div class="row" v-if="paramsE.id">
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">pedidos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','pedidos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">nota de entrega</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','notaEntrega')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                </div>
-                <div class="row" v-else>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">modelos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','modelos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">formatos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','formatos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="paramsE = {}, avisos = null, avisosAlert =''">Regresar</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <AgregarModalUsuarios :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" />
+
+    <EditarModalUsuarios :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" />
+
+    <MostrarModalUsuarios :paramsE="paramsE" />
+
+    <ImportarModalUsuarios :isLoadingImport="isLoadingImport" :fileData="fileData" />
+
+    <PdfModalUsuarios :fileData="fileData" :paramsE="paramsE" />
+
 </template>
 <style scoped>
 .selected {

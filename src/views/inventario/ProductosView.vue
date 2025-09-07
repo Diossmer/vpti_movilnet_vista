@@ -8,6 +8,13 @@ import AlertComponents from '@/components/AlertComponents.vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router'
+import EditarModalProductos from '@/components/modales/inventario/productos/EditarModalProductos.vue';
+import AgregarModalProductos from '@/components/modales/inventario/productos/AgregarModalProductos.vue';
+import MostrarModalProductos from '@/components/modales/inventario/productos/MostrarModalProductos.vue';
+import ImportarModalProductos from '@/components/modales/inventario/productos/ImportarModalProductos.vue';
+import PdfModalProductos from '@/components/modales/inventario/productos/PdfModalProductos.vue';
+
+//variables
 const router = useRouter();
 const { columns, sortTable } = dataTable();
 const rowData = ref([]);
@@ -30,8 +37,8 @@ const modalAgregar = ref(null);
 const modalEditar = ref(null);
 const store = useLoginStore()
 const { dataPerfil } = storeToRefs(store);
-console.log(dataPerfil.value);
 
+//Filtro de busqueda
 const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
     if (globalSearchQuery.value) {
@@ -62,6 +69,8 @@ const filteredAndPaginatedData = computed(() => {
 watch([globalSearchQuery, searchQueries, currentPage, rowsPerPage], () => {
   totalOfPage.value = Math.ceil(filteredData.value.length / rowsPerPage.value);
 });
+
+//Acciones
 const handleData = async (action, data = null) => {
   try {
     let response;
@@ -79,6 +88,8 @@ const handleData = async (action, data = null) => {
       paramsE.value = await ProductosServicios('fetch', data);
     }
     avisos.value=response
+
+    //Tiempo de modal
     let timeoutId
     if(response?.error){
       avisos.value = response?.error;
@@ -107,6 +118,8 @@ const handleData = async (action, data = null) => {
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };
+
+//Paginacion
 const visiblePages = computed(() => {
   const total = Math.max(Math.ceil(filteredData.value.length / rowsPerPage.value) || Math.ceil(rowData.value.length / rowsPerPage.value));
   const current = currentPage.value;
@@ -125,20 +138,8 @@ const visiblePages = computed(() => {
 
   return [1, 2, '...', current - 1, current, current + 1, '...', total - 1, total];
 });
-watch([() => paramsA.value?.nombre], ([nombre]) => {
-  const errors = [];
-  const nombreError = validacionesUtils().nombreValid(nombre);
-  if (nombreError) errors.push(nombreError);
-  avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((nombre==='' || nombre===undefined))avisosAlert.value="";
-});
-watch([() => paramsE.value?.nombre], ([nombre]) => {
-  const errors = [];
-  const nombreError = validacionesUtils().nombreValid(nombre);
-  if (nombreError) errors.push(nombreError);
-  avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((nombre==='' || nombre===undefined))avisosAlert.value="";
-});
+
+//Archivos
 const fileData = async (fileEvent,format,nameFile) => {
   switch (format) {
     case 'pdf':
@@ -168,6 +169,8 @@ const fileData = async (fileEvent,format,nameFile) => {
       console.error('Formato no soportado');
   }
 };
+
+//Eliminacion data total
 const manejadorEliminar=async(type)=>{
   try {
     if (type === 'individual' && selectedRows.value?.length > 0) {
@@ -192,6 +195,8 @@ const manejadorEliminar=async(type)=>{
     console.error('Error en eliminación:', error);
   }
 }
+
+//eliminicacion de fila individual
 const filaIndividual=(row)=>{
   const index = selectedRows.value.findIndex(r => r.id === row.id);
   index === -1 ? selectedRows.value.push(row) : selectedRows.value.splice(index, 1);
@@ -199,6 +204,8 @@ const filaIndividual=(row)=>{
 const handleMasivoDelete=async(e)=>{
   selectedRowsAll.value = e.target.checked ? [...rowData.value] : [];
 }
+
+//retroceder de pagina
 const goBack = () => {router.go(-1)}
 onMounted(async()=>{await handleData()})
 </script>
@@ -343,240 +350,17 @@ onMounted(async()=>{await handleData()})
           </div>
       </div>
     </div>
-    <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="handleData('create')">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.usuario_id" required>
-                        <option v-for="(usuario, index) in relations[0]" :key="index" :value="usuario.id">{{ usuario.usuario }}</option>
-                      </select>
-                    </div>
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[1]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">producto<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\d]+$" class="form-control" :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre)}" v-model="paramsA.nombre" placeholder="Nombre" required />
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="paramsA = {}, avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
-                    <span v-if="!isLoadingImport">Agregar</span>
-                    <span v-else>
-                    <span class="spinner-border spinner-border-sm" role="status"></span>
-                      Procesando...
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalEditar" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="handleData('update', paramsE.id)">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.usuario?.usuario }}</span>
-                      <select class="form-select" v-model="paramsE.usuario_id" required>
-                        <option v-for="(usuario, index) in relations[0]" :key="index" :value="usuario.id">{{ usuario.usuario }}</option>
-                      </select>
-                    </div>
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[1]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">producto<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\d]+$" class="form-control" :class="{'is-invalid':paramsE.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsE.nombre),'is-valid':paramsE.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsE.nombre)}" v-model="paramsE.nombre" placeholder="Nombre" required />
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="paramsE = {}, avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
-                    <span v-if="!isLoadingImport">Actualizar</span>
-                      <span v-else>
-                      <span class="spinner-border spinner-border-sm" role="status"></span>
-                        Procesando...
-                      </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Productos</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-6">
-                <p><b>nombre: </b>{{ paramsE.nombre }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>nombre & apellido: </b>{{ paramsE.usuario?.nombre}} {{ paramsE.usuario?.apellido}}</p>
-              </div>
-              <div class="col-6">
-                <p><b>estatus: </b>{{ paramsE?.estatus?.nombre }}</p>
-              </div>
-              <hr class="border-4 border-primary opacity-75">
-              
-              <div class="col-6">
-                <p><b>evaluaciones: </b>{{ paramsE.evaluaciones?.length }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>descripciones: </b>{{ paramsE.descripciones?.length }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>inventarios: </b>{{ paramsE.inventarios?.length }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>perifericos: </b>{{ paramsE.perifericos?.length }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="paramsE = {}, avisos = null, avisosAlert =''">Regresar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticImportar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Importar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="(e)=>fileData(e,'import')">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="border-3 border">
-                        <input class="form-control form-control-sm" type="file" name="file" id="formFileMultiple" multiple>
-                      </div>
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport"><span v-if="!isLoadingImport">Aceptar</span>
-                    <span v-else>
-                      <span class="spinner-border spinner-border-sm" role="status"></span>
-                      Procesando...
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticPDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">PDF</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12">
-                <div class="row" v-if="paramsE.id">
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">pedidos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','pedidos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">nota de entrega</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','notaEntrega')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                </div>
-                <div class="row" v-else>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">modelos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','modelos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">formatos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','formatos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="paramsE = {}, avisos = null, avisosAlert =''">Regresar</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <AgregarModalProductos :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" />
+
+    <EditarModalProductos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" />
+
+    <MostrarModalProductos :paramsE="paramsE" :relations="relations" />
+
+    <ImportarModalProductos :isLoadingImport="isLoadingImport" @fileData="fileData" />
+    
+    <PdfModalProductos :fileData="fileData" :paramsE="paramsE" />
+
 </template>
 <style scoped>
 .selected {

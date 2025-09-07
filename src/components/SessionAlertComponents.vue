@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
-import { storeToRefs } from '../../node_modules/pinia/dist/pinia';
+import { storeToRefs } from 'pinia';
 
 const store = useLoginStore();
 const { tiempoRestante, showExtensionDialog } = storeToRefs(store);
