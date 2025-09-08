@@ -3,8 +3,6 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { dataTable } from '@/components/utils/dataTableUtils';
 import { Modal } from 'bootstrap/dist/js/bootstrap.min';
 import ProductosServicios from '@/components/services/inventario/ProductosServicios';
-import { validacionesUtils } from '@/components/utils/validacionesUtils';
-import AlertComponents from '@/components/AlertComponents.vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router'
@@ -31,7 +29,6 @@ const selectedRowsAll = ref([]);
 const paramsA = ref({})
 const paramsE = ref({})
 const avisos = ref(null);
-const avisosAlert = ref(null);
 const isLoadingImport = ref(false);
 const modalAgregar = ref(null);
 const modalEditar = ref(null);
@@ -216,8 +213,6 @@ onMounted(async()=>{await handleData()})
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
-        <h5 class="text-dark fs-6 badge"><i class="bi bi-journal-check"></i> Productos</h5>
-        <hr class="border-2 border-red-m opacity-75">
         <div class="w-100 d-flex justify-content-end" v-if="dataPerfil.rol.id !== 2">
           <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticAgregar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px; height: 20px;">

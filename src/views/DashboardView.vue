@@ -5,14 +5,8 @@ import { useLoginStore } from '@/stores/autenticacion'
 import { storeToRefs } from 'pinia'
 
 // Servicios
-import EstatusServicios from '@/components/services/administrativo/EstatusServicios';
-import RolesServicios from '@/components/services/administrativo/RolesServicios';
-import UsuariosServicios from '@/components/services/administrativo/UsuariosServicios';
 import DescripcionServicios from '@/components/services/inventario/DescripcionServicios';
 import ProductosServicios from '@/components/services/inventario/ProductosServicios';
-import EvaluacionesServicios from '@/components/services/inventario/EvaluacionesServicios';
-import InventariosServicios from '@/components/services/inventario/InventariosServicios';
-import PerifericosServicios from '@/components/services/inventario/PerifericosServicios';
 import UbicacionServicios from '@/components/services/inventario/UbicacionServicios';
 import AsignacionServicios from '@/components/services/inventario/AsignacionServicios';
 

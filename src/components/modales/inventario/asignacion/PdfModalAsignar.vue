@@ -48,7 +48,7 @@ defineProps({
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Regresar</button>
+            <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="avisos = null, avisosAlert = null">Regresar</button>
           </div>
         </div>
       </div>

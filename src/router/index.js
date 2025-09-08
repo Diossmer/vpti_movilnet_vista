@@ -85,26 +85,26 @@ const router = createRouter({
         {
           path: '',
           name: 'configuracion.estatus',
-          component: () => import('@/components/config/administrativo/EstatusConfig.vue'),
+          component: () => import('@/components/config/EstatusConfig.vue'),
           meta: { requiresAuth: true },
         },
         {
           path: '/roles',
           name: 'configuracion.roles',
-          component: () => import('@/components/config/administrativo/RolesConfig.vue'),
+          component: () => import('@/components/config/RolesConfig.vue'),
           meta: { requiresAuth: true },
         },
         //Inventario
         {
-          path: '/inventarios',
-          name: 'configuracion.inventarios',
-          component: () => import('@/components/config/inventario/InventariosServicios.vue'),
+          path: '/Sin Periféricos',
+          name: 'configuracion.Sin Perifericos',
+          component: () => import('@/views/inventario/InventariosView.vue'),
           meta: { requiresAuth: true },
         },
         {
-          path: '/perifericos',
+          path: '/Periféricos',
           name: 'configuracion.perifericos',
-          component: () => import('@/components/config/inventario/PerifericosServicios.vue'),
+          component: () => import('@/views/inventario/PerifericosView.vue'),
           meta: { requiresAuth: true },
         },
       ],

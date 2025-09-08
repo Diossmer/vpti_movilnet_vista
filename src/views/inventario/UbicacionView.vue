@@ -3,14 +3,17 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { dataTable } from '@/components/utils/dataTableUtils';
 import { Modal } from 'bootstrap/dist/js/bootstrap.min';
 import UbicacionServicios from '@/components/services/inventario/UbicacionServicios';
-import { validacionesUtils } from '@/components/utils/validacionesUtils';
-import AlertComponents from '@/components/AlertComponents.vue';
 import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
+import AgregarModalUbicacion from '@/components/modales/inventario/ubicacion/AgregarModalUbicacion.vue';
+import EditarModalUbicacion from '@/components/modales/inventario/ubicacion/EditarModalUbicacion.vue';
+import MostrarModalUbicacion from '@/components/modales/inventario/ubicacion/MostrarModalUbicacion.vue';
+import ImportarModalUbicacion from '@/components/modales/inventario/ubicacion/ImportarModalUbicacion.vue';
+import PdfModalUbicacion from '@/components/modales/inventario/ubicacion/PdfModalUbicacion.vue';
+
 const store = useLoginStore()
-const { isAuthenticated, dataPerfil } = storeToRefs(store)
-console.log(dataPerfil.value);
+const { dataPerfil } = storeToRefs(store)
 
 const router = useRouter();
 const { columns, sortTable } = dataTable();
@@ -28,7 +31,6 @@ const selectedRowsAll = ref([]);
 const paramsA = ref({})
 const paramsE = ref({})
 const avisos = ref(null);
-const avisosAlert = ref(null);
 const isLoadingImport = ref(false);
 const modalAgregar = ref(null);
 const modalEditar = ref(null);
@@ -121,68 +123,6 @@ const visiblePages = computed(() => {
 
   return [1, 2, '...', current - 1, current, current + 1, '...', total - 1, total];
 });
-watch([
-  () => paramsA.value?.origen,
-  () => paramsA.value?.destino,
-  () => paramsA.value?.piso,
-  () => paramsA.value?.region,
-  () => paramsA.value?.estado,
-  () => paramsA.value?.capital,
-], ([origen, destino, piso, region, estado, capital]) => {
-  const errors = [];
-  const origenError = validacionesUtils().textValid(origen);
-  if (origenError) errors.push(origenError);
-  const destinoError = validacionesUtils().textValid(destino);
-  if (destinoError) errors.push(destinoError);
-  const pisoError = validacionesUtils().pisoValid(piso);
-  if (pisoError) errors.push(pisoError);
-  const regionError = validacionesUtils().textValid(region);
-  if (regionError) errors.push(regionError);
-  const estadoError = validacionesUtils().textValid(estado);
-  if (estadoError) errors.push(estadoError);
-  const capitalError = validacionesUtils().textValid(capital);
-  if (capitalError) errors.push(capitalError);
-
-  avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((origen==='' || origen===undefined)
-  && (destino === '' || destino===undefined)
-  && (piso === '' || piso===undefined)
-  && (region === '' || region===undefined)
-  && (estado === '' || estado===undefined)
-  && (capital === '' || capital===undefined)
-)avisosAlert.value="";
-});
-watch([
-  () => paramsE.value?.origen,
-  () => paramsE.value?.destino,
-  () => paramsE.value?.piso,
-  () => paramsE.value?.region,
-  () => paramsE.value?.estado,
-  () => paramsE.value?.capital,
-], ([origen, destino, piso, region, estado, capital]) => {
-  const errors = [];
-  const origenError = validacionesUtils().textValid(origen);
-  if (origenError) errors.push(origenError);
-  const destinoError = validacionesUtils().textValid(destino);
-  if (destinoError) errors.push(destinoError);
-  const pisoError = validacionesUtils().pisoValid(piso);
-  if (pisoError) errors.push(pisoError);
-  const regionError = validacionesUtils().textValid(region);
-  if (regionError) errors.push(regionError);
-  const estadoError = validacionesUtils().textValid(estado);
-  if (estadoError) errors.push(estadoError);
-  const capitalError = validacionesUtils().textValid(capital);
-  if (capitalError) errors.push(capitalError);
-
-  avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((origen==='' || origen===undefined)
-  && (destino === '' || destino===undefined)
-  && (piso === '' || piso===undefined)
-  && (region === '' || region===undefined)
-  && (estado === '' || estado===undefined)
-  && (capital === '' || capital===undefined)
-)avisosAlert.value="";
-});
 const fileData = async (fileEvent,format,nameFile) => {
   switch (format) {
     case 'pdf':
@@ -253,8 +193,6 @@ onMounted(async()=>{await handleData()})
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
-        <h5 class="text-dark fs-6 badge"><i class="bi bi-geo-fill"></i> Ubicación</h5>
-        <hr class="border-2 border-red-m opacity-75">
         <div class="w-100 d-flex justify-content-end" v-if="dataPerfil.rol.id !== 2">
           <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticAgregar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px; height: 20px;">
@@ -389,269 +327,17 @@ onMounted(async()=>{await handleData()})
         </div>
       </div>
     </div>
-    <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="handleData('create')">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">descripcion del producto<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.descripcion_id" required>
-                        <option v-for="(descripcion, index) in relations" :key="index" :value="descripcion.id">Modelo:{{ descripcion.modelo }} | Codigo: {{ descripcion.codigo }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">origen<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.origen && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.origen),'is-valid':paramsA.origen && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.origen)}" v-model="paramsA.origen" placeholder="Origen" required />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">destino<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.destino),'is-valid':paramsA.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.destino)}" v-model="paramsA.destino" placeholder="Destino" required />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">piso</label>
-                      <input type="text" inputmode="numeric" maxlength="2" pattern="^(PB|pb|\d+|S[0-9]|s[0-9])$" class="form-control" :class="{'is-invalid':paramsA.piso && !/^(PB|pb|\d+|S[0-9]|s[0-9])$/.test(paramsA.piso),'is-valid':paramsA.piso && /^(PB|pb|\d+|S[0-9]|s[0-9])$/.test(paramsA.piso)}" v-model="paramsA.piso" placeholder="Piso" />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Región</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.region && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.region),'is-valid':paramsA.region && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.region)}" v-model="paramsA.region" placeholder="Region"  />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Estado</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.estado && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.estado),'is-valid':paramsA.estado && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.estado)}" v-model="paramsA.estado" placeholder="Estado"  />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">capítal</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.capital && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.capital),'is-valid':paramsA.capital && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.capital)}" v-model="paramsA.capital" placeholder="Capital"  />
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="paramsA = {}, avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
-                    <span v-if="!isLoadingImport">Agregar</span>
-                    <span v-else>
-                    <span class="spinner-border spinner-border-sm" role="status"></span>
-                      Procesando...
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalEditar" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="handleData('update', paramsE.id)">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.producto_id" required>
-                        <option v-for="(producto, index) in relations" :key="index" :value="producto.id">{{ producto.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">origen<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.origen && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.origen),'is-valid':paramsE.origen && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.origen)}" v-model="paramsE.origen" placeholder="Origen" required />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">destino<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino),'is-valid':paramsE.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino)}" v-model="paramsE.destino" placeholder="Destino" required />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">piso</label>
-                      <input type="text" inputmode="numeric" maxlength="2" pattern="^(PB|pb|\d+|S[0-9]|s[0-9])$" class="form-control" :class="{'is-invalid':paramsE.piso && !/^(PB|pb|\d+|S[0-9]|s[0-9])$/.test(paramsE.piso),'is-valid':paramsE.piso && /^(PB|pb|\d+|S[0-9]|s[0-9])$/.test(paramsE.piso)}" v-model="paramsE.piso" placeholder="Piso" />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Región</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.region && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.region),'is-valid':paramsE.region && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.region)}" v-model="paramsE.region" placeholder="region"  />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">Estado</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.estado && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.estado),'is-valid':paramsE.estado && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.estado)}" v-model="paramsE.estado" placeholder="estado"  />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">capítal</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.capital && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.capital),'is-valid':paramsE.capital && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.capital)}" v-model="paramsE.capital" placeholder="capital"  />
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="paramsE = {}, avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
-                    <span v-if="!isLoadingImport">Actualizar</span>
-                      <span v-else>
-                      <span class="spinner-border spinner-border-sm" role="status"></span>
-                        Procesando...
-                      </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Ubicación</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-6">
-                <p><b>origen: </b>{{ paramsE?.origen }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>destino: </b>{{ paramsE?.destino }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>piso: </b>{{ paramsE?.piso }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>region: </b>{{ paramsE?.region }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>estado: </b>{{ paramsE?.estado }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>capital: </b>{{ paramsE?.capital }}</p>
-              </div>
-              <hr class="border-2 border-success opacity-75">
-              <div class="col-6">
-                <p><b>producto: </b>{{ paramsE.producto?.nombre }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>asignaciones: </b>{{ paramsE.asignaciones?.length }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="paramsE = {}, avisos = null, avisosAlert =''">Regresar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticImportar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Importar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert =''"></button>
-          </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="(e)=>fileData(e,'import')">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="border-3 border">
-                        <input class="form-control form-control-sm" type="file" name="file" id="formFileMultiple" multiple>
-                      </div>
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="avisos = null, avisosAlert =''">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport"><span v-if="!isLoadingImport">Aceptar</span>
-                    <span v-else>
-                      <span class="spinner-border spinner-border-sm" role="status"></span>
-                      Procesando...
-                    </span>
-                  </button>
-                </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
-              </div>
-            </template>
-          </Suspense>
-        </div>
-      </div>
-    </div>
-    <div class="modal fade" id="staticPDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">PDF</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="paramsE = {}, avisos = null, avisosAlert =''"></button>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-12">
-                <div class="row" v-if="paramsE.id">
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">pedidos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','pedidos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">nota de entrega</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','notaEntrega')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                </div>
-                <div class="row" v-else>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">modelos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','modelos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                  <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">formatos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','formatos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="paramsE = {}, avisos = null, avisosAlert =''">Regresar</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    
+    <AgregarModalUbicacion :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" />
+
+    <EditarModalUbicacion :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" />
+
+    <MostrarModalUbicacion :paramsE="paramsE" :relations="relations" />
+
+    <ImportarModalUbicacion :isLoadingImport="isLoadingImport" @fileData="fileData" />
+    
+    <PdfModalUbicacion :fileData="fileData" :paramsE="paramsE" />
+    
 </template>
 
 <style scoped>

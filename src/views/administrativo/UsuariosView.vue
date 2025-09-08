@@ -6,11 +6,11 @@ import UsuariosServicios from '@/components/services/administrativo/UsuariosServ
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router'
-import AgregarModalUsuarios from '@/components/modales/administrativo/usuariosModal/AgregarModalUsuarios.vue';
-import EditarModalUsuarios from '@/components/modales/administrativo/usuariosModal/EditarModalUsuarios.vue';
-import MostrarModalUsuarios from '@/components/modales/administrativo/usuariosModal/MostrarModalUsuarios.vue';
-import ImportarModalUsuarios from '@/components/modales/administrativo/usuariosModal/ImportarModalUsuarios.vue';
-import PdfModalUsuarios from '@/components/modales/administrativo/usuariosModal/PdfModalUsuarios.vue';
+import AgregarModalUsuarios from '@/components/modales/administrativo/usuarios/AgregarModalUsuarios.vue';
+import EditarModalUsuarios from '@/components/modales/administrativo/usuarios/EditarModalUsuarios.vue';
+import MostrarModalUsuarios from '@/components/modales/administrativo/usuarios/MostrarModalUsuarios.vue';
+import ImportarModalUsuarios from '@/components/modales/administrativo/usuarios/ImportarModalUsuarios.vue';
+import PdfModalUsuarios from '@/components/modales/administrativo/usuarios/PdfModalUsuarios.vue';
 
 //variables
 const router = useRouter();
@@ -112,7 +112,6 @@ const handleData = async (action, data = null) => {
     const {mostrarT,estatus,roles} = await UsuariosServicios('fetchAll');
     col.value = columns(mostrarT);
     relations.value=[estatus,roles]
-    console.log(dataPerfil.value);
     rowData.value = mostrarT.filter(row => {
       if(dataPerfil.value.rol?.id !== 1 && dataPerfil.value.rol?.id !== 3)
       return row.rol?.id === dataPerfil.value.rol?.id
@@ -223,7 +222,6 @@ onMounted(async()=>{await handleData()})
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
-        
         <div class="w-100 d-flex justify-content-end" v-if="dataPerfil.rol.id !== 2">
           <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticAgregar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px; height: 20px;">

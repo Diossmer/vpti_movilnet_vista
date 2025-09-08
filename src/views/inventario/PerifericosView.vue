@@ -2,16 +2,15 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { dataTable } from '@/components/utils/dataTableUtils';
 import { Modal } from 'bootstrap/dist/js/bootstrap.min';
-import DescripcionServicios from '@/components/services/inventario/DescripcionServicios';
+import PerifericosServicios from '@/components/services/inventario/PerifericosServicios';
 import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
-import AgregarModalDescripcion from '@/components/modales/inventario/descripcion/AgregarModalDescripcion.vue';
-import EditarModalDescripcion from '@/components/modales/inventario/descripcion/EditarModalDescripcion.vue';
-import MostrarModalDescripcion from '@/components/modales/inventario/descripcion/MostrarModalDescripcion.vue';
-import ImportarModalDescripcion from '@/components/modales/inventario/descripcion/ImportarModalDescripcion.vue';
-import PdfModalDescripcion from '@/components/modales/inventario/descripcion/PdfModalDescripcion.vue';
-
+import AgregarModalPerifericos from '@/components/modales/inventario/perifericos/AgregarModalPerifericos.vue';
+import EditarModalPerifericos from '@/components/modales/inventario/perifericos/EditarModalPerifericos.vue';
+import MostrarModalPerifericos from '@/components/modales/inventario/perifericos/MostrarModalPerifericos.vue';
+import ImportarModalPerifericos from '@/components/modales/inventario/perifericos/ImportarModalPerifericos.vue';
+import PdfModalPerifericos from '@/components/modales/inventario/perifericos/PdfModalPerifericos.vue';
 const store = useLoginStore()
 const { dataPerfil } = storeToRefs(store)
 
@@ -31,6 +30,7 @@ const selectedRowsAll = ref([]);
 const paramsA = ref({})
 const paramsE = ref({})
 const avisos = ref(null);
+const avisosAlert = ref(null);
 const isLoadingImport = ref(false);
 const modalAgregar = ref(null);
 const modalEditar = ref(null);
@@ -43,6 +43,12 @@ const filteredAndPaginatedData = computed(() => {
     }
     return Object.values(row).every((cell, index) => {
       const searchQuery = searchQueries.value[index];
+      if(row?.estatus?.nombre?.toLowerCase()===(searchQuery?.toLowerCase() || row?.estatus !== null)){
+        const searchRelation = Object.values(row?.estatus).some((celda) => {
+          return searchQuery ? celda?.toString().toLowerCase().includes(searchQuery?.toLowerCase()) : true;
+        });
+        return searchQuery ? cell?.toString().includes(searchQuery.toLowerCase()) || searchRelation : true ;
+      }
       return searchQuery ? cell?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true;
     });
   });
@@ -50,23 +56,23 @@ const filteredAndPaginatedData = computed(() => {
   return filteredData.value?.slice(start, start + rowsPerPage.value);
 });
 watch([globalSearchQuery, searchQueries, currentPage, rowsPerPage], () => {
-  totalOfPage.value = Math.ceil(filteredData.value.length / rowsPerPage.value);
+  totalOfPage.value = Math.ceil(filteredData.value?.length / rowsPerPage.value);
 });
 const handleData = async (action, data = null) => {
   try {
     let response;
     if (action === 'create' || action === 'update') {
       isLoadingImport.value = true
-      response = action=== 'create'? await DescripcionServicios(action, data, paramsA.value)
-    : action === 'update'? await DescripcionServicios(action, data, paramsE.value):undefined;
+      response = action=== 'create'? await PerifericosServicios(action, data, paramsA.value)
+    : action === 'update'? await PerifericosServicios(action, data, paramsE.value):undefined;
       await handleData('fetchAll');
       paramsA.value = {};
       paramsE.value = {};
     } else if (action === 'delete') {
-      await DescripcionServicios(action, data);
+      await PerifericosServicios(action, data);
       await handleData('fetchAll');
     } else if (action === 'fetch') {
-      paramsE.value = await DescripcionServicios('fetch', data);
+      paramsE.value = await PerifericosServicios('fetch', data);
     }
     avisos.value=response
     let timeoutId
@@ -90,15 +96,15 @@ const handleData = async (action, data = null) => {
     console.error('Error al manejar los datos:', error);
   } finally {
     isLoadingImport.value = false
-    const {mostrarT,productos} = await DescripcionServicios('fetchAll');
+    const {mostrarT,estatus,productos} = await PerifericosServicios('fetchAll');
     col.value = columns(mostrarT);
+    relations.value = [estatus,productos]
     rowData.value = mostrarT;
-    relations.value = productos;
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };
 const visiblePages = computed(() => {
-  const total = Math.ceil(filteredData.value.length / rowsPerPage.value) || Math.ceil(rowData.value.length / rowsPerPage.value);
+  const total = Math.ceil(filteredData.value?.length / rowsPerPage.value) ||  Math.ceil(rowData.value?.length / rowsPerPage.value);
   const current = currentPage.value;
   const range = [];
 
@@ -122,13 +128,13 @@ const visiblePages = computed(() => {
 const fileData = async (fileEvent,format,nameFile) => {
   switch (format) {
     case 'pdf':
-      await DescripcionServicios(format,fileEvent.id,nameFile);
+      await PerifericosServicios(format,fileEvent.id,nameFile);
         break;
     case 'export':
-      await DescripcionServicios(format,fileEvent.id,nameFile);
+      await PerifericosServicios(format,fileEvent.id,nameFile);
         break;
     case 'exportAll':
-      await DescripcionServicios(format,fileEvent.id,nameFile);
+      await PerifericosServicios(format,fileEvent.id,nameFile);
         break;
     case 'import':
       isLoadingImport.value = true
@@ -137,7 +143,7 @@ const fileData = async (fileEvent,format,nameFile) => {
         formData.append(`file[${index}]`,file);
       })
       try {
-          const response = await DescripcionServicios(format, '', formData);
+          const response = await PerifericosServicios(format, '', formData);
           await handleData('fetchAll');
           avisos.value=response;
       } catch (error) {
@@ -154,14 +160,14 @@ const manejadorEliminar=async(type)=>{
       // Eliminación de seleccionados
       await Promise.all(selectedRows.value.map(row =>{
         if(row.id !==1){
-          DescripcionServicios('delete', row.id)
+          PerifericosServicios('delete', row.id)
         }
       }));
     } else if (type === 'all') {
       // Eliminación de todos los registros
       await Promise.all(selectedRowsAll.value.map(row =>{
         if(row.id !==1){
-          DescripcionServicios('delete', row.id)
+          PerifericosServicios('delete', row.id)
         }
       }));
     }
@@ -185,7 +191,7 @@ onMounted(async()=>{await handleData()})
 <template>
   <div>
     <button @click="goBack" class="btn btn-outline-red-m btn-lg"><i class="bi bi-arrow-left-circle"></i> Regresar</button>
-    <span class="badge fs-1"><i class="bi bi-person-raised-hand"></i> Descripciones</span>
+    <span class="badge fs-1"><i class="bi bi-box-seam"></i> Perífericos</span>
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
@@ -217,7 +223,7 @@ onMounted(async()=>{await handleData()})
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">📁Archivos</button>
                     <ul class="dropdown-menu">
                       <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li>
-                      <li><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','descripcion')"><i class="bi bi-upload"></i> Exportar</button></li>
+                      <li><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','perifericos')"><i class="bi bi-upload"></i> Exportar</button></li>
                       <li v-if="dataPerfil.rol.id !== 2"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticImportar"><i class="bi bi-download"></i> Importar</button></li>
                     </ul>
                   </div>
@@ -231,7 +237,7 @@ onMounted(async()=>{await handleData()})
                 </div>
               </div>
             </div>
-           <div class="table-responsive">
+           <div class="table- ">
             <table class="table table-secondary table-striped table-hover" id="dataTable">
               <thead class="">
                 <tr class="">
@@ -255,19 +261,16 @@ onMounted(async()=>{await handleData()})
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" :checked="selectedRows.includes(row)" @change="filaIndividual(row)" :class="{ 'selected': selectedRows.includes(row) }">
                       </label>
                     </div>
-                  <td>{{ row.id }}</td>
-                  <td>{{ row.codigo }}</td>
-                  <td>{{ row.modelo }}</td>
-                  <td>{{ row.dispositivo }}</td>
-                  <td>{{ row.serial }}</td>
-                  <td>{{ row.marca }}</td>
-                  <td>{{ row.codigo_inv }}</td>
-                  <td>{{ row.producto?.nombre }}</td>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.cantidad_existente }}</td>
+                    <td>{{ row.entrada }}</td>
+                    <td>{{ row.salida }}</td>
+                    <td>{{ row.estatus?.nombre }}</td>
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">
                       <li><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li>
-                      <li><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export',(row.producto?.nombre) )"><i class="bi bi-upload"></i>Exportar</button></li>
+                      <li><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export','periferico' )"><i class="bi bi-upload"></i>Exportar</button></li>
                       <li v-if="dataPerfil.rol.id !==2">
                         <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal" data-bs-target="#staticEditar" @click="handleData('fetch', row.id)">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px;">
@@ -326,16 +329,16 @@ onMounted(async()=>{await handleData()})
       </div>
     </div>
 
-    <AgregarModalDescripcion :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" />
+    <AgregarModalPerifericos :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" />
 
-    <EditarModalDescripcion :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" />
+    <EditarModalPerifericos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" />
 
-    <MostrarModalDescripcion :paramsE="paramsE" />
+    <MostrarModalPerifericos :paramsE="paramsE" />
 
-    <ImportarModalDescripcion :isLoadingImport="isLoadingImport" @fileData="fileData" />
-    
-    <PdfModalDescripcion :fileData="fileData" :paramsE="paramsE" />
-    
+    <ImportarModalPerifericos :isLoadingImport="isLoadingImport" :fileData="fileData" />
+
+    <PdfModalPerifericos :fileData="fileData" :paramsE="paramsE" />
+
 </template>
 <style scoped>
 .selected {

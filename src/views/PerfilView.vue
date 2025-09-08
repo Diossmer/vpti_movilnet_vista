@@ -6,8 +6,7 @@ import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 const store = useLoginStore()
-const { isAuthenticated, dataPerfil } = storeToRefs(store)
-console.log(dataPerfil.value);
+const { dataPerfil } = storeToRefs(store)
 
 const router = useRouter();
 const { cambioContraseña } = store;

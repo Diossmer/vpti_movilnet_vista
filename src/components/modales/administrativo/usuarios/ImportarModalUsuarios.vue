@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps } from 'vue';
 import AlertComponents from '@/components/AlertComponents.vue';
 
 defineProps({

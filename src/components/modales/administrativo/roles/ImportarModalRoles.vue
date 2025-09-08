@@ -19,7 +19,7 @@ const avisosAlert = ref(null);
 </script>
 <template>
   <div class="modal fade" id="staticImportar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Importar</h1>
@@ -39,7 +39,7 @@ const avisosAlert = ref(null);
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
+                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="avisos = null, avisosAlert = null">Cancelar</button>
                   <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport"><span v-if="!isLoadingImport">Aceptar</span>
                     <span v-else>
                       <span class="spinner-border spinner-border-sm" role="status"></span>
