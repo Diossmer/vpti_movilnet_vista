@@ -61,7 +61,6 @@ const handleData = async (action = null, params = null, id = null) => {
     } else if (action === 'fetch') {
       paramsE.value = await RolesServicios('fetch', id);
     }
-    console.log(response.value)
     /* let timeoutId
     if(response?.error){
       avisos.value = response?.error;
