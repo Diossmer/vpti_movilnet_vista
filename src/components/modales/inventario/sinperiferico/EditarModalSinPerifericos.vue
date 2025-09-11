@@ -13,7 +13,9 @@ const props = defineProps({
   },
   paramsE: {
     type: Object,
-    default: () => ({}),
+    default: () => ({
+      producto_id: []
+    }),
     required: true,
   },
   relations: {
@@ -33,7 +35,11 @@ const modalEditar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
 
-watch(() => props.paramsE,() =>{},{ deep: true });
+watch(() => props.paramsE, (newVal) => {
+  if (newVal && !Array.isArray(newVal.producto_id)) {
+    newVal.producto_id = [];
+  }
+}, { immediate: true });
 watch([() => props.paramsE?.cantidad_existente,
 () => props.paramsE?.entrada,
 () => props.paramsE?.salida,

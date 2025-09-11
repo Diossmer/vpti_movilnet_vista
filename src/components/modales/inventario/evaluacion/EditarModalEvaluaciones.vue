@@ -85,7 +85,7 @@ watch([() => props.paramsE?.estado_fisico,
                   <div class="row">
                     <div class="col-4">
                       <label for="" class="badge text-secondary">estado_fisico</label>
-                      <input type="text" maxlength="25" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.estado_fisico && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.estado_fisico),'is-valid':paramsE.estado_fisico && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.estado_fisico)}" v-model="paramsE.estado_fisico" placeholder="Estado Fisico" required />
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsE.estado_fisico && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.estado_fisico),'is-valid':paramsE.estado_fisico && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.estado_fisico)}" v-model="paramsE.estado_fisico" placeholder="Estado Fisico" required />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">escala</label>
@@ -93,15 +93,15 @@ watch([() => props.paramsE?.estado_fisico,
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">compatibilidad</label>
-                      <input type="text" maxlength="25" pattern="[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid': paramsE.compatibilidad && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.compatibilidad),'is-valid': paramsE.compatibilidad && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.compatibilidad)}" v-model="paramsE.compatibilidad" placeholder="Compatibilidad"  />
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.compatibilidad),'is-valid': paramsE.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.compatibilidad)}" v-model="paramsE.compatibilidad" placeholder="Compatibilidad"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">reemplazo</label>
-                      <input type="text" maxlength="25" pattern="[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid': paramsE.reemplazo && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.reemplazo),'is-valid': paramsE.reemplazo && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.reemplazo)}" v-model="paramsE.reemplazo" placeholder="Reemplazo"  />
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.reemplazo && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.reemplazo),'is-valid': paramsE.reemplazo && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.reemplazo)}" v-model="paramsE.reemplazo" placeholder="Reemplazo"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">mantenimineto</label>
-                      <input type="text" maxlength="25" pattern="[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid': paramsE.mantenimineto && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.mantenimineto),'is-valid': paramsE.mantenimineto && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.mantenimineto)}" v-model="paramsE.mantenimineto" placeholder="Mantenimineto"  />
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.mantenimineto && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimineto),'is-valid': paramsE.mantenimineto && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimineto)}" v-model="paramsE.mantenimineto" placeholder="Mantenimineto"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>

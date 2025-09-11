@@ -16,10 +16,6 @@ const props = defineProps({
     default: () => ({}),
     required: true,
   },
-  relations: {
-    type: Array,
-    default: () => [[], []],
-  },
   isLoadingImport: {
     type: Boolean,
     default: false,
@@ -63,7 +59,7 @@ watch([() => props.paramsE?.nombre,
                   <div class="row">
                     <div class="col-6">
                       <label for="" class="badge text-secondary">nombre<span class="text-danger">*</span></label>
-                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\d]+$" class="form-control" :class="{'is-invalid':paramsE.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsE.nombre),'is-valid':paramsE.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsE.nombre)}" v-model="paramsE.nombre" placeholder="Nombre" required />
+                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsE.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.nombre),'is-valid':paramsE.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.nombre)}" v-model="paramsE.nombre" placeholder="Nombre" required />
                     </div>
                     <div class="col-6">
                       <label for="" class="badge text-secondary">descripción</label>

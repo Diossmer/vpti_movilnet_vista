@@ -27,7 +27,9 @@ const { dataPerfil } = storeToRefs(loginStore);
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
-const paramsA = ref({});
+const paramsA = ref({
+  producto_id: [],
+});
 
 watch([() => paramsA.value?.comentario], ([comentario]) => {
   const errors = [];
@@ -61,7 +63,7 @@ watch([() => paramsA.value?.comentario], ([comentario]) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Destinos<span class="text-danger">*</span></label>
-                      <input type="text" class="form-control" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" :class="{'is-invalid':paramsA.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.destino),'is-valid':paramsA.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.destino)}" v-model="paramsA.destino" placeholder="Destino" required />
+                      <input type="text" class="form-control" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$" :class="{'is-invalid':paramsA.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$/.test(paramsA.destino),'is-valid':paramsA.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$/.test(paramsA.destino)}" v-model="paramsA.destino" placeholder="Destino" required />
                     </div>
                     <div class="col-12">
                       <label for="" class="badge text-secondary">comentario</label>

@@ -7,10 +7,6 @@ defineProps({
     default: () => ({}),
     required: true,
   },
-  relations: {
-    type: Array,
-    default: () => [[], []],
-  }
 });
 </script>
 

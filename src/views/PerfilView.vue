@@ -44,10 +44,6 @@ const goBack = () => {router.go(-1)}
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="bg-red card-body p-5">
-        <div class="w-100 d-flex justify-content-between">
-          <span class="text-dark fs-3 badge span"><i class="bi bi-person-workspace"></i> Perfil de Usuario</span>
-        </div>
-        <hr class="border-2 border-red-m opacity-75">
         <div class="w-100 p-2">
           <div class="row">
             <div class="col-6">

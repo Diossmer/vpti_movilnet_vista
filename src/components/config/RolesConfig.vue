@@ -189,8 +189,6 @@ onMounted(async()=>{await handleData()})
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
-        <h5 class="text-dark fs-6 badge"><i class="bi bi-gear-wide-connected"></i> roles</h5>
-        <hr class="border-2 border-red-m opacity-75">
         <div class="w-100 d-flex justify-content-end">
           <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticAgregar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px; height: 20px;">
@@ -322,11 +320,11 @@ onMounted(async()=>{await handleData()})
       </div>
     </div>
 
-    <AgregarModalRoles :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" />
+    <AgregarModalRoles :handleData="handleData" :isLoadingImport="isLoadingImport" />
 
-    <EditarModalRoles :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" />
+    <EditarModalRoles :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
-    <MostrarModalRoles :paramsE="paramsE" :relations="relations" />
+    <MostrarModalRoles :paramsE="paramsE" />
 
     <ImportarModalRoles :isLoadingImport="isLoadingImport" @fileData="fileData" />
     

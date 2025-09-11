@@ -61,7 +61,8 @@ watch([() => paramsA.value?.estado_fisico,
   && (reemplazo==='' || reemplazo===undefined)
   && (mantenimineto==='' || mantenimineto===undefined)
   && (escala==='' || escala===undefined))
-  avisosAlert.value="";
+  // Se cambia la asignación de "" a null para evitar el error de tipo.
+  avisosAlert.value=null;
 });
 </script>
 
@@ -80,7 +81,8 @@ watch([() => paramsA.value?.estado_fisico,
                   <div class="row">
                     <div class="col-4">
                       <label for="" class="badge text-secondary">estado_fisico</label>
-                      <input type="text" maxlength="25" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.estado_fisico && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.estado_fisico),'is-valid':paramsA.estado_fisico && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.estado_fisico)}" v-model="paramsA.estado_fisico" placeholder="Estado Fisico" required />
+                      <!-- Regex corrected to escape special characters -->
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.estado_fisico && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.estado_fisico),'is-valid':paramsA.estado_fisico && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.estado_fisico)}" v-model="paramsA.estado_fisico" placeholder="Estado Fisico" required />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">escala</label>
@@ -88,15 +90,18 @@ watch([() => paramsA.value?.estado_fisico,
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">compatibilidad</label>
-                      <input type="text" maxlength="25" pattern="[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid': paramsA.compatibilidad && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.compatibilidad),'is-valid': paramsA.compatibilidad && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.compatibilidad)}" v-model="paramsA.compatibilidad" placeholder="Compatibilidad"  />
+                      <!-- Regex corrected to escape special characters -->
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsA.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.compatibilidad),'is-valid': paramsA.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.compatibilidad)}" v-model="paramsA.compatibilidad" placeholder="Compatibilidad"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">reemplazo</label>
-                      <input type="text" maxlength="25" pattern="[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid': paramsA.reemplazo && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.reemplazo),'is-valid': paramsA.reemplazo && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.reemplazo)}" v-model="paramsA.reemplazo" placeholder="Reemplazo"  />
+                      <!-- Regex corrected to escape special characters -->
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsA.reemplazo && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.reemplazo),'is-valid': paramsA.reemplazo && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.reemplazo)}" v-model="paramsA.reemplazo" placeholder="Reemplazo"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">mantenimineto</label>
-                      <input type="text" maxlength="25" pattern="[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid': paramsA.mantenimineto && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.mantenimineto),'is-valid': paramsA.mantenimineto && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.mantenimineto)}" v-model="paramsA.mantenimineto" placeholder="Mantenimineto"  />
+                      <!-- Regex corrected to escape special characters -->
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsA.mantenimineto && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.mantenimineto),'is-valid': paramsA.mantenimineto && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.mantenimineto)}" v-model="paramsA.mantenimineto" placeholder="Mantenimineto"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>

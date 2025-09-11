@@ -27,7 +27,9 @@ const { dataPerfil } = storeToRefs(loginStore);
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
-const paramsA = ref({});
+const paramsA = ref({
+  producto_id: []
+});
 
 watch([() => paramsA.value?.cantidad_existente,
 () => paramsA.value?.entrada,

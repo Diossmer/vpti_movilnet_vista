@@ -16,10 +16,6 @@ const props = defineProps({
     default: () => ({}),
     required: true,
   },
-  relations: {
-    type: Array,
-    default: () => [[], []],
-  },
   isLoadingImport: {
     type: Boolean,
     default: false,
@@ -61,7 +57,7 @@ watch([() => props.paramsE?.nombre,() => props.paramsE?.descripcion], ([nombre,d
               <div class="row">
                 <div class="col-4">
                   <label for="" class="badge text-secondary">Nombre<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" :class="{'is-invalid':paramsE.nombre && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.nombre),'is-valid':paramsE.nombre && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.nombre)}" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" v-model="paramsE.nombre" placeholder="Nombre" required />
+                  <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsE.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.nombre),'is-valid':paramsE.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.nombre)}" v-model="paramsE.nombre" placeholder="Nombre" required />
                 </div>
                 <div class="col-4">
                   <label for="" class="badge text-secondary">Descripción</label>

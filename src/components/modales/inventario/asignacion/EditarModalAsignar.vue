@@ -13,7 +13,9 @@ const props = defineProps({
   },
   paramsE: {
     type: Object,
-    default: () => ({}),
+    default: () => ({
+      producto_id: [],
+    }),
     required: true,
   },
   relations: {
@@ -33,7 +35,11 @@ const modalEditar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
 
-watch(() => props.paramsE,() =>{},{ deep: true });
+watch(() => props.paramsE, (newVal) => {
+  if (newVal && !Array.isArray(newVal.producto_id)) {
+    newVal.producto_id = [];
+  }
+}, { immediate: true });
 watch([() => props.paramsE?.comentario], ([comentario]) => {
   const errors = [];
   const comentarioError = validacionesUtils().textareaValid(comentario);
@@ -66,7 +72,7 @@ watch([() => props.paramsE?.comentario], ([comentario]) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Destinos<span class="text-danger">*</span></label>
-                      <input type="text" class="form-control" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" :class="{'is-invalid':paramsE.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino),'is-valid':paramsE.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino)}" v-model="paramsE.destino" placeholder="Destino" required />
+                      <input type="text" class="form-control" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$" :class="{'is-invalid':paramsE.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino),'is-valid':paramsE.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino)}" v-model="paramsE.destino" placeholder="Destino" required />
                     </div>
                     <div class="col-12">
                       <label for="" class="badge text-secondary">comentario</label>

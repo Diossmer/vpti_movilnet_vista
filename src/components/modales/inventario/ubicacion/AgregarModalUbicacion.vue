@@ -83,11 +83,11 @@ watch([
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">origen<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.origen && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.origen),'is-valid':paramsA.origen && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.origen)}" v-model="paramsA.origen" placeholder="Origen" required />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.origen && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.origen),'is-valid':paramsA.origen && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.origen)}" v-model="paramsA.origen" placeholder="Origen" required />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">destino<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.destino),'is-valid':paramsA.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.destino)}" v-model="paramsA.destino" placeholder="Destino" required />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.destino && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.destino),'is-valid':paramsA.destino && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.destino)}" v-model="paramsA.destino" placeholder="Destino" required />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">piso</label>
@@ -95,15 +95,15 @@ watch([
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Región</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.region && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.region),'is-valid':paramsA.region && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.region)}" v-model="paramsA.region" placeholder="Region"  />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.region && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.region),'is-valid':paramsA.region && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.region)}" v-model="paramsA.region" placeholder="Region"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Estado</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.estado && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.estado),'is-valid':paramsA.estado && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.estado)}" v-model="paramsA.estado" placeholder="Estado"  />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.estado && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.estado),'is-valid':paramsA.estado && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.estado)}" v-model="paramsA.estado" placeholder="Estado"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">capítal</label>
-                      <input type="text" maxlength="20" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsA.capital && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.capital),'is-valid':paramsA.capital && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.capital)}" v-model="paramsA.capital" placeholder="Capital"  />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.capital && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.capital),'is-valid':paramsA.capital && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.capital)}" v-model="paramsA.capital" placeholder="Capital"  />
                     </div>
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
                   </div>

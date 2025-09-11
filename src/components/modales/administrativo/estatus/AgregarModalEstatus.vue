@@ -11,10 +11,6 @@ defineProps({
     default: null,
     required: true,
   },
-  relations: {
-    type: Array,
-    default: () => [[], []],
-  },
   isLoadingImport: {
     type: Boolean,
     default: false,
@@ -56,7 +52,7 @@ watch([() => paramsA.value?.nombre, () => paramsA.value?.descripcion], ([nombre,
               <div class="row">
                 <div class="col-4">
                   <label for="" class="badge text-secondary">Nombre<span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" :class="{'is-invalid':paramsA.nombre && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsA.nombre)}" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" v-model="paramsA.nombre" placeholder="Nombre" required />
+                  <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre)}" v-model="paramsA.nombre" placeholder="Nombre" required />
                 </div>
                 <div class="col-4">
                   <label for="" class="badge text-secondary">Descripción</label>

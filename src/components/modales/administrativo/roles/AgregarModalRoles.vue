@@ -11,10 +11,6 @@ defineProps({
     default: null,
     required: true,
   },
-  relations: {
-    type: Array,
-    default: () => [[], []],
-  },
   isLoadingImport: {
     type: Boolean,
     default: false,
@@ -58,7 +54,7 @@ watch([() => paramsA.value?.nombre,
                   <div class="row">
                     <div class="col-6">
                       <label for="" class="badge text-secondary">nombre<span class="text-danger">*</span></label>
-                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\d]+$" class="form-control" :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre)}" v-model="paramsA.nombre" placeholder="Nombre" required />
+                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre)}" v-model="paramsA.nombre" placeholder="Nombre" required />
                     </div>
                     <div class="col-6">
                       <label for="" class="badge text-secondary">descripción</label>

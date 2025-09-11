@@ -208,8 +208,6 @@ onMounted(async () => { await handleData() })
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
-        <h5 class="text-dark fs-6 badge"><i class="bi bi-person-arms-up"></i> estatus</h5>
-        <hr class="border-2 border-red-m opacity-75">
         <div class="w-100 d-flex justify-content-end">
           <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal"
             data-bs-target="#staticAgregar">
@@ -343,11 +341,11 @@ onMounted(async () => { await handleData() })
       </div>
     </div>
 
-    <AgregarModalEstatus :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" />
+    <AgregarModalEstatus :handleData="handleData" :isLoadingImport="isLoadingImport" />
 
-    <EditarModalEstatus :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" />
+    <EditarModalEstatus :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
-    <MostrarModalEstatus :paramsE="paramsE" :relations="relations" />
+    <MostrarModalEstatus :paramsE="paramsE" />
 
     <ImportarModalEstatus :isLoadingImport="isLoadingImport" @fileData="fileData" />
     

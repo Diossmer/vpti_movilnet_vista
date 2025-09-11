@@ -15,7 +15,7 @@ onMounted(async()=>{
   isAuthenticated.value = localStorage.getItem('ingresar') === 'true'
 })
 const includedModulesAdmin = ref(['usuarios']);
-const includedModulesInven = ref(['productos', 'descripciones', 'Sin Periféricos', 'periféricos', 'evaluaciones', 'asignaciones', 'ubicaciones']);
+const includedModulesInven = ref(['productos', 'descripciones', 'sin-perifericos', 'periféricos', 'evaluaciones', 'asignaciones', 'ubicaciones']);
 const includedModulesConfi = ref(['estatus','roles']);
 </script>
 <template>
@@ -83,13 +83,13 @@ const includedModulesConfi = ref(['estatus','roles']);
                   modulo ==='descripciones'?'descripciones':
                   modulo ==='ubicaciones'?'ubicaciones':
                   modulo ==='evaluaciones'?'evaluaciones':
-                  modulo ==='Sin Periféricos'?'Sin Periféricos':
+                  modulo ==='sin-perifericos'?'sin-perifericos':
                   modulo ==='asignaciones'?'asignaciones':
                   modulo ==='periféricos'?'periféricos':
                   'productos'"
                   class="">
                   <i class="bi bi-box-seam" v-if="modulo ==='periféricos'"></i>
-                  <i class="bi bi-box2" v-if="modulo ==='Sin Periféricos'"></i>
+                  <i class="bi bi-box2" v-if="modulo ==='sin-perifericos'"></i>
                   <i class="bi bi-geo-fill" v-if="modulo ==='ubicaciones'"></i>
                   <i class="bi bi-hand-thumbs-up" v-if="modulo ==='evaluaciones'"></i>
                   <i class="bi bi-journal-check" v-if="modulo ==='productos'"></i>

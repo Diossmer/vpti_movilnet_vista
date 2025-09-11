@@ -65,7 +65,7 @@ watch([
   if (modeloError) errors.push(modeloError);
   const serialError = validacionesUtils().serialValid(serial);
   if (serialError) errors.push(serialError);
-  const codigo_invError = validacionesUtils().serialValid(codigo_inv);
+  const codigo_invError = validacionesUtils().skuValid(codigo_inv);
   if (codigo_invError) errors.push(codigo_invError);
   const observacionError = validacionesUtils().textareaValid(observacion);
   if (observacionError) errors.push(observacionError);
@@ -98,19 +98,22 @@ watch([
                   <div class="row">
                     <div class="col-2">
                       <label for="" class="badge text-secondary">codigo</label>
-                      <input type="text" maxlength="6" pattern="^(?:\d+|X{0,2}[SLM]|X{3}L?)(?:[-\/](?:\d+|X{0,2}[SLM]|X{3}L?))*$" class="form-control" :class="{'is-invalid':paramsE.codigo && !/^(?:\d+|X{0,2}[SLM]|X{3}L?)(?:[-\/](?:\d+|X{0,2}[SLM]|X{3}L?))*$/.test(paramsE.codigo),'is-valid':paramsE.codigo && /^(?:\d+|X{0,2}[SLM]|X{3}L?)(?:[-\/](?:\d+|X{0,2}[SLM]|X{3}L?))*$/.test(paramsE.codigo)}" v-model="paramsE.codigo" placeholder="codigo" />
+                      <input type="text" maxlength="6" pattern="^(\d+|X{0,2}[SLM]|X{3}L?)*$" class="form-control" :class="{'is-invalid':paramsE.codigo && !/^(\d+|X{0,2}[SLM]|X{3}L?)*$/.test(paramsE.codigo),'is-valid':paramsE.codigo && /^(\d+|X{0,2}[SLM]|X{3}L?)*$/.test(paramsE.codigo)}" v-model="paramsE.codigo" placeholder="codigo" />
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">dispositivo</label>
-                      <input type="text" maxlength="10" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.dispositivo && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.dispositivo),'is-valid':paramsE.dispositivo && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.dispositivo)}" v-model="paramsE.dispositivo" placeholder="dispositivo" />
+                      <!-- Corrected pattern attribute with a valid regex -->
+                      <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo),'is-valid':paramsE.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo)}" v-model="paramsE.dispositivo" placeholder="dispositivo" />
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">marca</label>
-                      <input type="text" maxlength="15" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.marca && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.marca),'is-valid':paramsE.marca && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.marca)}" v-model="paramsE.marca" placeholder="marca" />
+                      <!-- Corrected pattern attribute with a valid regex -->
+                      <input type="text" maxlength="15" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.marca && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.marca),'is-valid':paramsE.marca && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.marca)}" v-model="paramsE.marca" placeholder="marca" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">modelo</label>
-                      <input type="text" maxlength="10" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$" class="form-control" :class="{'is-invalid':paramsE.modelo && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.modelo),'is-valid':paramsE.modelo && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.modelo)}" v-model="paramsE.modelo" placeholder="Modelo" />
+                      <!-- Corrected pattern attribute with a valid regex -->
+                      <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo),'is-valid':paramsE.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo)}" v-model="paramsE.modelo" placeholder="Modelo" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">serial</label>
@@ -129,8 +132,10 @@ watch([
                     </div>
                     <div class="col-8">
                       <label for="" class="badge text-secondary">observación</label>
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.observacion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.observacion), 'is-valid':paramsE.observacion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.observacion) }" placeholder="Observación" v-model="paramsE.observacion"></textarea>
+                      <!-- Corrected pattern in textarea's class binding -->
+                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.observacion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-]+$/.test(paramsE.observacion), 'is-valid':paramsE.observacion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-]+$/.test(paramsE.observacion) }" placeholder="Observación" v-model="paramsE.observacion"></textarea>
                     </div>
+
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
                   </div>
                 </div>

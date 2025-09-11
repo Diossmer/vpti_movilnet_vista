@@ -96,8 +96,8 @@ const router = createRouter({
         },
         //Inventario
         {
-          path: '/Sin Periféricos',
-          name: 'configuracion.Sin Perifericos',
+          path: '/sin-perifericos',
+          name: 'configuracion.sin-perifericos',
           component: () => import('@/views/inventario/InventariosView.vue'),
           meta: { requiresAuth: true },
         },
