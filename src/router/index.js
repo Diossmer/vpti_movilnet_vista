@@ -102,7 +102,7 @@ const router = createRouter({
           meta: { requiresAuth: true },
         },
         {
-          path: '/Periféricos',
+          path: '/perifericos',
           name: 'configuracion.perifericos',
           component: () => import('@/views/inventario/PerifericosView.vue'),
           meta: { requiresAuth: true },
