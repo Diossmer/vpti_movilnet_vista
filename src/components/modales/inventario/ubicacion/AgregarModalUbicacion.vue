@@ -58,7 +58,7 @@ watch([
   && (region === '' || region===undefined)
   && (estado === '' || estado===undefined)
   && (capital === '' || capital===undefined)
-)avisosAlert.value="";
+)avisosAlert.value = null;
 });
 </script>
 

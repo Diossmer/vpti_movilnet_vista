@@ -66,7 +66,7 @@ watch([() => props.paramsE?.estado_fisico,
   && (reemplazo==='' || reemplazo===undefined)
   && (mantenimineto==='' || mantenimineto===undefined)
   && (escala==='' || escala===undefined))
-  avisosAlert.value="";
+  avisosAlert.value = null;
 });
 </script>
 

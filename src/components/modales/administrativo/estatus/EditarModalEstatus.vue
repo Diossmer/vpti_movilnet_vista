@@ -37,7 +37,7 @@ watch([() => props.paramsE?.nombre,() => props.paramsE?.descripcion], ([nombre,d
   const descError = validacionesUtils().textareaValid(descripcion);
   if (descError) errors.push(descError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((nombre===''||nombre===undefined) && (descripcion===''|| descripcion===undefined))avisosAlert.value="";
+  if ((nombre===''||nombre===undefined) && (descripcion===''|| descripcion===undefined))avisosAlert.value = null;
 })
 </script>
 

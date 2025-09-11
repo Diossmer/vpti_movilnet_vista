@@ -79,7 +79,7 @@ watch([
   && (serial==='' || serial===undefined)
   && (codigo_inv==='' || codigo_inv===undefined)
   && (observacion==='' || observacion===undefined))
-  avisosAlert.value="";
+  avisosAlert.value = null;
 });
 </script>
 

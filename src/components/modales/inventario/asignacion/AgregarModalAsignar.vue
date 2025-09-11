@@ -36,7 +36,7 @@ watch([() => paramsA.value?.comentario], ([comentario]) => {
   const comentarioError = validacionesUtils().textareaValid(comentario);
   if (comentarioError) errors.push(comentarioError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((comentario==='' || comentario===undefined)) avisosAlert.value="";
+  if ((comentario==='' || comentario===undefined)) avisosAlert.value = null;
 });
 </script>
 

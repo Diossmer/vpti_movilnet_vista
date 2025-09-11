@@ -62,7 +62,7 @@ watch([() => paramsA.value?.estado_fisico,
   && (mantenimineto==='' || mantenimineto===undefined)
   && (escala==='' || escala===undefined))
   // Se cambia la asignación de "" a null para evitar el error de tipo.
-  avisosAlert.value=null;
+  avisosAlert.value = null;
 });
 </script>
 

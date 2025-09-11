@@ -40,7 +40,7 @@ watch([() => props.paramsE?.nombre,
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
   if ((nombre==='' || nombre===undefined)
   && (descripcion==='' || descripcion===undefined))
-  avisosAlert.value="";
+  avisosAlert.value = null;
 });
 </script>
 

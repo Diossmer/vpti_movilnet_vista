@@ -39,7 +39,7 @@ watch([() => props.paramsE?.nombre], ([nombre]) => {
   const nombreError = validacionesUtils().nombreValid(nombre);
   if (nombreError) errors.push(nombreError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((nombre==='' || nombre===undefined))avisosAlert.value="";
+  if ((nombre==='' || nombre===undefined))avisosAlert.value = null;
 });
 </script>
 

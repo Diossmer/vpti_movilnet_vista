@@ -58,7 +58,7 @@ watch([() => props.paramsE?.cantidad_existente,
   && (entrada==='' || entrada===undefined)
   && (salida==='' || salida===undefined)
   && (descripcion==='' || descripcion===undefined))
-  avisosAlert.value="";
+  avisosAlert.value = null;
 });
 </script>
 

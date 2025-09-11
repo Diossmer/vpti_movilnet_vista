@@ -92,7 +92,7 @@ watch([
   && (codigo_postal==='' || codigo_postal===undefined)
   && (direccion==='' || direccion===undefined)
   && (telefono_casa==='' || telefono_casa===undefined))
-  avisosAlert.value="";
+  avisosAlert.value = null;
 });
 </script>
 
