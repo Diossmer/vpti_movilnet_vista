@@ -5,7 +5,7 @@ import { storeToRefs } from 'pinia';
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
 import AlertComponents from '@/components/AlertComponents.vue';
 
-defineProps({
+const props = defineProps({
   handleData: {
     type: Function,
     default: null,

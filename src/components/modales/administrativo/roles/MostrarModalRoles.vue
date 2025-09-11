@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps } from 'vue';
 
-defineProps({
+const props = defineProps({
   paramsE: {
     type: Object,
     default: () => ({}),

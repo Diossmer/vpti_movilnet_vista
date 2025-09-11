@@ -1,8 +1,8 @@
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, watch, defineProps } from 'vue';
 import AlertComponents from '@/components/AlertComponents.vue';
 
-defineProps({
+const props = defineProps({
   isLoadingImport: {
     type: Boolean,
     default: false,
