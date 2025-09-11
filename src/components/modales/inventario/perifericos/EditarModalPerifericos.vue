@@ -27,6 +27,11 @@ const props = defineProps({
     default: false,
     required: true,
   },
+  response: {
+    type: Object,
+    default: null,
+    required: false,
+  },
 });
 
 const loginStore = useLoginStore();
@@ -60,6 +65,12 @@ watch([() => props.paramsE?.cantidad_existente,
   && (descripcion==='' || descripcion===undefined))
   avisosAlert.value = null;
 });
+
+watch(() => props.response, (newResponse) => {
+  if (newResponse) {
+    avisos.value = newResponse;
+  }
+});
 </script>
 
 <template>
@@ -72,7 +83,7 @@ watch([() => props.paramsE?.cantidad_existente,
           </div>
           <Suspense>
             <template #default>
-              <form @submit.prevent="handleData('update', paramsE.id)">
+              <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-3">

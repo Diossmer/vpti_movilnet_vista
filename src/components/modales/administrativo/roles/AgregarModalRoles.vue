@@ -4,8 +4,9 @@ import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
 import AlertComponents from '@/components/AlertComponents.vue';
+import { Modal } from 'bootstrap/dist/js/bootstrap.min';
 
-defineProps({
+const props = defineProps({
   handleData: {
     type: Function,
     default: null,
@@ -15,6 +16,11 @@ defineProps({
     type: Boolean,
     default: false,
     required: true,
+  },
+  response: {
+    type: Object,
+    default: null,
+    required: false,
   },
 });
 
@@ -37,53 +43,72 @@ watch([() => paramsA.value?.nombre,
   && (descripcion==='' || descripcion===undefined))
   avisosAlert.value = null;
 });
+watch(() => props.response, (newResponse) => {
+  if (newResponse) {
+    avisos.value = newResponse;
+  }
+});
+const resetForm = () => {
+  paramsA.value = {};
+  avisos.value = null;
+  avisosAlert.value = null;
+};
+
+/* const myModal = new bootstrap.Modal(document.getElementById('myModal'), options)
+// or
+const myModalAlternative = new bootstrap.Modal('#myModal', options) */
 </script>
 
 <template>
-  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar" aria-hidden="true">
+  <!-- `data-bs-backdrop` y `data-bs-keyboard` ya no son necesarios aquí, el componente padre los maneja si se usan correctamente. -->
+  <div class="modal fade" id="staticAgregar" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ref="modalAgregar">
       <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
+            <!-- Resetea el formulario al cerrar el modal -->
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetForm"></button>
           </div>
-          <Suspense>
-            <template #default>
-              <form @submit.prevent="handleData('create')">
-                <div class="modal-body">
-                  <div class="row">
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">nombre<span class="text-danger">*</span></label>
-                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre)}" v-model="paramsA.nombre" placeholder="Nombre" required />
-                    </div>
-                    <div class="col-6">
-                      <label for="" class="badge text-secondary">descripción</label>
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsA.descripcion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion), 'is-valid':paramsA.descripcion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion)}" placeholder="Descripción" v-model="paramsA.descripcion"></textarea>
-                    </div>
-                    <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
-                  </div>
+          <!-- <Suspense> es para carga asíncrona, no es necesario para un formulario simple. Lo he eliminado para evitar el error. -->
+          <form @submit.prevent="handleData('create', paramsA)">
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-6">
+                  <label for="" class="badge text-secondary">nombre<span class="text-danger">*</span></label>
+                  <input 
+                    type="text" 
+                    pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" 
+                    class="form-control" 
+                    :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre)}" 
+                    v-model="paramsA.nombre" 
+                    placeholder="Nombre" 
+                    required 
+                  />
                 </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
-                    <span v-if="!isLoadingImport">Agregar</span>
-                    <span v-else>
-                    <span class="spinner-border spinner-border-sm" role="status"></span>
-                      Procesando...
-                    </span>
-                  </button>
+                <div class="col-6">
+                  <label for="" class="badge text-secondary">descripción</label>
+                  <textarea 
+                    class="form-control" 
+                    :class="{ 'is-invalid': paramsA.descripcion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion), 'is-valid':paramsA.descripcion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion)}" 
+                    placeholder="Descripción" 
+                    v-model="paramsA.descripcion"
+                  ></textarea>
                 </div>
-              </form>
-            </template>
-            <template #fallback>
-              <div class="modal-body text-center py-5">
-                <div class="spinner-border text-red" role="status">
-                  <span class="visually-hidden">Cargando...</span>
-                </div>
-                <p class="mt-2 text-muted">Procesando archivo...</p>
+                <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
               </div>
-            </template>
-          </Suspense>
+            </div>
+            <div class="modal-footer">
+              <!-- Resetea el formulario al cancelar -->
+              <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="resetForm">Cancelar</button>
+              <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
+                <span v-if="!isLoadingImport">Agregar</span>
+                <span v-else>
+                <span class="spinner-border spinner-border-sm" role="status"></span>
+                  Procesando...
+                </span>
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

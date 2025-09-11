@@ -20,6 +20,11 @@ defineProps({
     default: false,
     required: true,
   },
+  response: {
+    type: Object,
+    default: null,
+    required: false,
+  },
 });
 
 const loginStore = useLoginStore();
@@ -76,6 +81,16 @@ watch([
   && (observacion==='' || observacion===undefined))
   avisosAlert.value = null;
 });
+watch(() => props.response, (newResponse) => {
+  if (newResponse) {
+    avisos.value = newResponse;
+  }
+});
+const resetForm = () => {
+  paramsA.value = {};
+  avisos.value = null;
+  avisosAlert.value = null;
+};
 </script>
 
 <template>
@@ -84,11 +99,11 @@ watch([
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetForm"></button>
           </div>
           <Suspense>
             <template #default>
-              <form @submit.prevent="handleData('create')">
+              <form @submit.prevent="handleData('create', paramsA)">
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-2">
@@ -134,7 +149,7 @@ watch([
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
+                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="resetForm">Cancelar</button>
                   <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
                     <span v-if="!isLoadingImport">Agregar</span>
                     <span v-else>

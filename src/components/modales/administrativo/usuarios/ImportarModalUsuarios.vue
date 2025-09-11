@@ -12,10 +12,21 @@ defineProps({
     type: Function,
     required: true,
   },
+  response: {
+    type: Object,
+    default: null,
+    required: false,
+  },
 });
 
 const avisos = ref(null);
 const avisosAlert = ref(null);
+
+watch(() => props.response, (newResponse) => {
+  if (newResponse) {
+    avisos.value = newResponse;
+  }
+});
 </script>
 <template>
   <div class="modal fade" id="staticImportar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">

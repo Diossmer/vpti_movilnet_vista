@@ -25,6 +25,11 @@ const props = defineProps({
     default: false,
     required: true,
   },
+  response: {
+    type: Object,
+    default: null,
+    required: false,
+  },
 });
 
 const loginStore = useLoginStore();
@@ -68,6 +73,12 @@ watch([() => props.paramsE?.estado_fisico,
   && (escala==='' || escala===undefined))
   avisosAlert.value = null;
 });
+
+watch(() => props.response, (newResponse) => {
+  if (newResponse) {
+    avisos.value = newResponse;
+  }
+});
 </script>
 
 <template>
@@ -80,7 +91,7 @@ watch([() => props.paramsE?.estado_fisico,
           </div>
           <Suspense>
             <template #default>
-              <form @submit.prevent="handleData('update', paramsE.id)">
+              <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-4">
