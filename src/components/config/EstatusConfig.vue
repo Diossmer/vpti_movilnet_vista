@@ -140,23 +140,23 @@ const fileData = async (fileEvent,format,nameFile) => {
       console.error('Formato no soportado');
   }
 };
-// elimidar datos
+//Eliminacion data total
 const manejadorEliminar=async(type)=>{
   try {
     if (type === 'individual' && selectedRows.value?.length > 0) {
       // Eliminación de seleccionados
-      await Promise.all(selectedRows.value.map(row =>{
-        if(row.id !==1){
-          EstatusServicios('delete', row.id)
+      await selectedRows.value.map(row => {
+        if (row.id !== 1) {
+          EstatusServicios('delete', row.id);
         }
-      }));
+      });
     } else if (type === 'all') {
       // Eliminación de todos los registros
-      await Promise.all(selectedRowsAll.value.map(row =>{
-        if(row.id !==1){
-          EstatusServicios('delete', row.id)
+      await selectedRowsAll.value.map(row => {
+        if (row.id !== 1) {
+          EstatusServicios('delete', row.id);
         }
-      }));
+      });
     }
     await handleData('fetchAll');
     selectedRows.value = [];
@@ -165,13 +165,16 @@ const manejadorEliminar=async(type)=>{
     console.error('Error en eliminación:', error);
   }
 }
+
 const filaIndividual=(row)=>{
   const index = selectedRows.value.findIndex(r => r.id === row.id);
   index === -1 ? selectedRows.value.push(row) : selectedRows.value.splice(index, 1);
 }
+
 const handleMasivoDelete=async(e)=>{
   selectedRowsAll.value = e.target.checked ? [...rowData.value] : [];
 }
+
 const goBack = () => {router.go(-1)}
 onMounted(async () => { await handleData() })
 </script>
