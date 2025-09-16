@@ -40,15 +40,12 @@ watch([() => paramsA.value?.estado_fisico,
 () => paramsA.value?.compatibilidad,
 () => paramsA.value?.reemplazo,
 () => paramsA.value?.mantenimineto], ([
-  estado_fisico,
   notas,
   escala,
   compatibilidad,
   reemplazo,
   mantenimineto]) => {
   const errors = [];
-  const EstadoFisicoError = validacionesUtils().textValid(estado_fisico);
-  if (EstadoFisicoError) errors.push(EstadoFisicoError);
   const CompatibilidadError = validacionesUtils().textValid(compatibilidad);
   if (CompatibilidadError) errors.push(CompatibilidadError);
   const ReemplazoError = validacionesUtils().textValid(reemplazo);
@@ -60,13 +57,11 @@ watch([() => paramsA.value?.estado_fisico,
   const escalaError = validacionesUtils().sizeValid(escala);
   if (escalaError) errors.push(escalaError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((estado_fisico==='' || estado_fisico===undefined)
-  && (notas==='' || notas===undefined)
+  if ((notas==='' || notas===undefined)
   && (compatibilidad==='' || compatibilidad===undefined)
   && (reemplazo==='' || reemplazo===undefined)
   && (mantenimineto==='' || mantenimineto===undefined)
   && (escala==='' || escala===undefined))
-  // Se cambia la asignación de "" a null para evitar el error de tipo.
   avisosAlert.value = null;
 });
 watch(() => props.response, (newResponse) => {
@@ -74,11 +69,6 @@ watch(() => props.response, (newResponse) => {
     avisos.value = newResponse;
   }
 });
-const resetForm = () => {
-  paramsA.value = {};
-  avisos.value = null;
-  avisosAlert.value = null;
-};
 </script>
 
 <template>
@@ -87,7 +77,7 @@ const resetForm = () => {
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetForm"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
           </div>
           <Suspense>
             <template #default>
@@ -95,9 +85,10 @@ const resetForm = () => {
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">estado_fisico</label>
-                      <!-- Regex corrected to escape special characters -->
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsA.estado_fisico && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.estado_fisico),'is-valid':paramsA.estado_fisico && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.estado_fisico)}" v-model="paramsA.estado_fisico" placeholder="Estado Fisico" required />
+                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsA.producto_id" required multiple>
+                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
+                      </select>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">escala</label>
@@ -119,12 +110,6 @@ const resetForm = () => {
                       <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsA.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.mantenimiento),'is-valid': paramsA.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.mantenimiento)}" v-model="paramsA.mantenimiento" placeholder="Mantenimiento"  />
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.producto_id" required>
-                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.estatus_id" required>
                         <option v-for="(estatus, index) in relations[1]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
@@ -144,7 +129,7 @@ const resetForm = () => {
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="paramsA = {}, resetForm">Cancelar</button>
+                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
                   <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
                     <span v-if="!isLoadingImport">Agregar</span>
                     <span v-else>

@@ -95,8 +95,11 @@ watch(() => props.response, (newResponse) => {
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">estado_fisico</label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsE.estado_fisico && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.estado_fisico),'is-valid':paramsE.estado_fisico && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.estado_fisico)}" v-model="paramsE.estado_fisico" placeholder="Estado Fisico" required />
+                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
+                      <!-- <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span> -->
+                      <select class="form-select" v-model="paramsE.producto_id" required multiple>
+                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
+                      </select>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">escala</label>
@@ -113,13 +116,6 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">mantenimiento</label>
                       <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento),'is-valid': paramsE.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento)}" v-model="paramsE.mantenimiento" placeholder="Mantenimineto"  />
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.producto_id" required>
-                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
-                      </select>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
