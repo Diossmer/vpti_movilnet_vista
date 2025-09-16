@@ -36,12 +36,10 @@ const paramsA = ref({});
 
 watch([
   () => paramsA.value?.codigo,
-  () => paramsA.value?.dispositivo,
-  () => paramsA.value?.tamaño,
-  () => paramsA.value?.marca,
-  () => paramsA.value?.nucleo,
   () => paramsA.value?.modelo,
+  () => paramsA.value?.dispositivo,
   () => paramsA.value?.serial,
+  () => paramsA.value?.marca,
   () => paramsA.value?.codigo_inv,
   () => paramsA.value?.observacion,
 ],
@@ -57,10 +55,6 @@ watch([
   if (dispositivoError) errors.push(dispositivoError);
   const marcaError = validacionesUtils().textValid(marca);
   if (marcaError) errors.push(marcaError);
-  const tamañoError = validacionesUtils().sizeValid(tamaño);
-  if (tamañoError) errors.push(tamañoError);
-  const nucleoError = validacionesUtils().textValid(nucleo);
-  if (nucleoError) errors.push(nucleoError);
   const modeloError = validacionesUtils().textValid(modelo);
   if (modeloError) errors.push(modeloError);
   const serialError = validacionesUtils().serialValid(serial);
@@ -73,8 +67,6 @@ watch([
   if ((codigo==='' || codigo===undefined)
   && (dispositivo==='' || dispositivo===undefined)
   && (marca==='' || marca===undefined)
-  && (tamaño==='' || tamaño===undefined)
-  && (nucleo==='' || nucleo===undefined)
   && (modelo==='' || modelo===undefined)
   && (serial==='' || serial===undefined)
   && (codigo_inv==='' || codigo_inv===undefined)

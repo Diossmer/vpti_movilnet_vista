@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch, toRaw } from 'vue';
 import { dataTable } from '@/components/utils/dataTableUtils';
 import DescripcionServicios from '@/components/services/inventario/DescripcionServicios';
 import { useRouter } from 'vue-router'
@@ -52,7 +52,7 @@ const handleData = async (action = null, params = null, id = null) => {
   try {
     if (action === 'create' || action === 'update') {
       isLoadingImport.value = true
-      response.value = action=== 'create'? await DescripcionServicios(action, data, params)
+      response.value = action=== 'create'? await DescripcionServicios(action, id, params)
     : action === 'update'? await DescripcionServicios(action, id, params):undefined;
       await handleData('fetchAll');
     } else if (action === 'delete') {

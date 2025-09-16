@@ -88,7 +88,7 @@ watch(() => props.response, (newResponse) => {
                   <div class="row">
                     <div class="col-3">
                       <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span>
+                      <!-- <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span> -->
                       <select class="form-select" v-model="paramsE.producto_id" multiple required>
                         <option v-for="(producto, index) in relations[1]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
                       </select>
