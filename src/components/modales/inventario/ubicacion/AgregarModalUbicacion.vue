@@ -91,9 +91,15 @@ const resetForm = () => {
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-4">
+                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsA.producto_id" multiple required>
+                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id" selected>{{ producto.nombre }}</option>
+                      </select>
+                    </div>
+                    <div class="col-4">
                       <label for="" class="badge text-secondary">descripcion del producto<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.descripcion_id" required>
-                        <option v-for="(descripcion, index) in relations" :key="index" :value="descripcion.id">Modelo:{{ descripcion.modelo }} | Codigo: {{ descripcion.codigo }}</option>
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">Modelo:{{ descripcion.modelo }} | Codigo: {{ descripcion.codigo }}</option>
                       </select>
                     </div>
                     <div class="col-4">

@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps } from 'vue';
+import { ref, computed, defineProps } from 'vue';
 
 const props = defineProps({
   paramsE: {
@@ -11,6 +11,16 @@ const props = defineProps({
     type: Array,
     default: () => [[], []],
   }
+});
+const searchQuery = ref('');
+
+const filteredProductos = computed(() => {
+  if (!searchQuery.value) {
+    return props.paramsE.productos;
+  }
+  return props.paramsE.productos.filter(producto =>
+    producto.nombre.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
 });
 </script>
 
@@ -51,12 +61,22 @@ const props = defineProps({
               <div class="col-6">
                 <p><b class="text-red fw-bolder">codigo: </b>{{ paramsE.descripcion?.codigo }}</p>
               </div>
-              <div class="col-6">
-                <p><b class="text-red fw-bolder">cantidad de productos: </b>{{ paramsE.productos?.length}}</p>
-                <div class="row">
-                  <div class="col-6" v-for="(producto) in paramsE.productos" :key="producto.id">{{ producto.nombre }}</div>
+              <div class="col-3">
+                <p><b class="text-red fw-bolder">cantidad de productos: </b>{{ filteredProductos?.length }}</p>
+              </div>
+              <div class="col-9">
+                <p><b class="text-red fw-bolder">productos: </b></p>
+                <input type="text" v-model="searchQuery" class="form-control mb-2" placeholder="Buscar producto...">
+                <div class="product-list-container" style="max-height: 200px; overflow-y: auto;">
+                  <ul v-if="filteredProductos && filteredProductos.length">
+                    <li v-for="producto in filteredProductos" :key="producto.id">
+                      {{ producto.nombre }}
+                    </li>
+                  </ul>
+                  <p v-else class="text-muted">No se encontraron productos.</p>
                 </div>
               </div>
+              
             </div>
           </div>
           <div class="modal-footer">

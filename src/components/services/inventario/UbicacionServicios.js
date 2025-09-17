@@ -63,6 +63,7 @@ export  default async function UbicacionServicios(action, data = null, params = 
       return {
         mostrarT: await get(`${process.APP_URL}/api/ubicacion`, localStorage.getItem('token')),
         descripcion: await get(`${process.APP_URL}/api/descripcion`, localStorage.getItem('token')),
+        productos: await get(`${process.APP_URL}/api/productos`, localStorage.getItem('token')),
       };
     }
   }

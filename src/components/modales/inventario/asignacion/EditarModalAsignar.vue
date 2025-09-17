@@ -98,10 +98,24 @@ watch(() => props.response, (newResponse) => {
                       </select>
                     </div>
                     <div class="col-5">
+                      <label for="" class="badge text-secondary">descripcion<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsE.descripcion?.modelo }}</span>
+                      <select class="form-select" v-model="paramsE.descripcion_id" required>
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">Modelo:{{ descripcion.modelo }} | Codigo: {{ descripcion.codigo }}</option>
+                      </select>
+                    </div>
+                    <div class="col-5">
+                      <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsE.usuario?.nombre }}</span>
+                      <select class="form-select" v-model="paramsE.usuario_id" required>
+                        <option v-for="(usuario, index) in relations[2]" :key="index" :value="usuario.id">{{ usuario.nombre }}</option>
+                      </select>
+                    </div>
+                    <div class="col-5">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
                       <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
                       <select class="form-select" v-model="paramsE.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[2]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
+                        <option v-for="(estatus, index) in relations[3]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
                       </select>
                     </div>
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>

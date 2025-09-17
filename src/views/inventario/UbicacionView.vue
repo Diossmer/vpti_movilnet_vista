@@ -71,10 +71,10 @@ const handleData = async (action = null, params = null, id = null) => {
     console.error('Error al manejar los datos:', error);
   } finally {
     isLoadingImport.value = false
-    const {mostrarT, descripcion} = await UbicacionServicios('fetchAll');
+    const {mostrarT, descripcion, productos} = await UbicacionServicios('fetchAll');
     col.value = columns(mostrarT);
     rowData.value = mostrarT;
-    relations.value = descripcion;
+    relations.value = [productos,descripcion];
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };

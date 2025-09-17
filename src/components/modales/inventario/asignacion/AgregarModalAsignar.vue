@@ -48,11 +48,6 @@ watch(() => props.response, (newResponse) => {
     avisos.value = newResponse;
   }
 });
-const resetForm = () => {
-  paramsA.value = {};
-  avisos.value = null;
-  avisosAlert.value = null;
-};
 </script>
 
 <template>
