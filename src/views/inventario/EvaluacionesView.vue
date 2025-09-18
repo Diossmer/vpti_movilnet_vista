@@ -31,6 +31,8 @@ const selectedRowsAll = ref([]);
 const paramsE = ref({})
 const response = ref(null);
 const isLoadingImport = ref(false);
+
+
 const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
     if (globalSearchQuery.value) {
@@ -246,7 +248,7 @@ onMounted(async()=>{await handleData()})
                   <td>{{ row.escala }}</td>
                   <td>{{ row.compatibilidad }}</td>
                   <td>{{ row.reemplazo }}</td>
-                  <td>{{ row.mantenimineto }}</td>
+                  <td>{{ row.mantenimiento }}</td>
                   <td>{{ row.estatus?.nombre }}</td>
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>

@@ -11,6 +11,7 @@ import MostrarModalUbicacion from '@/components/modales/inventario/ubicacion/Mos
 import ImportarModalUbicacion from '@/components/modales/inventario/ubicacion/ImportarModalUbicacion.vue';
 import PdfModalUbicacion from '@/components/modales/inventario/ubicacion/PdfModalUbicacion.vue';
 
+
 const store = useLoginStore()
 const { dataPerfil } = storeToRefs(store)
 
