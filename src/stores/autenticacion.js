@@ -111,14 +111,14 @@ export const useLoginStore = defineStore('login', ()=>{
     }
   };
 
-  /* watch(dataPerfil,async ()=>{
-    console.log(dataPerfil.value)
-    if(dataPerfil.value===''||dataPerfil.value===undefined||dataPerfil.value===null){
-      await perfil();
-    }
-  }); */
+  
 
   onMounted(async () => {
+    watch(dataPerfil,async ()=>{
+    if(dataPerfil.value===''||dataPerfil.value===undefined||dataPerfil.value===null){
+        await perfil();
+      }
+    });
     if(localStorage.getItem("token") || dataPerfil.value === null){
       await perfil();
       await iniciarSesion();

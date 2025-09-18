@@ -19,9 +19,6 @@ const props = defineProps({
   },
 });
 
-const avisos = ref(null);
-const avisosAlert = ref(null);
-
 watch(() => props.response, (newResponse) => {
   if (newResponse) {
     avisos.value = newResponse;

@@ -23,8 +23,6 @@ const props = defineProps({
   },
 });
 
-const loginStore = useLoginStore();
-const { dataPerfil } = storeToRefs(loginStore);
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
@@ -47,7 +45,7 @@ watch(() => props.response, (newResponse) => {
 </script>
 
 <template>
-  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">

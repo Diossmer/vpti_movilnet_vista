@@ -24,8 +24,6 @@ const props = defineProps({
   },
 });
 
-const loginStore = useLoginStore();
-const { dataPerfil } = storeToRefs(loginStore);
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
