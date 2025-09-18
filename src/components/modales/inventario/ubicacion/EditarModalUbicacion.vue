@@ -106,8 +106,8 @@ watch(() => props.response, (newResponse) => {
                       </select>
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">origen<span class="text-danger">*</span></label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsE.origen && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.origen),'is-valid':paramsE.origen && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.origen)}" v-model="paramsE.origen" placeholder="Origen" required />
+                      <label for="" class="badge text-secondary">origen</label>
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid':paramsE.origen && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.origen),'is-valid':paramsE.origen && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.origen)}" v-model="paramsE.origen" placeholder="Origen" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">destino<span class="text-danger">*</span></label>

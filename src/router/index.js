@@ -40,6 +40,18 @@ const router = createRouter({
           component: () => import('@/views/DashboardView.vue'),
         },
         {
+          path: '/sin-perifericos',
+          name: 'dashboard.sin-perifericos',
+          component: () => import('@/views/inventario/InventariosView.vue'),
+          meta: { requiresAuth: true },
+        },
+        {
+          path: '/perifericos',
+          name: 'dashboard.perifericos',
+          component: () => import('@/views/inventario/PerifericosView.vue'),
+          meta: { requiresAuth: true },
+        },
+        {
           path: '/evaluaciones',
           name: 'dashboard.evaluaciones',
           component: () => import('@/views/inventario/EvaluacionesView.vue'),
@@ -49,18 +61,6 @@ const router = createRouter({
           path: '/usuarios',
           name: 'dashboard.usuarios',
           component: () => import('@/views/administrativo/UsuariosView.vue'),
-          meta: { requiresAuth: true },
-        },
-        {
-          path: '/productos',
-          name: 'dashboard.productos',
-          component: () => import('@/views/inventario/ProductosView.vue'),
-          meta: { requiresAuth: true },
-        },
-        {
-          path: '/descripciones',
-          name: 'dashboard.descripciones',
-          component: () => import('@/views/inventario/DescripcionView.vue'),
           meta: { requiresAuth: true },
         },
         {
@@ -96,15 +96,15 @@ const router = createRouter({
         },
         //Inventario
         {
-          path: '/sin-perifericos',
-          name: 'configuracion.sin-perifericos',
-          component: () => import('@/views/inventario/InventariosView.vue'),
+          path: '/productos',
+          name: 'configuracion.productos',
+          component: () => import('@/components/config/ProductosConfig.vue'),
           meta: { requiresAuth: true },
         },
         {
-          path: '/perifericos',
-          name: 'configuracion.perifericos',
-          component: () => import('@/views/inventario/PerifericosView.vue'),
+          path: '/descripciones',
+          name: 'configuracion.descripciones',
+          component: () => import('@/components/config/DescripcionConfig.vue'),
           meta: { requiresAuth: true },
         },
       ],
