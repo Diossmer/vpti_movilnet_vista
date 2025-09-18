@@ -243,12 +243,10 @@ onMounted(async()=>{await handleData()})
                       </label>
                     </div>
                   <td>{{ row.id }}</td>
-                  <td>{{ row.estado_fisico }}</td>
                   <td>{{ row.escala }}</td>
                   <td>{{ row.compatibilidad }}</td>
                   <td>{{ row.reemplazo }}</td>
                   <td>{{ row.mantenimineto }}</td>
-                  <td>{{ row.producto?.nombre }}</td>
                   <td>{{ row.estatus?.nombre }}</td>
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>

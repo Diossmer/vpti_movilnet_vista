@@ -28,6 +28,7 @@ const dataTable = () => {
           'observacion',
           'notas',
           'comentario',
+          'ubicaciones',
         ].includes(key);
         // Si no existe y no está excluido, lo añade a columnas1
         if (!existsInColumnas1 && !esExcluido) {

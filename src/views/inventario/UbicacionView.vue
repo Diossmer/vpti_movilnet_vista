@@ -239,7 +239,6 @@ onMounted(async()=>{await handleData()})
                 <td>{{ row.piso }}</td>
                 <td>{{ row.region }}</td>
                 <td>{{ row.capital }}</td>
-                <td>{{ row.producto?.nombre }}</td>
                 <td>
                   <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                   <ul class="dropdown-menu p-2 gap-3">
