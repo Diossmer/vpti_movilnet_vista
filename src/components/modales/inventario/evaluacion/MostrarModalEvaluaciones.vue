@@ -26,8 +26,8 @@ const filteredProductos = computed(() => {
 </script>
 
 <template>
-  <div class="modal fade" id="staticMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+  <div class="modal fade" id="staticMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Evaluación del producto</h1>
@@ -55,8 +55,25 @@ const filteredProductos = computed(() => {
               </div>
               <hr class="border-4 border-primary opacity-75">
               <div class="col-6">
-                <p><b>codigo: </b>{{ paramsE.descripcion?.codigo }}</p>
-                <p><b>modelo: </b>{{ paramsE.descripcion?.modelo }}</p>
+                <p><b>modelo: </b>{{ paramsE?.descripcion?.modelo }}</p>
+              </div>
+              <div class="col-6">
+                <p><b>codigo: </b>{{ paramsE?.descripcion?.codigo }}</p>
+              </div>
+              <div class="col-6">
+                <p><b>dispositivo: </b>{{ paramsE?.descripcion?.dispositivo }}</p>
+              </div>
+              <div class="col-6">
+                <p><b>serial: </b>{{ paramsE?.descripcion?.serial }}</p>
+              </div>
+              <div class="col-6">
+                <p><b>marca: </b>{{ paramsE?.descripcion?.marca }}</p>
+              </div>
+              <div class="col-6">
+                <p><b>codigo_inv: </b>{{ paramsE?.descripcion?.codigo_inv }}</p>
+              </div>
+              <div class="col-6">
+                <p><b>descripcion: </b>{{ paramsE?.descripcion?.observacion }}</p>
               </div>
               <div class="col-6">
                 <p><b>estatus: </b>{{ paramsE.estatus?.nombre }}</p>

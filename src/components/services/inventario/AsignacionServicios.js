@@ -47,7 +47,7 @@ export  default async function AsignacionServicios(action, data = null, params =
           return await formData(`${process.APP_URL}/api/asignacionimportar`, params, localStorage.getItem('token'));
           //break;
         case 'pdf':
-            FileReader = await blob(`${process.APP_URL}/api/asignacionpdf/${data}`, localStorage.getItem('token'));
+            FileReader = await blob(`${process.APP_URL}/api/asignacionpdf/${data}/${params}`, localStorage.getItem('token'));
             url = URL.createObjectURL(FileReader);
             a = document.createElement('a');
             a.href = url;

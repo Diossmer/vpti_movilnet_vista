@@ -14,11 +14,11 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div class="modal fade" id="staticPDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="staticPDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">PDF</h1>
+            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Modelos o Formatos</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
           </div>
           <div class="modal-body">
@@ -48,7 +48,7 @@ const props = defineProps({
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="avisos = null, avisosAlert = null">Regresar</button>
+            <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Regresar</button>
           </div>
         </div>
       </div>

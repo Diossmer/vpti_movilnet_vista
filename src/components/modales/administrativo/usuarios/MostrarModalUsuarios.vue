@@ -11,7 +11,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="modal fade" id="staticMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="staticMostrar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -62,13 +62,13 @@ const props = defineProps({
             <hr class="border-4 border-primary opacity-75">
             <div class="row">
               <div class="col-4">
-                <p><b class="text-red fw-bolder">estatus: </b>{{ paramsE.estatus?.nombre }}</p>
+                <p :title="paramsE.estatus?.descripcion"><b class="text-red fw-bolder">estatus: </b>{{ paramsE.estatus?.nombre }}</p>
               </div>
               <div class="col-4">
-                <p><b class="text-red fw-bolder">rol: </b>{{ paramsE.rol?.nombre }}</p>
+                <p :title="paramsE.rol?.descripcion"><b class="text-red fw-bolder">rol: </b>{{ paramsE.rol?.nombre }}</p>
               </div>
               <div class="col-4">
-                <p><b class="text-red fw-bolder">productos: </b>{{ paramsE.productos?.length }}</p>
+                <p :title="paramsE.productos?.map(p => p.descripcion).join(', ')"><b class="text-red fw-bolder">productos: </b>{{ paramsE.productos?.length }}</p>
               </div>
             </div>
           </div>

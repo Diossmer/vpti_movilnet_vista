@@ -54,11 +54,11 @@ const myModalAlternative = new bootstrap.Modal('#myModal', options) */
 
 <template>
   <!-- `data-bs-backdrop` y `data-bs-keyboard` ya no son necesarios aquí, el componente padre los maneja si se usan correctamente. -->
-  <div class="modal fade" id="staticAgregar" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" ref="modalAgregar">
+  <div class="modal fade" id="staticAgregar" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar">
       <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
+            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Agregar</h1>
             <!-- Resetea el formulario al cerrar el modal -->
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
           </div>

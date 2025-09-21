@@ -14,11 +14,11 @@ const props = defineProps({
 });
 </script>
 <template>
-  <div class="modal fade" id="staticPDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="staticPDF" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">PDF</h1>
+            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Modelos o Formatos</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
           </div>
           <div class="modal-body">
@@ -26,23 +26,23 @@ const props = defineProps({
               <div class="col-12">
                 <div class="row" v-if="paramsE.id">
                   <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">pedidos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','pedidos')"><i class="bi bi-file-pdf"></i></button>
+                      <label for="" class="badge text-secondary text-wrap">informe</label>
+                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','informe')"><i class="bi bi-file-pdf"></i></button>
                   </div>
-                  <div class="col-4 text-center">
+                  <!-- <div class="col-4 text-center">
                       <label for="" class="badge text-secondary text-wrap">nota de entrega</label>
                       <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData(paramsE,'pdf','notaEntrega')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="row" v-else>
                   <div class="col-4 text-center">
-                      <label for="" class="badge text-secondary text-wrap">modelos</label>
-                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','modelos')"><i class="bi bi-file-pdf"></i></button>
+                      <label for="" class="badge text-secondary text-wrap">informes</label>
+                      <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','informes')"><i class="bi bi-file-pdf"></i></button>
                   </div>
-                  <div class="col-4 text-center">
+                  <!-- <div class="col-4 text-center">
                       <label for="" class="badge text-secondary text-wrap">formatos</label>
                       <button class="btn btn-outline-secondary text-danger dropdown-item fs-4 p-0" @click="fileData('','pdf','formatos')"><i class="bi bi-file-pdf"></i></button>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>

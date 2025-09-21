@@ -22,7 +22,13 @@ body{
     text-transform: capitalize;
     line-height: 1.6;
     text-rendering: optimizeLegibility;
+    font-family: 'Open Sans', sans-serif;
 }
+
+h1 {
+    font-family: 'Playfair Display', serif;
+}
+
 input,select,textarea{
     background-color: var(--institucional-m-gris-oscuro) !important;
     color: var(--institucional-m-blanco) !important;

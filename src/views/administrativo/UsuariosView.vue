@@ -205,7 +205,7 @@ onMounted(async()=>{await handleData()})
              <div class="col-5">
                <input type="text" class="form-control" v-model="globalSearchQuery" placeholder="Buscar globalmente...">
              </div>
-             <div class="row d-flex justify-content-between">
+             <div class="row d-flex justify-content-between" v-if="dataPerfil.rol.id !== 2">
               <div class="col-6 btn-group">
                   <div class="dropdown" v-if="dataPerfil.rol.id === 1 || dataPerfil.rol.id === 3">
                     <button class="btn btn-outline-secondary dropdown-toggle text-danger" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -222,7 +222,7 @@ onMounted(async()=>{await handleData()})
                   <ul class="dropdown-menu">
                     <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li>
                     <li><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','usuarios')"><i class="bi bi-upload"></i> Exportar</button></li>
-                    <li v-if="dataPerfil.rol.id !== 2"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticImportar"><i class="bi bi-download"></i> Importar</button></li>
+                    <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticImportar"><i class="bi bi-download"></i> Importar</button></li>
                   </ul>
                 </div>
                </div>
@@ -239,8 +239,8 @@ onMounted(async()=>{await handleData()})
             <table class="table table-secondary table-striped table-hover" id="dataTable">
               <thead class="">
                 <tr class="">
-                  <div class="p-2 text-nowrap"><i class="bi bi-ui-checks"></i>todos</div>
-                    <div class="form-check form-switch d-flex justify-content-end px-3" style="height: 60px;">
+                  <div class="p-2 text-nowrap" v-if="dataPerfil.rol?.id !== 2"><i class="bi bi-ui-checks"></i></div>
+                    <div class="form-check form-switch d-flex justify-content-end px-3" style="height: 60px;" v-if="dataPerfil.rol?.id !== 2">
                       <input class="form-check-input"  :class="{ 'selected': selectedRowsAll.length }" type="checkbox" role="switch" id="flexSwitchCheckDefault" @change="(e)=>handleMasivoDelete(e)" :checked="selectedRowsAll.length === rowData.length">
                       <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                     </div>
@@ -254,12 +254,11 @@ onMounted(async()=>{await handleData()})
               </thead>
               <tbody>
                 <tr v-for="(row, index) in filteredAndPaginatedData" :key="index">
-                  <div class="form-check form-switch d-flex justify-content-end" style="height: 60px;">
+                  <div class="form-check form-switch d-flex justify-content-end" style="height: 60px;" v-if="dataPerfil.rol?.id !== 2">
                       <label class="form-check-label" for="flexSwitchCheckDefault">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" :checked="selectedRows.includes(row)" @change="filaIndividual(row)" :class="{ 'selected': selectedRows.includes(row) }">
                       </label>
                     </div>
-                  <td>{{ row.id }}</td>
                   <td>{{ row.nombre }}</td>
                   <td>{{ row.apellido }}</td>
                   <td>{{ row.cedula }}</td>
@@ -270,8 +269,8 @@ onMounted(async()=>{await handleData()})
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">
-                      <li><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li>
-                      <li><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export',row.usuario)"><i class="bi bi-upload"></i>Exportar</button></li>
+                      <li v-if="dataPerfil.rol.id !== 2"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li>
+                      <li v-if="dataPerfil.rol.id !== 2"><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export',row.usuario)"><i class="bi bi-upload"></i>Exportar</button></li>
                       <li v-if="dataPerfil.rol.id !== 2">
                         <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal" data-bs-target="#staticEditar" @click="handleData('fetch', '', row.id)">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px;">

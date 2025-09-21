@@ -215,8 +215,8 @@ onMounted(async()=>{await handleData()})
             <table class="table table-secondary table-striped table-hover" id="dataTable">
               <thead class="">
                 <tr class="">
-                  <div class="p-2 text-nowrap"><i class="bi bi-ui-checks"></i>todos</div>
-                    <div class="form-check form-switch d-flex justify-content-end px-3" style="height: 60px;">
+                  <div class="p-2 text-nowrap" v-if="dataPerfil.rol?.id !== 2"><i class="bi bi-ui-checks"></i></div>
+                    <div class="form-check form-switch d-flex justify-content-end px-3" style="height: 60px;" v-if="dataPerfil.rol?.id !== 2">
                       <input class="form-check-input" :class="{ 'selected': selectedRowsAll.length }" type="checkbox" role="switch" id="flexSwitchCheckDefault" @change="(e)=>handleMasivoDelete(e)" :checked="selectedRowsAll.length === rowData.length">
                       <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                     </div>
@@ -230,17 +230,16 @@ onMounted(async()=>{await handleData()})
               </thead>
               <tbody>
                 <tr v-for="(row, index) in filteredAndPaginatedData" :key="index">
-                  <div class="form-check form-switch d-flex justify-content-end" style="height: 60px;">
+                  <div class="form-check form-switch d-flex justify-content-end" style="height: 60px;" v-if="dataPerfil.rol?.id !== 2">
                       <label class="form-check-label" for="flexSwitchCheckDefault">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" :checked="selectedRows.includes(row)" @change="filaIndividual(row)" :class="{ 'selected': selectedRows.includes(row) }">
                       </label>
                     </div>
-                  <td>{{ row.id }}</td>
                   <td>{{ row.fecha_asignar }}</td>
                   <td>{{ row.fecha_devolucion }}</td>
                   <td>{{ row.destino }}</td>
-                  <td>{{ row.estatus?.nombre }}</td>
                   <td>{{ row.usuario?.usuario }}</td>
+                  <td>{{ row.estatus?.nombre }}</td>
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">

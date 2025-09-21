@@ -43,7 +43,7 @@ export  default async function UsuariosServicios(action, data = null, params = n
         case 'import':
           return await formData(`${process.APP_URL}/api/usuarioimportar`, params, localStorage.getItem('token'),'omit');
         case 'pdf':
-            FileReader = await blob(`${process.APP_URL}/api/usuariopdf/${data}`, localStorage.getItem('token'));
+            FileReader = await blob(`${process.APP_URL}/api/usuariopdf/${data}/${params}`, localStorage.getItem('token'));
             url = URL.createObjectURL(FileReader);
             a = document.createElement('a');
             a.href = url;

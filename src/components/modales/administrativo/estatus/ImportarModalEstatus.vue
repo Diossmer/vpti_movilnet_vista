@@ -29,7 +29,7 @@ watch(() => props.response, (newResponse) => {
 });
 </script>
 <template>
-  <div class="modal fade" id="staticImportar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="staticImportar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
@@ -51,7 +51,7 @@ watch(() => props.response, (newResponse) => {
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" aria-hidden="true" @click="avisos = null, avisosAlert = null">Cancelar</button>
+                <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
                 <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport"><span v-if="!isLoadingImport">Aceptar</span>
                   <span v-else>
                     <span class="spinner-border spinner-border-sm" role="status"></span>

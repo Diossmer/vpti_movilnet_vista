@@ -30,7 +30,9 @@ const props = defineProps({
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
-const paramsA = ref({});
+const paramsA = ref({
+  producto_id: []
+});
 
 watch([
   () => paramsA.value?.origen,
@@ -71,11 +73,11 @@ watch(() => props.response, (newResponse) => {
 </script>
 
 <template>
-  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar" aria-hidden="true">
+  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="staticBackdropLabel">Agregar</h1>
+            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Agregar</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
           </div>
           <Suspense>

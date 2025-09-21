@@ -10,6 +10,7 @@ const dataTable = () => {
         const existsInColumnas1 = columnas1.some(column => column.title === key);
         // Verifica si el título no es uno de los excluidos
         const esExcluido = [
+          'id',
           'productos',
           'usuarios',
           'asignaciones',

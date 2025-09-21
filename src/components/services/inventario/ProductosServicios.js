@@ -46,7 +46,7 @@ export  default async function ProductosServicios(action, data = null, params = 
           return await formData(`${process.APP_URL}/api/productosimportar`, params, localStorage.getItem('token'));
           //break;
         case 'pdf':
-            FileReader = await blob(`${process.APP_URL}/api/productospdf/${data}`, localStorage.getItem('token'));
+            FileReader = await blob(`${process.APP_URL}/api/productospdf/${data}/${params}`, localStorage.getItem('token'));
             url = URL.createObjectURL(FileReader);
             a = document.createElement('a');
             a.href = url;
