@@ -65,7 +65,7 @@ const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripcione
             <li class="panelnav_li">
               <RouterLink to="dashboard" class="btn p-0"><span class="fs-5"><i class="bi bi-pc-display-horizontal"></i> Panel de control</span></RouterLink>
             </li>
-            <li class="panelnav_li" :hidden="includedModulesAdmin?.length<=0" v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 4">
+            <li class="panelnav_li" :hidden="includedModulesAdmin?.length<=0" v-if="dataPerfil?.rol.id !== 2 && dataPerfil?.rol.id !== 4">
               <span class="fs-5"><i class="bi bi-person-workspace"></i> Administrativo</span>
               <ul class="panel_nav_ul">
                 <li class="panel_nav_li" v-for="(modulo,index) in includedModulesAdmin" :key="index">
@@ -79,34 +79,25 @@ const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripcione
               <span class="fs-5"><i class="bi bi-calendar2-event"></i> Inventario</span>
               <ul class="panel_nav_ul">
                 <li class="panel_nav_li" v-for="(modulo,index) in includedModulesInven" :key="index">
-                  <RouterLink :to="
-                  (modulo ==='ubicaciones')?'ubicaciones':
-                  (modulo ==='evaluaciones')?'evaluaciones':
-                  (modulo ==='sin-perifericos')?'sin-perifericos':
-                  (modulo ==='asignaciones')?'asignaciones':
-                  'perifericos'"
-                  class=""
-                  v-if="!(modulo ==='evaluaciones' && dataPerfil.rol.id === 3)">
-                  <i class="bi bi-box-seam" v-if="modulo ==='perifericos'"></i>
-                  <i class="bi bi-box2" v-if="modulo ==='sin-perifericos'"></i>
-                  <i class="bi bi-geo-fill" v-if="modulo ==='ubicaciones'"></i>
-                  <i class="bi bi-hand-thumbs-up" v-if="modulo ==='evaluaciones'"></i>
-                  <i class="bi bi-person-badge-fill" v-if="modulo ==='asignaciones'"></i>
-                  
-                  {{ modulo }}</RouterLink>
+                  <RouterLink :to="modulo" class=""
+                    v-if="!(modulo ==='evaluaciones' && dataPerfil?.rol.id === 3)">
+                    <i class="bi bi-box-seam" v-if="modulo ==='perifericos'"></i>
+                    <i class="bi bi-box2" v-if="modulo ==='sin-perifericos'"></i>
+                    <i class="bi bi-geo-fill" v-if="modulo ==='ubicaciones'"></i>
+                    <i class="bi bi-hand-thumbs-up" v-if="modulo ==='evaluaciones'"></i>
+                    <i class="bi bi-person-badge-fill" v-if="modulo ==='asignaciones'"></i>
+                    {{ modulo }}</RouterLink>
                 </li>
               </ul>
             </li>
-            <li class="panelnav_li" :hidden="configuración?.length<=0" v-if="dataPerfil.rol.id !== 2">
+            <li class="panelnav_li" :hidden="configuración?.length <= 0" v-if="dataPerfil?.rol.id !== 2">
+
               <span class="fs-5"><i class="bi bi-nut"></i> Configuración</span>
+
               <ul class="panel_nav_ul">
                 <li class="panel_nav_li" v-for="(modulo,index) in includedModulesConfi" :key="modulo.id">
-                  <RouterLink :to="
-                    (modulo ==='estatus' && (dataPerfil.rol.id === 3 || dataPerfil.rol.id === 4)) ?'estatus':
-                    (modulo ==='roles' && (dataPerfil.rol.id === 3 || dataPerfil.rol.id === 4)) ?'roles':
-                    modulo ==='descripciones'?'descripciones':
-                    'productos'" class=""
-                    v-if="!(modulo ==='estatus' && (dataPerfil.rol.id === 3 || dataPerfil.rol.id === 4)) && !(modulo ==='roles' && (dataPerfil.rol.id === 3 || dataPerfil.rol.id === 4))">
+                  <RouterLink :to="modulo" class=""
+                    v-if="!(modulo ==='estatus' && (dataPerfil?.rol.id === 3 || dataPerfil?.rol.id === 4)) && !(modulo ==='roles' && (dataPerfil?.rol.id === 3 || dataPerfil?.rol.id === 4))">
                     <i class="bi bi-person-arms-up" v-if="modulo === 'estatus'"></i>
                     <i class="bi bi-gear-wide-connected" v-if="modulo === 'roles'"></i>
                     <i class="bi bi-journal-check" v-if="modulo ==='productos'"></i>

@@ -206,7 +206,7 @@ onMounted(async()=>{await handleData()})
                   <div class="dropdown">
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">📁Archivos</button>
                     <ul class="dropdown-menu">
-                      <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li>
+                      <!-- <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li> -->
                       <li><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','roles')"><i class="bi bi-upload"></i> Exportar</button></li>
                       <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticImportar"><i class="bi bi-download"></i> Importar</button></li>
                     </ul>
