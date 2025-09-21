@@ -84,18 +84,18 @@ export function validacionesUtils() {
   }
 
   const serialValid = (params) => {
-    const serialRegex = /^[A-Za-z0-9\-_]{6,20}$/;
+    const serialRegex = /^[^<>/'`]{6,20}$/;
     return serialRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo se permiten números y letras, con un guion o guion bajo, y una longitud de 6 a 20 caracteres.";
-  }
+      : "❌No se permiten los caracteres < > / ' `, y la longitud debe ser entre 6 y 20 caracteres.";
+  };
 
   const skuValid = (params) => {
-    const skuRegex = /^[A-Z0-9]{3,}-[A-Z0-9]{3,8}$/;
+    const skuRegex = /^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/;
     return skuRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo se permiten números y letras en mayúsculas, con un guion. Mínimo 3 caracteres antes del guion y 3-8 después.";
-  }
+      : "❌No se permiten los caracteres < > / ' `. Debe tener un guion (-), con 3 a 8 letras o números en mayúsculas después.";
+  };
 
   const phoneValid = (params) => {
     const phoneRegex = /^(0?41[246]|0?42[46])-?\d{7}$/;
@@ -118,11 +118,11 @@ export function validacionesUtils() {
       : "❌Solo codigos de area permitidos";
   }
 
-  const formatValid = (params) => {//tallas
-    const formatRegex = /^(\d+|X{0,2}[SLM]|X{3}L?)*$/;
+  const formatValid = (params) => {
+    const formatRegex = /^\d+$/;
     return formatRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo Tallas internacionales y nacionales permitidos";
+      : "❌Solo se permiten códigos de equipos numéricos. No se permiten letras ni otros caracteres.";
   }
 
   const sizeValid = (params) => {

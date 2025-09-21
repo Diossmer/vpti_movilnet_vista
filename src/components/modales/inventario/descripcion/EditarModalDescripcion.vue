@@ -107,7 +107,7 @@ watch(() => props.response, (newResponse) => {
                   <div class="row">
                     <div class="col-2">
                       <label for="" class="badge text-secondary">codigo</label>
-                      <input type="text" maxlength="6" pattern="^(\d+|X{0,2}[SLM]|X{3}L?)*$" class="form-control" :class="{'is-invalid':paramsE.codigo && !/^(\d+|X{0,2}[SLM]|X{3}L?)*$/.test(paramsE.codigo),'is-valid':paramsE.codigo && /^(\d+|X{0,2}[SLM]|X{3}L?)*$/.test(paramsE.codigo)}" v-model="paramsE.codigo" placeholder="codigo" />
+                      <input type="text" maxlength="6" pattern="^\d+$" class="form-control" :class="{'is-invalid':paramsE.codigo && !/^\d+$/.test(paramsE.codigo),'is-valid':paramsE.codigo && /^\d+$/.test(paramsE.codigo)}" v-model="paramsE.codigo" placeholder="codigo" />
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">dispositivo</label>
@@ -126,11 +126,11 @@ watch(() => props.response, (newResponse) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">serial</label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-z0-9\-_]{6,20}$" class="form-control" :class="{'is-invalid':paramsE.serial && !/^[A-Za-z0-9\-_]{6,20}$/.test(paramsE.serial),'is-valid':paramsE.serial && /^[A-Za-z0-9\-_]{6,20}$/.test(paramsE.serial)}" v-model="paramsE.serial" placeholder="XyZ_2025 - xyz-2025 - xyz2025" />
+                      <input type="text" maxlength="20" pattern="^[^<>/'`]{6,20}$" class="form-control" :class="{'is-invalid':paramsE.serial && !/^[^<>/'`]{6,20}$/.test(paramsE.serial),'is-valid':paramsE.serial && /^[^<>/'`]{6,20}$/.test(paramsE.serial)}" v-model="paramsE.serial" placeholder="XyZ_2025 - xyz-2025" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">codigo_inv</label>
-                      <input type="text" maxlength="15" pattern="^[A-Z0-9]{3,}-[A-Z0-9]{3,8}$" class="form-control" :class="{'is-invalid':paramsE.codigo_inv && !/^[A-Z0-9]{3,}-[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv),'is-valid':paramsE.codigo_inv && /^[A-Z0-9]{3,}-[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv)}" v-model="paramsE.codigo_inv" placeholder="codigo_inv-ABC123" />
+                      <input type="text" maxlength="15" pattern="^[^<>/'`]{3,}-[A-Z0-9]{3,8}$" class="form-control" :class="{'is-invalid':paramsE.codigo_inv && !/^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv),'is-valid':paramsE.codigo_inv && /^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv)}" v-model="paramsE.codigo_inv" placeholder="PBA-A000123" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>

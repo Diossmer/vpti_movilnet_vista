@@ -42,8 +42,8 @@ watch([
   () => paramsA.value?.observacion,
 ],
   ([
-  codigo, dispositivo, tamaño,
-  marca, nucleo, modelo,
+  codigo, dispositivo,
+  marca, modelo,
   serial, codigo_inv, observacion
   ]) => {
   const errors = [];
@@ -93,7 +93,7 @@ watch(() => props.response, (newResponse) => {
                   <div class="row">
                     <div class="col-2">
                       <label for="" class="badge text-secondary">codigo</label>
-                      <input type="text" maxlength="6" pattern="^(\d+|X{0,2}[SLM]|X{3}L?)*$" class="form-control" :class="{'is-invalid':paramsA.codigo && !/^(\d+|X{0,2}[SLM]|X{3}L?)*$/.test(paramsA.codigo),'is-valid':paramsA.codigo && /^(\d+|X{0,2}[SLM]|X{3}L?)*$/.test(paramsA.codigo)}" v-model="paramsA.codigo" placeholder="codigo" />
+                      <input type="text" maxlength="6" pattern="^\d+$" class="form-control" :class="{'is-invalid':paramsA.codigo && !/^\d+$/.test(paramsA.codigo),'is-valid':paramsA.codigo && /^\d+$/.test(paramsA.codigo)}" v-model="paramsA.codigo" placeholder="codigo" />
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">dispositivo</label>
@@ -112,11 +112,11 @@ watch(() => props.response, (newResponse) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">serial</label>
-                      <input type="text" maxlength="20" pattern="^[A-Za-z0-9\-_]{6,20}$" class="form-control" :class="{'is-invalid':paramsA.serial && !/^[A-Za-z0-9\-_]{6,20}$/.test(paramsA.serial),'is-valid':paramsA.serial && /^[A-Za-z0-9\-_]{6,20}$/.test(paramsA.serial)}" v-model="paramsA.serial" placeholder="XyZ_2025 - xyz-2025 - xyz2025" />
+                      <input type="text" maxlength="20" pattern="^[^<>/'`]{6,20}$" class="form-control" :class="{'is-invalid':paramsA.serial && !/^[^<>/'`]{6,20}$/.test(paramsA.serial),'is-valid':paramsA.serial && /^[^<>/'`]{6,20}$/.test(paramsA.serial)}" v-model="paramsA.serial" placeholder="XyZ_2025 - xyz-2025" />
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">codigo_inv</label>
-                      <input type="text" maxlength="15" pattern="^[A-Z0-9]{3,}-[A-Z0-9]{3,8}$" class="form-control" :class="{'is-invalid':paramsA.codigo_inv && !/^[A-Z0-9]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv),'is-valid':paramsA.codigo_inv && /^[A-Z0-9]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv)}" v-model="paramsA.codigo_inv" placeholder="codigo_inv-ABC123" />
+                      <label for="" class="badge text-secondary">codigo inventario</label>
+                      <input type="text" maxlength="15" pattern="^[^<>/'`]{3,}-[A-Z0-9]{3,8}$" class="form-control" :class="{'is-invalid':paramsA.codigo_inv && !/^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv),'is-valid':paramsA.codigo_inv && /^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv)}" v-model="paramsA.codigo_inv" placeholder="PBA-A000123" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
