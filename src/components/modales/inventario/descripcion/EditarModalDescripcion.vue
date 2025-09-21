@@ -32,6 +32,7 @@ const props = defineProps({
   },
 });
 
+const { dataPerfil } = storeToRefs(useLoginStore());
 const modalEditar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
@@ -110,22 +111,22 @@ watch(() => props.response, (newResponse) => {
                       <input type="text" maxlength="6" pattern="^\d+$" class="form-control" :class="{'is-invalid':paramsE.codigo && !/^\d+$/.test(paramsE.codigo),'is-valid':paramsE.codigo && /^\d+$/.test(paramsE.codigo)}" v-model="paramsE.codigo" placeholder="codigo" />
                     </div>
                     <div class="col-2">
-                      <label for="" class="badge text-secondary">dispositivo</label>
+                      <label for="" class="badge text-secondary">dispositivo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
                       <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo),'is-valid':paramsE.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo)}" v-model="paramsE.dispositivo" placeholder="dispositivo" />
                     </div>
                     <div class="col-2">
-                      <label for="" class="badge text-secondary">marca</label>
+                      <label for="" class="badge text-secondary">marca<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
                       <input type="text" maxlength="15" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.marca && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.marca),'is-valid':paramsE.marca && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.marca)}" v-model="paramsE.marca" placeholder="marca" />
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">modelo</label>
+                      <label for="" class="badge text-secondary">modelo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
                       <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo),'is-valid':paramsE.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo)}" v-model="paramsE.modelo" placeholder="Modelo" />
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">serial</label>
+                      <label for="" class="badge text-secondary">serial<span class="text-danger">*</span></label>
                       <input type="text" maxlength="20" pattern="^[^<>/'`]{6,20}$" class="form-control" :class="{'is-invalid':paramsE.serial && !/^[^<>/'`]{6,20}$/.test(paramsE.serial),'is-valid':paramsE.serial && /^[^<>/'`]{6,20}$/.test(paramsE.serial)}" v-model="paramsE.serial" placeholder="XyZ_2025 - xyz-2025" />
                     </div>
                     <div class="col-4">

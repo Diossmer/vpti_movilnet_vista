@@ -26,7 +26,7 @@ const props = defineProps({
     required: false,
   },
 });
-
+const { dataPerfil } = storeToRefs(useLoginStore());
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
@@ -59,7 +59,7 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('create', paramsA)">
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-6">
+                    <div class="col-6" v-if="dataPerfil?.rol.id === 1">
                       <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.usuario_id" required>
                         <option v-for="(usuario, index) in relations[0]" :key="index" :value="usuario.id">{{ usuario.usuario }}</option>

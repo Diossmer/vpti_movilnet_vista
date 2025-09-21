@@ -34,6 +34,7 @@ const props = defineProps({
   },
 });
 
+const { dataPerfil } = storeToRefs(useLoginStore());
 const modalEditar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);

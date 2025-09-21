@@ -1,5 +1,4 @@
 import querySettings from "@/components/api/querySettings";
-import DescripcionServicios from "./DescripcionServicios";
 const { get, post, put, blob, destroy, formData } = querySettings();
 export  default async function ProductosServicios(action, data = null, params = null){
   try {
@@ -9,15 +8,12 @@ export  default async function ProductosServicios(action, data = null, params = 
         case 'fetch':
           return await get(`${process.APP_URL}/api/productos/${data}`, localStorage.getItem('token'));
         case 'create':
-          (await DescripcionServicios('create', null, params));
           response = await post(`${process.APP_URL}/api/productos`, params, localStorage.getItem('token'));
           return response;
         case 'update':
-          (await DescripcionServicios('update', data, params));
           response = await put(`${process.APP_URL}/api/productos/${data}`, params, localStorage.getItem('token'));
           return response;
         case 'delete':
-          (await DescripcionServicios('delete', data));
           response = await destroy(`${process.APP_URL}/api/productos/${data}`, localStorage.getItem('token'));
           return response;
         case 'export':
