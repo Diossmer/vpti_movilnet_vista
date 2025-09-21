@@ -198,8 +198,8 @@ onMounted(async()=>{await handleData()})
                 <input type="text" class="form-control" v-model="globalSearchQuery" placeholder="Buscar globalmente...">
               </div>
               <div class="row d-flex justify-content-between">
-                <div class="col-6 btn-group" v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3 && dataPerfil.rol.id !== 4">
-                  <div class="dropdown">
+                <div class="col-6 btn-group" v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 4">
+                  <div class="dropdown" v-if="dataPerfil.rol.id !== 3">
                     <button class="btn btn-outline-secondary dropdown-toggle text-danger" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <i class="bi bi-trash"></i>
                       Eliminar
@@ -212,8 +212,8 @@ onMounted(async()=>{await handleData()})
                   <div class="dropdown">
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">📁Archivos</button>
                     <ul class="dropdown-menu">
-                      <li><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li>
-                      <li><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','productos')"><i class="bi bi-upload"></i> Exportar</button></li>
+                      <li v-if="dataPerfil.rol.id !== 3"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li>
+                      <li v-if="dataPerfil.rol.id !== 3"><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','productos')"><i class="bi bi-upload"></i> Exportar</button></li>
                       <li v-if="dataPerfil.rol?.id !== 2"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticImportar"><i class="bi bi-download"></i> Importar</button></li>
                     </ul>
                   </div>
