@@ -27,7 +27,8 @@ let totalOfPage = ref(0);
 const selectedRows = ref([]);
 const selectedRowsAll = ref([]);
 const paramsE = ref({
-  producto_id:[]
+  producto_id: [],
+  descripcion_id: [],
 })
 const response = ref(null);
 const isLoadingImport = ref(false);
@@ -72,10 +73,10 @@ const handleData = async (action = null, params = null, id = null) => {
     console.error('Error al manejar los datos:', error);
   } finally {
     isLoadingImport.value = false
-    const {mostrarT, productos, descripcion, usuarios, estatus} = await AsignacionServicios('fetchAll');
+    const {mostrarT, descripciones, usuarios, estatus} = await AsignacionServicios('fetchAll');
     col.value = columns(mostrarT);
     rowData.value = mostrarT;
-    relations.value = [productos, descripcion, usuarios, estatus];
+    relations.value = [descripciones, usuarios, estatus];
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };
@@ -238,8 +239,8 @@ onMounted(async()=>{await handleData()})
                   <td>{{ row.fecha_asignar }}</td>
                   <td>{{ row.fecha_devolucion }}</td>
                   <td>{{ row.destino }}</td>
-                  <td>{{ row.usuario?.usuario }}</td>
                   <td>{{ row.estatus?.nombre }}</td>
+                  <td>{{ row.usuario?.usuario }}</td>
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">

@@ -107,13 +107,11 @@ onMounted(async() => {
                     <p class="fw-bolder">Descripción:</p>
                     <hr class="border-2 border-red-m opacity-75">
                     <div class="mt-1 row" v-for="(d, i) in Inventario.Descripciones" :key="i">
-                      <p class="col-6">id <strong class="text-red-600">{{ d.id || 'Sin descripción' }}</strong></p> 
-                      <p class="col-6">talla <strong class="text-red-600">{{ d.talla || 'Sin descripción' }}</strong></p> 
+                      <p class="col-6">codigo <strong class="text-red-600">{{ d.codigo || 'Sin descripción' }}</strong></p> 
+                      <p class="col-6">dispositivo <strong class="text-red-600">{{ d.dispositivo || 'Sin descripción' }}</strong></p> 
                       <p class="col-6">modelo <strong class="text-red-600">{{ d.modelo || 'Sin descripción' }}</strong></p> 
-                      <p class="col-6">color <strong class="text-red-600">{{ d.color || 'Sin descripción' }}</strong></p> 
-                      <p class="col-6">tamaño <strong class="text-red-600">{{ d.tamaño || 'Sin descripción' }}</strong></p> 
-                      <p class="col-6">textura <strong class="text-red-600">{{ d.textura || 'Sin descripción' }}</strong></p> 
-                      <p class="col-6">sku <strong class="text-red-600">{{ d.sku || 'Sin descripción' }}</strong></p>
+                      <p class="col-6">serial <strong class="text-red-600">{{ d.serial || 'Sin descripción' }}</strong></p> 
+                      <p class="col-6">codigo_inv <strong class="text-red-600">{{ d.codigo_inv || 'Sin descripción' }}</strong></p>
                       <p class="col-12">observacion <strong class="text-red-600">{{ d.observacion || 'Sin descripción' }}</strong></p> 
                     </div>
                   </div>
@@ -122,7 +120,6 @@ onMounted(async() => {
                     <p class="fw-bolder">Ubicación:</p>
                     <hr class="border-2 border-red-m opacity-75">
                     <p class="mt-1 row">
-                      <p class="col-6">id <strong class="text-red-600">{{ getUbicacion(producto.id).id || 'sin ubicación' }}</strong></p>
                       <p class="col-6">origen <strong class="text-red-600">{{ getUbicacion(producto.id).origen || 'sin ubicación' }}</strong></p>
                       <p class="col-6">destino <strong class="text-red-600">{{ getUbicacion(producto.id).destino || 'sin ubicación' }}</strong></p>
                       <p class="col-6">piso <strong class="text-red-600">{{ getUbicacion(producto.id).piso || 'sin ubicación' }}</strong></p>
@@ -136,18 +133,17 @@ onMounted(async() => {
                     <p class="fw-bolder">Asignación:</p>
                     <hr class="border-2 border-red-m opacity-75">
                     <p class="mt-1 row">
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).id || 'sin asignación' }}</strong></p>
                       <p class="col-6">fecha asignar <strong class="text-red-600">{{ getAsignacion(producto.id).fecha_asignar || 'sin asignación' }}</strong></p>
                       <p class="col-6">fecha_devolucion <strong class="text-red-600">{{ getAsignacion(producto.id).fecha_devolucion || "Sin devolución" || 'sin asignación' }}</strong></p>
                       <p class="col-6">destino <strong class="text-red-600">{{ getAsignacion(producto.id).destino || 'sin asignación' }}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).comentario || 'sin asignación' }}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.nombre || 'sin asignación' }}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.apellido || 'sin asignación' }}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.cedula || 'sin asignación'}}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.usuario || 'sin asignación' }}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.correo || 'sin asignación' }}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.telefono_celular || 'sin asignación' }}</strong></p>
-                      <p class="col-6">id <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.telefono_alternativo || 'sin asignación' }}</strong></p>
+                      <p class="col-6">comentario <strong class="text-red-600">{{ getAsignacion(producto.id).comentario || 'sin asignación' }}</strong></p>
+                      <p class="col-6">nombre <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.nombre || 'sin asignación' }}</strong></p>
+                      <p class="col-6">apellido <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.apellido || 'sin asignación' }}</strong></p>
+                      <p class="col-6">cedula <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.cedula || 'sin asignación'}}</strong></p>
+                      <p class="col-6">usuario <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.usuario || 'sin asignación' }}</strong></p>
+                      <p class="col-6">correo <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.correo || 'sin asignación' }}</strong></p>
+                      <p class="col-6">telefono_celular <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.telefono_celular || 'sin asignación' }}</strong></p>
+                      <p class="col-6">telefono_alternativo <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.telefono_alternativo || 'sin asignación' }}</strong></p>
                     </p>
                   </div>
                 </div>

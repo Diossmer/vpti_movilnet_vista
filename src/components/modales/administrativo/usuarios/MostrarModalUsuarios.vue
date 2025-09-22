@@ -70,6 +70,9 @@ const props = defineProps({
               <div class="col-4">
                 <p :title="paramsE.productos?.map(p => p.descripcion).join(', ')"><b class="text-red fw-bolder">productos: </b>{{ paramsE.productos?.length }}</p>
               </div>
+              <div class="col-4">
+                <p :title="paramsE.asignaciones?.map(p => p.asignacion).join(', ')"><b class="text-red fw-bolder">asignaciones: </b>{{ paramsE.asignaciones?.length }}</p>
+              </div>
             </div>
           </div>
           <div class="modal-footer">

@@ -26,7 +26,10 @@ let rowsPerPage = ref(5);
 let totalOfPage = ref(0);
 const selectedRows = ref([]);
 const selectedRowsAll = ref([]);
-const paramsE = ref({})
+const paramsE = ref({
+  producto_id: [],
+  descripcion_id: [],
+})
 const response = ref(null);
 const isLoadingImport = ref(false);
 const filteredAndPaginatedData = computed(() => {
@@ -70,9 +73,9 @@ const handleData = async (action = null, params = null, id = null) => {
     console.error('Error al manejar los datos:', error);
   } finally {
     isLoadingImport.value = false
-    const {mostrarT,estatus,productos} = await PerifericosServicios('fetchAll');
+    const {mostrarT,estatus,descripciones} = await PerifericosServicios('fetchAll');
     col.value = columns(mostrarT);
-    relations.value = [estatus,productos]
+    relations.value = [estatus,descripciones]
     rowData.value = mostrarT;
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }

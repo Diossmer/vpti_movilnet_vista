@@ -90,18 +90,10 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <!-- <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span> -->
-                      <select class="form-select" v-model="paramsE.producto_id" required multiple>
-                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">descripcion del producto<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.descripcion?.modelo }} {{ paramsE.descripcion?.codigo }}</span>
-                      <select class="form-select" v-model="paramsE.descripcion_id" required>
-                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ 'Modelo:' + descripcion.modelo + ' | Codigo: ' + descripcion.codigo }}</option>
+                    <div class="col-8">
+                      <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
+                        <option v-for="(descripcion, index) in relations[0]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
                       </select>
                     </div>
                     <div class="col-4">

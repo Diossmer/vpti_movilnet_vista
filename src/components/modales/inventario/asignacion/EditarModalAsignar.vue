@@ -72,50 +72,41 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-4">
+                    <div class="col-3">
                       <label for="" class="badge text-secondary">fecha asignar<span class="text-danger">*</span></label>
                       <input type="date" pattern="^\d{4}-\d{2}-\d{2}$" class="form-control" :class="{'is-invalid':paramsE.fecha_asignar && !/^\d{4}-\d{2}-\d{2}$/.test(paramsE.fecha_asignar),'is-valid':paramsE.fecha_asignar && /^\d{4}-\d{2}-\d{2}$/.test(paramsE.fecha_asignar)}" v-model="paramsE.fecha_asignar" placeholder="fecha asignar" required />
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                       <label for="" class="badge text-secondary">fecha devolucion</label>
                       <input type="date" pattern="^\d{4}-\d{2}-\d{2}$" class="form-control" :class="{'is-invalid':paramsE.fecha_devolucion && !/^\d{4}-\d{2}-\d{2}$/.test(paramsE.fecha_devolucion),'is-valid':paramsE.fecha_devolucion && /^\d{4}-\d{2}-\d{2}$/.test(paramsE.fecha_devolucion)}" v-model="paramsE.fecha_devolucion" placeholder="fecha devolucion"/>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                       <label for="" class="badge text-secondary">Destinos<span class="text-danger">*</span></label>
                       <input type="text" class="form-control" pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$" :class="{'is-invalid':paramsE.destino && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino),'is-valid':paramsE.destino && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s-{}()+*]+$/.test(paramsE.destino)}" v-model="paramsE.destino" placeholder="Destino" required />
+                    </div>
+                    <div class="col-3">
+                      <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsE.usuario?.nombre }}</span>
+                      <select class="form-select" v-model="paramsE.usuario_id" required>
+                        <option v-for="(usuario, index) in relations[1]" :key="index" :value="usuario.id">{{ usuario.usuario }}</option>
+                      </select>
+                    </div>
+                    <div class="col-4">
+                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
+                      <select class="form-select" v-model="paramsE.estatus_id" required>
+                        <option v-for="(estatus, index) in relations[2]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
+                      </select>
+                    </div>
+                    <div class="col-8">
+                      <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
+                        <option v-for="(descripcion, index) in relations[0]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                      </select>
                     </div>
                     <div class="col-12">
                       <label for="" class="badge text-secondary">comentario</label>
                       <textarea class="form-control" :class="{ 'is-invalid': paramsE.comentario && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.comentario), 'is-valid':paramsE.comentario && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.comentario)}" placeholder="Descripción" v-model="paramsE.comentario"></textarea>
-                    </div>
-
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.producto_id" multiple required>
-                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-5">
-                      <label for="" class="badge text-secondary">descripcion<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.descripcion?.modelo }}</span>
-                      <select class="form-select" v-model="paramsE.descripcion_id" required>
-                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">Modelo:{{ descripcion.modelo }} | Codigo: {{ descripcion.codigo }}</option>
-                      </select>
-                    </div>
-                    <div class="col-5">
-                      <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.usuario?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.usuario_id" required>
-                        <option v-for="(usuario, index) in relations[2]" :key="index" :value="usuario.id">{{ usuario.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-5">
-                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[3]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
                     </div>
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
                   </div>

@@ -93,11 +93,17 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
+                    <div class="col-8">
+                      <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                      </select>
+                    </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <!-- <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span> -->
-                      <select class="form-select" v-model="paramsE.producto_id" required multiple>
-                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
+                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
+                      <select class="form-select" v-model="paramsE.estatus_id" required>
+                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
                       </select>
                     </div>
                     <div class="col-4">
@@ -116,21 +122,7 @@ watch(() => props.response, (newResponse) => {
                       <label for="" class="badge text-secondary">mantenimiento</label>
                       <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento),'is-valid': paramsE.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento)}" v-model="paramsE.mantenimiento" placeholder="Mantenimineto"  />
                     </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[1]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-12">
-                      <label for="" class="badge text-secondary">descripcion del producto<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">modelo: {{ paramsE.descripcion?.modelo }} | Codigo: {{ paramsE.descripcion?.codigo }}</span>
-                      <select class="form-select" v-model="paramsE.descripcion_id" required>
-                        <option v-for="(descripcion, index) in relations[2]" :key="index" :value="descripcion.id">Modelo:{{ descripcion.modelo }} | Codigo: {{ descripcion.codigo }}</option>
-                      </select>
-                    </div>
-                    <div class="col-12">
+                    <div class="col-8">
                       <label for="" class="badge text-secondary">Observación</label>
                       <textarea class="form-control" :class="{ 'is-invalid': paramsE.notas && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.notas), 'is-valid':paramsE.notas && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.notas) }" placeholder="Observación" v-model="paramsE.notas"></textarea>
                     </div>

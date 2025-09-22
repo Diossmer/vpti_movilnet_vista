@@ -85,20 +85,26 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-3">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <!-- <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span> -->
-                      <select class="form-select" v-model="paramsE.producto_id" multiple required>
-                        <option v-for="(producto, index) in relations[1]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
+                    <div class="col-8">
+                      <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
                       </select>
                     </div>
-                    <div class="col-3">
+                    <div class="col-4">
                       <label for="" class="badge text-secondary">estatus actual<span class="text-danger">*</span></label>
                       <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
                       <select class="form-select" v-model="paramsE.estatus_id" required>
                         <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
                       </select>
                     </div>
+                    <!-- <div class="col-4">
+                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsE.producto?.nombre }}</span>
+                      <select class="form-select" v-model="paramsE.producto_id" multiple required>
+                        <option v-for="(producto, index) in relations[1]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
+                      </select>
+                    </div> -->
                     <div class="col-2">
                       <label for="" class="badge text-secondary">Cantidad Existente<span class="text-danger">*</span></label>
                       <input type="text" inputmode="numeric" maxlength="10"  pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsE.cantidad_existente && !/^\d+(^\.\d+)?$/.test(paramsE.cantidad_existente),'is-valid': paramsE.cantidad_existente && /^\d+(^\.\d+)?$/.test(paramsE.cantidad_existente)}" v-model="paramsE.cantidad_existente" placeholder="Cantidad Existente" required />

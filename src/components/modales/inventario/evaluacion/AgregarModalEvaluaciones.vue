@@ -32,7 +32,8 @@ const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
 const paramsA = ref({
-  producto_id: []
+  producto_id: [],
+  descripcion_id: [],
 });
 
 watch([() => paramsA.value?.estado_fisico,
@@ -85,10 +86,16 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('create', paramsA)">
                 <div class="modal-body">
                   <div class="row">
+                    <div class="col-8">
+                      <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsA.descripcion_id" multiple required>
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id" selected>{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                      </select>
+                    </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.producto_id" required multiple>
-                        <option v-for="(producto, index) in relations[0]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
+                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
+                      <select class="form-select" v-model="paramsA.estatus_id" required>
+                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
                       </select>
                     </div>
                     <div class="col-4">
@@ -110,19 +117,8 @@ watch(() => props.response, (newResponse) => {
                       <!-- Regex corrected to escape special characters -->
                       <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsA.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.mantenimiento),'is-valid': paramsA.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.mantenimiento)}" v-model="paramsA.mantenimiento" placeholder="Mantenimiento"  />
                     </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[1]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
-                    </div>
-                    <div class="col-4">
-                      <label for="" class="badge text-secondary">descripcion del producto<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsA.descripcion_id" required>
-                        <option v-for="(descripcion, index) in relations[2]" :key="index" :value="descripcion.id">Modelo:{{ descripcion.modelo }} | Codigo: {{ descripcion.codigo }}</option>
-                      </select>
-                    </div>
-                    <div class="col-12">
+                    
+                    <div class="col-8">
                       <label for="" class="badge text-secondary">Observación</label>
                       <textarea class="form-control" :class="{ 'is-invalid': paramsA.notas && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.notas), 'is-valid':paramsA.notas && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.notas) }" placeholder="Observación" v-model="paramsA.notas"></textarea>
                     </div>

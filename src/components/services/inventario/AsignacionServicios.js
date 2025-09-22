@@ -67,10 +67,10 @@ export  default async function AsignacionServicios(action, data = null, params =
     if(action!=='fetch'&&action!=='create'&&action!=='update'&&action!=='delete'&&action!=='export'&&action!=='exportAll'&&action!=='import'&&action!=='importAll'&&action!=='pdf'&&action!=='pdfAll'){
       return {
         mostrarT: await get(`${process.APP_URL}/api/asignacion`, localStorage.getItem('token')),
-        descripcion: await get(`${process.APP_URL}/api/descripcion`, localStorage.getItem('token')),
+        descripciones: await get(`${process.APP_URL}/api/descripcion`, localStorage.getItem('token')),
         usuarios: await get(`${process.APP_URL}/api/usuarios`, localStorage.getItem('token')),
         estatus: await get(`${process.APP_URL}/api/estatus`, localStorage.getItem('token')),
-        productos: await get(`${process.APP_URL}/api/productos`, localStorage.getItem('token')),
+        //productos: await get(`${process.APP_URL}/api/productos`, localStorage.getItem('token')),
       };
     }
   }

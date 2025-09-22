@@ -29,7 +29,8 @@ let totalOfPage = ref(0);
 const selectedRows = ref([]);
 const selectedRowsAll = ref([]);
 const paramsE = ref({
-  producto_id: []
+  producto_id: [],
+  descripcion_id: [],
 })
 const response = ref(null);
 const isLoadingImport = ref(false);
@@ -82,10 +83,10 @@ const handleData = async (action = null, params = null, id = null) => {
     console.error('Error al manejar los datos:', error);
   } finally {
     isLoadingImport.value = false
-    const {mostrarT,productos,estatus,descripcion} = await EvaluacionesServicios('fetchAll');
+    const {mostrarT,estatus,descripciones} = await EvaluacionesServicios('fetchAll');
     col.value = columns(mostrarT);
     rowData.value = mostrarT;
-    relations.value = [productos,estatus,descripcion];
+    relations.value = [estatus,descripciones];
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };

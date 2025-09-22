@@ -63,7 +63,8 @@ export  default async function InventariosServicios(action, data = null, params 
       return {
         mostrarT: await get(`${process.APP_URL}/api/inventarios`, localStorage.getItem('token')),
         estatus: await get(`${process.APP_URL}/api/estatus`, localStorage.getItem('token')),
-        productos: await get(`${process.APP_URL}/api/productos`, localStorage.getItem('token')), 
+        //productos: await get(`${process.APP_URL}/api/productos`, localStorage.getItem('token')),
+        descripciones: await get(`${process.APP_URL}/api/descripcion`, localStorage.getItem('token')),
       };
     }
   }

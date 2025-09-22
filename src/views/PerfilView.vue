@@ -120,7 +120,7 @@ const goBack = () => {router.go(-1)}
                 <div class="mb-3 row">
                   <label for="inputPassword" class="col-sm-4 col-form-label">Contraseña Antígua</label>
                   <div class="col-sm-5 d-flex">
-                    <input :type="passwordVisible?'text':'password'" v-model="passwordAntiguo" pattern="^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$" class="form-control" :class="{'is-invalid':passwordAntiguo && !/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{4,}$/.test(passwordAntiguo),'is-valid':passwordAntiguo && /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{4,}$/.test(passwordAntiguo)}" maxlength="20" @keypress.enter="handleLogin" placeholder="Contraseña Antígua" required autocomplete="on"/>
+                    <input :type="passwordVisible?'text':'password'" v-model="passwordAntiguo" pattern="^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{6,}$" class="form-control" :class="{'is-invalid':passwordAntiguo && !/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{6,}$/.test(passwordAntiguo),'is-valid':passwordAntiguo && /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{6,}$/.test(passwordAntiguo)}" maxlength="20" @keypress.enter="handleLogin" placeholder="Contraseña Antígua" required autocomplete="on"/>
                     <button type="button" @click="passwordVisible = !passwordVisible" class=" btn btn-outline-secondary">
                       <span  v-if="passwordVisible">👁️</span>
                       <span v-else>👁️‍🗨️</span>
