@@ -61,30 +61,18 @@ const handleData = async (action = null, params = null, id = null) => {
     } else if (action === 'fetch') {
       paramsE.value = await RolesServicios('fetch', id);
     }
-    /* let timeoutId
-    if(response?.error){
-      avisos.value = response?.error;
-      let modalInstance = Modal.getInstance(modalAgregar.value) || Modal.getInstance(modalEditar.value);
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        avisos.value = null;
-        modalInstance.hide();
-      }, 3000);
-    }else if(action === 'create' || action === 'update'){
-      let modalInstance = Modal.getInstance(modalAgregar.value) || Modal.getInstance(modalEditar.value);
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        avisos.value = null;
-        modalInstance.hide();
-      }, 1000);
-    } */
   } catch (error) {
     console.error('Error al manejar los datos:', error);
   } finally {
     isLoadingImport.value = false
     const {mostrarT} = await RolesServicios('fetchAll');
-    col.value = columns(mostrarT);
-    rowData.value = mostrarT;
+    if (Array.isArray(mostrarT)) {
+      col.value = columns(mostrarT);
+      rowData.value = mostrarT;
+    } else {
+      rowData.value = [];
+      col.value = columns([]);
+    }
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };

@@ -84,8 +84,13 @@ const handleData = async (action = null, params = null, id = null) => {
   } finally {
     isLoadingImport.value = false
     const {mostrarT,estatus,descripciones} = await EvaluacionesServicios('fetchAll');
-    col.value = columns(mostrarT);
-    rowData.value = mostrarT;
+    if (Array.isArray(mostrarT)) {
+      col.value = columns(mostrarT);
+      rowData.value = mostrarT;
+    } else {
+      rowData.value = [];
+      col.value = columns([]);
+    }
     relations.value = [estatus,descripciones];
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }

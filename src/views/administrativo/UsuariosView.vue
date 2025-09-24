@@ -83,8 +83,9 @@ const handleData = async (action = null, params = null, id = null) => {
     isLoadingImport.value = false
     const {mostrarT,estatus,roles} = await UsuariosServicios('fetchAll');
     col.value = columns(mostrarT);
-    relations.value=[estatus,roles]
-    rowData.value = mostrarT.filter(row => {
+    if (Array.isArray(mostrarT)) {
+      col.value = columns(mostrarT);
+      rowData.value = mostrarT.filter(row => {
       if(dataPerfil.value.rol?.id !== 1 && dataPerfil.value.rol?.id !== 3)
       return row.rol?.id === dataPerfil.value.rol?.id
       else if(dataPerfil.value.rol?.id !== 1 && dataPerfil.value.rol?.id === 3)
@@ -92,6 +93,11 @@ const handleData = async (action = null, params = null, id = null) => {
       else
       return row
     });
+    } else {
+      rowData.value = [];
+      col.value = columns([]);
+    }
+    relations.value=[estatus,roles]
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };

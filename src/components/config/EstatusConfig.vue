@@ -82,8 +82,13 @@ const handleData = async (action = null, params = null, id = null) => {
     La columna puedes hacerlo de forma MANUAL:
     [{title:"id",sortable: true},{title:"nombre",sortable: true},{title:"descripcion",sortable: true}]
     */
-    col.value = columns(mostrarT);
-    rowData.value = mostrarT;
+    if (Array.isArray(mostrarT)) {
+      col.value = columns(mostrarT);
+      rowData.value = mostrarT;
+    } else {
+      rowData.value = [];
+      col.value = columns([]);
+    }
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };
