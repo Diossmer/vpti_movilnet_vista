@@ -89,7 +89,8 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-8">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.descripcion_id" multiple required>
-                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id" selected>{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id" selected v-if="descripcion">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                        <option selected v-else>Sin descripcion del producto</option>
                       </select>
                     </div>
                     <div class="col-4">

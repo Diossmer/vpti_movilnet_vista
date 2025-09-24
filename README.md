@@ -23,3 +23,8 @@
     laravel excel: 3.1
 ### Navegador:
     Google chrome: Versión 131.0.6778.85 (Build oficial) (64 bits)
+
+
+-- restar o sumar cantidad de productos almacenado o desincorporado
+-- el rol que se cree por defecto se debe visualizar el producto dashboard
+-- el perfil va editar desde alli mismo se edita el perfil
