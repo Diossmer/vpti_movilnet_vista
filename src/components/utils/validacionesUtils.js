@@ -126,10 +126,10 @@ export function validacionesUtils() {
   }
 
   const sizeValid = (params) => {
-    const sizeRegex = /^\d+\s*[a-zA-Z]+(?:\s+\d+\s*[a-zA-Z]+)*$/;
-    return sizeRegex.test(params)
+    const escalaRegex = /^(critico|alto|medio|bajo|regular|resuelto)$/;
+    return escalaRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo Unidades de medidas o escala";
+      : "❌Solo se permiten las escalas: critico, alto, medio, bajo, regular, o resuelto.";
   }
 
   const emailValid = (params) => {

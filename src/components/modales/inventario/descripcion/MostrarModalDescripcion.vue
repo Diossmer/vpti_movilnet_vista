@@ -49,32 +49,20 @@ const props = defineProps({
               <div class="col-6">
                 <p><b>producto: </b>{{ paramsE.producto?.nombre }}</p>
               </div>
-              <b>asignaciones: </b>
-              <div class="col-6" v-for="(asignar) in paramsE.asignaciones?.filter(evalua => evalua.id === paramsE.id)" :key="asignar.id">
-                <p>
-                  <b>fecha_asignar: </b>{{ asignar?.fecha_asignar }} 
-                </p>
-                <p>
-                  <b>fecha_devolucion: </b>{{ asignar?.fecha_devolucion }} 
-                </p>
-                <p>
-                  <b>destino: </b>{{ asignar?.destino }} 
-                </p>
-                <p>
-                  <b>comentario: </b>{{ asignar?.comentario }} 
-                </p>
+              <div class="col-6">
+                <p><b>Cantidad de asignaciones: </b>{{ paramsE.asignaciones?.length}}</p>
               </div>
               <div class="col-6">
-                <p><b>evaluaciones: </b></p>
-                <div class="row">
-                  <span class="col-12" v-for="(evalua) in paramsE.evaluaciones?.filter(evalua => evalua.id === paramsE.id)" :key="evalua.id">
-                    <p><b>estado_fisico: </b>{{ evalua?.estado_fisico }}</p>
-                    <p><b>escala: </b>{{ evalua?.escala }}</p>
-                    <p><b>compatibilidad: </b>{{ evalua?.compatibilidad }}</p>
-                    <p><b>reemplazo: </b>{{ evalua?.reemplazo }}</p>
-                    <p><b>mantenimineto: </b>{{ evalua?.mantenimineto }}</p>
-                  </span>
-                </div>
+                <p><b>Cantidad de evaluaciones: </b>{{ paramsE.evaluaciones?.length}}</p>
+              </div>
+              <div class="col-6">
+                <p><b>Cantidad de Sin periferico: </b>{{ paramsE.inventarios?.length}}</p>
+              </div>
+              <div class="col-6">
+                <p><b>Cantidad de perifericos: </b>{{ paramsE.perifericos?.length}}</p>
+              </div>
+              <div class="col-6">
+                <p><b>Cantidad de ubicaciones: </b>{{ paramsE.ubicaciones?.length}}</p>
               </div>
             </div>
           </div>

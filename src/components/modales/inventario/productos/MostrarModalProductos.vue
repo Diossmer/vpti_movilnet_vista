@@ -36,16 +36,7 @@ const props = defineProps({
               <hr class="border-4 border-primary opacity-75">
               
               <div class="col-6">
-                <p><b>evaluaciones: </b>{{ paramsE.evaluaciones?.length }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>descripciones: </b>{{ paramsE.descripciones?.length }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>inventarios: </b>{{ paramsE.inventarios?.length }}</p>
-              </div>
-              <div class="col-6">
-                <p><b>perifericos: </b>{{ paramsE.perifericos?.length }}</p>
+                <p><b>Cantidad de descripciones: </b>{{ paramsE.descripciones?.length }}</p>
               </div>
             </div>
           </div>

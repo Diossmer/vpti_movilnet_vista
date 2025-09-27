@@ -24,14 +24,16 @@ const props = defineProps({
             <hr class="border-2 border-success opacity-75">
             <p><b class="text-red fw-bolder">cantidad de usuarios: </b>{{ paramsE?.usuarios?.length }}</p>
             <hr class="border-2 border-success opacity-75">
-            <p><b class="text-red fw-bolder">cantidad de gestión de usuarios: </b>{{ paramsE?.gestion_usuarios?.length
+            <p><b class="text-red fw-bolder">cantidad de productos: </b>{{ paramsE?.productos?.length
               }}</p>
             <hr class="border-2 border-success opacity-75">
-            <p><b class="text-red fw-bolder">cantidad de productos: </b>{{ paramsE?.productos?.length }}</p>
+            <p><b class="text-red fw-bolder">cantidad de asignaciones: </b>{{ paramsE?.asignaciones?.length }}</p>
             <hr class="border-2 border-success opacity-75">
-            <p><b class="text-red fw-bolder">cantidad de proveedores: </b>{{ paramsE?.proveedores?.length }}</p>
+            <p><b class="text-red fw-bolder">cantidad de perifericos: </b>{{ paramsE?.perifericos?.length }}</p>
             <hr class="border-2 border-success opacity-75">
-            <p><b class="text-red fw-bolder">cantidad de asistencias: </b>{{ paramsE?.asistencias?.length }}</p>
+            <p><b class="text-red fw-bolder">cantidad de inventarios: </b>{{ paramsE?.inventarios?.length }}</p>
+            <hr class="border-2 border-success opacity-75">
+            <p><b class="text-red fw-bolder">cantidad de evaluaciones: </b>{{ paramsE?.evaluaciones?.length }}</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Regresar</button>

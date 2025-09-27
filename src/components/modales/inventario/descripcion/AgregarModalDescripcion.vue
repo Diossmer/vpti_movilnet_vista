@@ -31,14 +31,16 @@ const { dataPerfil } = storeToRefs(useLoginStore());
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
-const paramsA = ref({});
+const paramsA = ref({
+  producto_id: [],
+});
 
 watch([
   () => paramsA.value?.codigo,
-  () => paramsA.value?.modelo,
   () => paramsA.value?.dispositivo,
-  () => paramsA.value?.serial,
   () => paramsA.value?.marca,
+  () => paramsA.value?.modelo,
+  () => paramsA.value?.serial,
   () => paramsA.value?.codigo_inv,
   () => paramsA.value?.observacion,
 ],
@@ -96,10 +98,10 @@ watch(() => props.response, (newResponse) => {
                       <label for="" class="badge text-secondary">codigo</label>
                       <input type="text" maxlength="6" pattern="^\d+$" class="form-control" :class="{'is-invalid':paramsA.codigo && !/^\d+$/.test(paramsA.codigo),'is-valid':paramsA.codigo && /^\d+$/.test(paramsA.codigo)}" v-model="paramsA.codigo" placeholder="codigo" />
                     </div>
-                    <div class="col-2">
+                    <div class="col-4">
                       <label for="" class="badge text-secondary">dispositivo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsA.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo),'is-valid':paramsA.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo)}" v-model="paramsA.dispositivo" placeholder="dispositivo" />
+                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsA.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo),'is-valid':paramsA.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo)}" v-model="paramsA.dispositivo" placeholder="dispositivo" />
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">marca<span class="text-danger">*</span></label>
@@ -109,7 +111,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">modelo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsA.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.modelo),'is-valid':paramsA.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.modelo)}" v-model="paramsA.modelo" placeholder="Modelo" />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsA.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.modelo),'is-valid':paramsA.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.modelo)}" v-model="paramsA.modelo" placeholder="Modelo" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">serial<span class="text-danger">*</span></label>
@@ -123,7 +125,7 @@ watch(() => props.response, (newResponse) => {
                       <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>
                       <span class="badge text-secondary">{{ paramsA.producto?.nombre }}</span>
                       <select class="form-select" v-model="paramsA.producto_id" required>
-                        <option v-for="(producto, index) in relations" :key="index" :value="producto.id" v-if="producto">{{ producto.nombre }}</option>
+                        <option v-for="(producto, index) in relations" :key="index" :value="producto.id" v-if="relations.length > 0">{{ producto.nombre }}</option>
                         <option selected v-else>Sin productos</option>
                       </select>
                     </div>

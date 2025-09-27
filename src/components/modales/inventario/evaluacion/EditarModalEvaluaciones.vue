@@ -38,37 +38,28 @@ const avisos = ref(null);
 const avisosAlert = ref(null);
 
 watch(() => props.paramsE,() =>{},{ deep: true });
-watch([() => props.paramsE?.estado_fisico,
-() => props.paramsE?.notas,
+watch([
 () => props.paramsE?.escala,
 () => props.paramsE?.compatibilidad,
 () => props.paramsE?.reemplazo,
-() => props.paramsE?.mantenimineto], ([
-  estado_fisico,
-  notas,
+() => props.paramsE?.mantenimiento], ([
   escala,
   compatibilidad,
   reemplazo,
-  mantenimineto]) => {
+  mantenimiento]) => {
   const errors = [];
-  const EstadoFisicoError = validacionesUtils().textValid(estado_fisico);
-  if (EstadoFisicoError) errors.push(EstadoFisicoError);
   const CompatibilidadError = validacionesUtils().textValid(compatibilidad);
   if (CompatibilidadError) errors.push(CompatibilidadError);
   const ReemplazoError = validacionesUtils().textValid(reemplazo);
   if (ReemplazoError) errors.push(ReemplazoError);
-  const ManteniminetoError = validacionesUtils().textValid(mantenimineto);
-  if (ManteniminetoError) errors.push(ManteniminetoError);
-  const notaError = validacionesUtils().textareaValid(notas);
-  if (notaError) errors.push(notaError);
+  const mantenimientoError = validacionesUtils().textValid(mantenimiento);
+  if (mantenimientoError) errors.push(mantenimientoError);
   const escalaError = validacionesUtils().sizeValid(escala);
   if (escalaError) errors.push(escalaError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((estado_fisico==='' || estado_fisico===undefined)
-  && (notas==='' || notas===undefined)
-  && (compatibilidad==='' || compatibilidad===undefined)
+  if ((compatibilidad==='' || compatibilidad===undefined)
   && (reemplazo==='' || reemplazo===undefined)
-  && (mantenimineto==='' || mantenimineto===undefined)
+  && (mantenimiento==='' || mantenimiento===undefined)
   && (escala==='' || escala===undefined))
   avisosAlert.value = null;
 });
@@ -108,7 +99,7 @@ watch(() => props.response, (newResponse) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">escala</label>
-                      <input type="text" maxlength="10" inputmode="numeric" pattern="^\d+\s*[a-zA-Z]+(?:\s+\d+\s*[a-zA-Z]+)*$" class="form-control" :class="{'is-invalid': paramsE.escala && !/^\d+\s*[a-zA-Z]+(?:\s+\d+\s*[a-zA-Z]+)*$/.test(paramsE.escala),'is-valid': paramsE.escala && /^\d+\s*[a-zA-Z]+(?:\s+\d+\s*[a-zA-Z]+)*$/.test(paramsE.escala)}" v-model="paramsE.escala" placeholder="Escala"  />
+                      <input type="text" maxlength="20" pattern="^(critico|alto|medio|bajo|regular|resuelto)$" class="form-control" :class="{'is-invalid': paramsE.escala && !/^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsE.escala),'is-valid': paramsE.escala && /^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsE.escala)}" v-model="paramsE.escala" placeholder="Escala"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">compatibilidad</label>
@@ -120,7 +111,7 @@ watch(() => props.response, (newResponse) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">mantenimiento</label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento),'is-valid': paramsE.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento)}" v-model="paramsE.mantenimiento" placeholder="Mantenimineto"  />
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento),'is-valid': paramsE.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento)}" v-model="paramsE.mantenimiento" placeholder="mantenimiento"  />
                     </div>
                     <div class="col-8">
                       <label for="" class="badge text-secondary">Observación</label>

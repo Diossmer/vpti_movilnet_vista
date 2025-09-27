@@ -40,9 +40,6 @@ const filteredDescripcion = computed(() => {
           <div class="modal-body">
             <div class="row">
               <div class="col-6">
-                <p><b>estado fisico: </b>{{ paramsE.estado_fisico }}</p>
-              </div>
-              <div class="col-6">
                 <p><b>escala: </b>{{ paramsE.escala }}</p>
               </div>
               <div class="col-6">
@@ -52,7 +49,7 @@ const filteredDescripcion = computed(() => {
                 <p><b>reemplazo: </b>{{ paramsE.reemplazo }}</p>
               </div>
               <div class="col-6">
-                <p><b>mantenimineto: </b>{{ paramsE.mantenimineto }}</p>
+                <p><b>mantenimiento: </b>{{ paramsE.mantenimiento }}</p>
               </div>
               <div class="col-4">
                 <p><b>estatus: </b>{{ paramsE.estatus?.nombre }}</p>

@@ -36,33 +36,28 @@ const paramsA = ref({
   descripcion_id: [],
 });
 
-watch([() => paramsA.value?.estado_fisico,
-() => paramsA.value?.notas,
+watch([
 () => paramsA.value?.escala,
 () => paramsA.value?.compatibilidad,
 () => paramsA.value?.reemplazo,
-() => paramsA.value?.mantenimineto], ([
-  notas,
+() => paramsA.value?.mantenimiento], ([
   escala,
   compatibilidad,
   reemplazo,
-  mantenimineto]) => {
+  mantenimiento]) => {
   const errors = [];
   const CompatibilidadError = validacionesUtils().textValid(compatibilidad);
   if (CompatibilidadError) errors.push(CompatibilidadError);
   const ReemplazoError = validacionesUtils().textValid(reemplazo);
   if (ReemplazoError) errors.push(ReemplazoError);
-  const ManteniminetoError = validacionesUtils().textValid(mantenimineto);
-  if (ManteniminetoError) errors.push(ManteniminetoError);
-  const notaError = validacionesUtils().textareaValid(notas);
-  if (notaError) errors.push(notaError);
+  const mantenimientoError = validacionesUtils().textValid(mantenimiento);
+  if (mantenimientoError) errors.push(mantenimientoError);
   const escalaError = validacionesUtils().sizeValid(escala);
   if (escalaError) errors.push(escalaError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((notas==='' || notas===undefined)
-  && (compatibilidad==='' || compatibilidad===undefined)
+  if ((compatibilidad==='' || compatibilidad===undefined)
   && (reemplazo==='' || reemplazo===undefined)
-  && (mantenimineto==='' || mantenimineto===undefined)
+  && (mantenimiento==='' || mantenimiento===undefined)
   && (escala==='' || escala===undefined))
   avisosAlert.value = null;
 });
@@ -89,7 +84,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-8">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.descripcion_id" multiple required>
-                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id" selected v-if="descripcion">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id" selected v-if="relations.length > 0">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
                         <option selected v-else>Sin descripcion del producto</option>
                       </select>
                     </div>
@@ -101,7 +96,7 @@ watch(() => props.response, (newResponse) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">escala</label>
-                      <input type="text" maxlength="10" inputmode="numeric" pattern="^\d+\s*[a-zA-Z]+(?:\s+\d+\s*[a-zA-Z]+)*$" class="form-control" :class="{'is-invalid': paramsA.escala && !/^\d+\s*[a-zA-Z]+(?:\s+\d+\s*[a-zA-Z]+)*$/.test(paramsA.escala),'is-valid': paramsA.escala && /^\d+\s*[a-zA-Z]+(?:\s+\d+\s*[a-zA-Z]+)*$/.test(paramsA.escala)}" v-model="paramsA.escala" placeholder="Escala"  />
+                      <input type="text" maxlength="20" pattern="^(critico|alto|medio|bajo|regular|resuelto)$" class="form-control" :class="{'is-invalid': paramsA.escala && !/^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsA.escala),'is-valid': paramsA.escala && /^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsA.escala)}" v-model="paramsA.escala" placeholder="Escala"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">compatibilidad</label>

@@ -28,7 +28,9 @@ let rowsPerPage = ref(5);
 let totalOfPage = ref(0);
 const selectedRows = ref([]);
 const selectedRowsAll = ref([]);
-const paramsE = ref({})
+const paramsE = ref({
+  producto_id: [],
+})
 const response = ref(null);
 const isLoadingImport = ref(false);
 const filteredAndPaginatedData = computed(() => {
@@ -245,7 +247,7 @@ onMounted(async()=>{await handleData()})
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">
-                      <li v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3 && dataPerfil.rol.id !== 4"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li>
+                      <!-- <li v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3 && dataPerfil.rol.id !== 4"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li> -->
                       <li v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3 && dataPerfil.rol.id !== 4"><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export',(row.producto?.nombre) )"><i class="bi bi-upload"></i>Exportar</button></li>
                       <li v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3">
                         <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal" data-bs-target="#staticEditar" @click="handleData('fetch', '', row.id)">

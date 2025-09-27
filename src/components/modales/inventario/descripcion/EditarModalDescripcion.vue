@@ -41,17 +41,15 @@ watch(() => props.paramsE,() =>{},{ deep: true });
 watch([
   () => props.paramsE?.codigo,
   () => props.paramsE?.dispositivo,
-  () => props.paramsE?.tamaño,
   () => props.paramsE?.marca,
-  () => props.paramsE?.nucleo,
   () => props.paramsE?.modelo,
   () => props.paramsE?.serial,
   () => props.paramsE?.codigo_inv,
   () => props.paramsE?.observacion,
 ],
   ([
-  codigo, dispositivo, tamaño,
-  marca, nucleo, modelo,
+  codigo, dispositivo,
+  marca, modelo,
   serial, codigo_inv, observacion
   ]) => {
   const errors = [];
@@ -61,10 +59,6 @@ watch([
   if (dispositivoError) errors.push(dispositivoError);
   const marcaError = validacionesUtils().textValid(marca);
   if (marcaError) errors.push(marcaError);
-  const tamañoError = validacionesUtils().sizeValid(tamaño);
-  if (tamañoError) errors.push(tamañoError);
-  const nucleoError = validacionesUtils().textValid(nucleo);
-  if (nucleoError) errors.push(nucleoError);
   const modeloError = validacionesUtils().textValid(modelo);
   if (modeloError) errors.push(modeloError);
   const serialError = validacionesUtils().serialValid(serial);
@@ -77,8 +71,6 @@ watch([
   if ((codigo==='' || codigo===undefined)
   && (dispositivo==='' || dispositivo===undefined)
   && (marca==='' || marca===undefined)
-  && (tamaño==='' || tamaño===undefined)
-  && (nucleo==='' || nucleo===undefined)
   && (modelo==='' || modelo===undefined)
   && (serial==='' || serial===undefined)
   && (codigo_inv==='' || codigo_inv===undefined)
@@ -113,7 +105,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-2">
                       <label for="" class="badge text-secondary">dispositivo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo),'is-valid':paramsE.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo)}" v-model="paramsE.dispositivo" placeholder="dispositivo" />
+                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo),'is-valid':paramsE.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo)}" v-model="paramsE.dispositivo" placeholder="dispositivo" />
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">marca<span class="text-danger">*</span></label>
@@ -123,7 +115,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">modelo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" maxlength="10" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo),'is-valid':paramsE.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo)}" v-model="paramsE.modelo" placeholder="Modelo" />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo),'is-valid':paramsE.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo)}" v-model="paramsE.modelo" placeholder="Modelo" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">serial<span class="text-danger">*</span></label>

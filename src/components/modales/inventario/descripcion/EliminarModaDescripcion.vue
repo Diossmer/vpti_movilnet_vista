@@ -24,7 +24,7 @@ const avisosAlert = ref(null);
 
 <template>
   <div class="modal fade" id="staticEliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="staticEliminar">
-      <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
+      <div class="modal-dialog modal-md modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Eliminar</h1>
@@ -38,7 +38,7 @@ const avisosAlert = ref(null);
               <div class="row">
                 <div class="col-12 text-center">
                   <p class="text-dark badge fs-6">
-                    Estas seguro <span class="text-secondary">{{dataPerfil.usuario}}</span> que quieres eliminar <span class="text-red">{{paramsE.nombre}}</span>?
+                    ¿Estas seguro <span class="text-secondary">{{dataPerfil.usuario}}</span> que quieres eliminar <span class="text-red">{{paramsE.modelo}}</span>?
                   </p>
                 </div>
               </div>

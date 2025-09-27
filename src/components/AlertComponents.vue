@@ -24,7 +24,7 @@ defineProps({
       </div>
     </div>
     <div class="col-12 badge text-wrap alert alert-danger" role="alert" v-else-if="avisos?.error || avisos">
-      {{ avisos?.cargo_id || avisos?.departamento_id || avisos?.error || avisos }}
+      {{ avisos?.cargo_id || avisos?.error || avisos }}
     </div>
     <div class=" col-12 badge text-wrap alert" role="alert" v-else-if="avisosAlert">
       <div v-for="(error, index) in avisosAlert?.error.split('|')" :key="index">

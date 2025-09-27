@@ -20,17 +20,15 @@ const props = defineProps({
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-6">
+              <div class="col-4">
                 <p><b>Rol: </b>{{ paramsE?.nombre }}</p>
               </div>
-              <div class="col-6">
+              <div class="col-8">
                 <p><b>descripción: </b>{{ paramsE?.descripcion }}</p>
               </div>
             </div>
             <hr class="border-2 border-success opacity-75">
-            <p><b class="text-red fw-bolder">permisos asignados: </b>{{ paramsE.permisos?.length }}</p>
-            <hr class="border-2 border-success opacity-75">
-            <p><b class="text-red fw-bolder">usuarios asignados: </b>{{ paramsE.usuarios?.length }}</p>
+            <p><b class="text-red fw-bolder">Cantidad de usuarios: </b>{{ paramsE.usuarios?.length }}</p>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Regresar</button>
