@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, defineProps } from 'vue';
+import { ref, watch, defineProps, computed } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
@@ -103,6 +103,17 @@ watch(() => props.response, (newResponse) => {
     avisos.value = newResponse;
   }
 });
+
+const filteredRoles = computed(() => {
+  const allRol = props.relations[1];
+  const restrictedRolNames = ['SuperUsuario', 'Administrador', 'Activo'];
+  if (dataPerfil.value?.rol?.id !== 1) {
+    return allRol?.filter(rol =>
+      !restrictedRolNames.includes(rol.nombre)
+    );
+  }
+  return allRol;
+});
 </script>
 
 <template>
@@ -121,13 +132,15 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
+                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">
+                          {{ estatus.nombre }}
+                        </option>
                       </select>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">roles<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.rol_id" required>
-                        <option v-for="(rol, index) in relations[1]" :key="index" :value="rol.id">{{ rol.nombre }}</option>
+                        <option v-for="(rol, index) in filteredRoles" :key="index" :value="rol.id">{{ rol.nombre }}</option>
                       </select>
                     </div>
                     <div class="col-4">

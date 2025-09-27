@@ -9,6 +9,8 @@ import DescripcionServicios from '@/components/services/inventario/DescripcionSe
 import ProductosServicios from '@/components/services/inventario/ProductosServicios';
 import UbicacionServicios from '@/components/services/inventario/UbicacionServicios';
 import AsignacionServicios from '@/components/services/inventario/AsignacionServicios';
+import InventariosServicios from '@/components/services/inventario/InventariosServicios';
+import PerifericosServicios from '@/components/services/inventario/PerifericosServicios';
 
 const router = useRouter();
 const store = useLoginStore()
@@ -20,6 +22,8 @@ const Inventario = ref({
   Descripciones: [],
   Ubicaciones: [],
   Asignaciones: [],
+  Inventarios: [],
+  Perifericos: [],
 });
 
 // Carga de datos
@@ -29,6 +33,8 @@ const loadData = async () => {
     Inventario.value.Descripciones = await DescripcionServicios('fetchAll').then(res => res.mostrarT);
     Inventario.value.Ubicaciones = await UbicacionServicios('fetchAll').then(res => res.mostrarT);
     Inventario.value.Asignaciones = await AsignacionServicios('fetchAll').then(res => res.mostrarT);
+    Inventario.value.Inventarios = await InventariosServicios('fetchAll').then(res => res.mostrarT);
+    Inventario.value.Perifericos = await PerifericosServicios('fetchAll').then(res => res.mostrarT);
   } catch (error) {
     console.error('Error loading data:', error);
   }
@@ -55,7 +61,8 @@ const filteredProductos = computed(() => {
 
 // Helpers
 const getUbicacion = (productoId) => Inventario.value.Ubicaciones.find(u => u.id === productoId) || 'sin ubicación';
-
+const getInventarios = (inventarioId) => Inventario.value.Inventarios.find(i => i.id === inventarioId) || 'sin ubicación';
+const getPerifericos = (perifericoId) => Inventario.value.Perifericos.find(p => p.id === perifericoId) || 'sin ubicación';
 const getAsignacion = (productoId) => Inventario.value.Asignaciones.find(a => a.id === productoId) || 'sin asignación';
 
 // Navegación
@@ -126,9 +133,9 @@ onMounted(async() => {
                       <p class="col-6">region <strong class="text-red-600">{{ getUbicacion(producto.id).region || 'sin ubicación' }}</strong></p>
                       <p class="col-6">estado <strong class="text-red-600">{{ getUbicacion(producto.id).estado || 'sin ubicación' }}</strong></p>
                       <p class="col-6">capital <strong class="text-red-600">{{ getUbicacion(producto.id).capital || 'sin ubicación' }}</strong></p>
-                      <p class="col-6">escuela <strong class="text-red-600">{{ getUbicacion(producto.id).escuela || 'sin ubicación' }}</strong></p>
                     </p>
                   </div>
+
                   <div class="col-6">
                     <p class="fw-bolder">Asignación:</p>
                     <hr class="border-2 border-red-m opacity-75">
@@ -136,7 +143,6 @@ onMounted(async() => {
                       <p class="col-6">fecha asignar <strong class="text-red-600">{{ getAsignacion(producto.id).fecha_asignar || 'sin asignación' }}</strong></p>
                       <p class="col-6">fecha_devolucion <strong class="text-red-600">{{ getAsignacion(producto.id).fecha_devolucion || "Sin devolución" || 'sin asignación' }}</strong></p>
                       <p class="col-6">destino <strong class="text-red-600">{{ getAsignacion(producto.id).destino || 'sin asignación' }}</strong></p>
-                      <p class="col-6">comentario <strong class="text-red-600">{{ getAsignacion(producto.id).comentario || 'sin asignación' }}</strong></p>
                       <p class="col-6">nombre <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.nombre || 'sin asignación' }}</strong></p>
                       <p class="col-6">apellido <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.apellido || 'sin asignación' }}</strong></p>
                       <p class="col-6">cedula <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.cedula || 'sin asignación'}}</strong></p>
@@ -146,9 +152,28 @@ onMounted(async() => {
                       <p class="col-6">telefono_alternativo <strong class="text-red-600">{{ getAsignacion(producto.id).usuario?.telefono_alternativo || 'sin asignación' }}</strong></p>
                     </p>
                   </div>
+
+                  <div class="col-6">
+                    <p class="fw-bolder">Periféricos:</p>
+                    <hr class="border-2 border-red-m opacity-75">
+                    <p class="mt-1 row">
+                      <p class="col-6">Cantidad existente <strong class="text-red-600">{{ getPerifericos(producto.id).cantidad_existente || "Sin estock" }}</strong></p>
+                      <p class="col-6">Entrada <strong class="text-red-600">{{ getPerifericos(producto.id).entrada || "Sin entrada" }}</strong></p>
+                      <p class="col-6">destino <strong class="text-red-600">{{ getPerifericos(producto.id).salida || 'sin salida' }}</strong></p>
+                      <p class="col-6">estado que se encuentra <strong class="text-red-600">{{ getPerifericos(producto.id).estatus?.nombre || 'sin asignación' }}</strong></p>
+                    </p>
+                    <p class="fw-bolder">Sin Periféricos:</p>
+                    <hr class="border-2 border-red-m opacity-75">
+                    <p class="mt-1 row">
+                      <p class="col-6">Cantidad existente <strong class="text-red-600">{{ getInventarios(producto.id).cantidad_existente || "Sin estock" }}</strong></p>
+                      <p class="col-6">Entrada <strong class="text-red-600">{{ getInventarios(producto.id).entrada || "Sin entrada" }}</strong></p>
+                      <p class="col-6">destino <strong class="text-red-600">{{ getInventarios(producto.id).salida || 'sin salida' }}</strong></p>
+                      <p class="col-6">estado que se encuentra <strong class="text-red-600">{{ getInventarios(producto.id).estatus?.nombre || 'sin asignación' }}</strong></p>
+                    </p>
+                  </div>
+
                 </div>
               </div>
-
               <div 
                 v-if="filteredProductos.length === 0 && searchQuery"
                 class="text-center py-12 bg-white rounded-lg"
