@@ -34,10 +34,10 @@ export function validacionesUtils() {
   };
 
   const textareaValid = (params) => {
-    const textareaRegex = /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-]+$/;
+    const textareaRegex = /^[^<>{}\[\]]+$/;
     return textareaRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo se permiten letras, espacios, números y signos de puntuación como puntos y comas.";
+      : "❌ No se permiten los caracteres < > { } [ ] y solo se permiten letras, números, espacios y los símbolos , . -";
   };
 
   const decimalValid = (params) => {

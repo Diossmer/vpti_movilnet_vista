@@ -200,7 +200,7 @@ watch(() => props.response, (newResponse) => {
                     </div>
                     <div class="col-12">
                       <label for="" class="badge text-secondary">Dirección</label>
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.direccion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.direccion), 'is-valid':paramsE.direccion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsE.direccion) }" placeholder="Dirección" v-model="paramsE.direccion" autocomplete="on"></textarea>
+                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.direccion && !/^[^<>{}\[\]]+$/.test(paramsE.direccion), 'is-valid':paramsE.direccion && /^[^<>{}\[\]]+$/.test(paramsE.direccion) }" placeholder="Dirección" v-model="paramsE.direccion" autocomplete="on"></textarea>
                     </div>
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
                   </div>

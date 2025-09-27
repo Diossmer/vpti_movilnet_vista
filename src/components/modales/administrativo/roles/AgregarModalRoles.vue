@@ -83,7 +83,7 @@ const myModalAlternative = new bootstrap.Modal('#myModal', options) */
                   <label for="" class="badge text-secondary">descripción</label>
                   <textarea 
                     class="form-control" 
-                    :class="{ 'is-invalid': paramsA.descripcion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion), 'is-valid':paramsA.descripcion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion)}" 
+                    :class="{ 'is-invalid': paramsA.descripcion && !/^[^<>{}\[\]]+$/.test(paramsA.descripcion), 'is-valid':paramsA.descripcion && /^[^<>{}\[\]]+$/.test(paramsA.descripcion)}" 
                     placeholder="Descripción" 
                     v-model="paramsA.descripcion"
                   ></textarea>

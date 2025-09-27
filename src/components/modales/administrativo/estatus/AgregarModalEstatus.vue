@@ -65,14 +65,14 @@ watch(() => props.response, (newResponse) => {
                 </div>
                 <div class="col-4">
                   <label for="" class="badge text-secondary">Descripción</label>
-                  <textarea class="form-control" :class="{ 'is-invalid': paramsA.descripcion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion), 'is-valid':paramsA.descripcion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-].[^<>]+$/.test(paramsA.descripcion)}" placeholder="Descripción" v-model="paramsA.descripcion"></textarea>
+                  <textarea class="form-control" :class="{ 'is-invalid': paramsA.descripcion && !/^[^<>{}\[\]]+$/.test(paramsA.descripcion), 'is-valid':paramsA.descripcion && /^[^<>{}\[\]]+$/.test(paramsA.descripcion)}" placeholder="Descripción" v-model="paramsA.descripcion"></textarea>
                 </div>
                 <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
               </div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
-              <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
+              <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport" data-bs-dismiss="modal">
                 <span v-if="!isLoadingImport">Agregar</span>
                 <span v-else>
                 <span class="spinner-border spinner-border-sm" role="status"></span>
