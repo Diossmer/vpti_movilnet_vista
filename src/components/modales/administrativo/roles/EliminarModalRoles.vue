@@ -45,7 +45,7 @@ const avisosAlert = ref(null);
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
-              <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport" data-bs-dismiss="modal">
+              <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">
                 <span v-if="!isLoadingImport">Eliminar</span>
                   <span v-else>
                   <span class="spinner-border spinner-border-sm" role="status"></span>
