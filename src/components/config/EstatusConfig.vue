@@ -207,7 +207,7 @@ onMounted(async () => { await handleData() })
                 <input type="text" class="form-control" v-model="globalSearchQuery" placeholder="Buscar globalmente...">
               </div>
               <div class="row d-flex justify-content-between">
-                <div class="col-6 btn-group" v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3 && dataPerfil.rol.id !== 4">
+                <div class="col-6 btn-group" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
                   <div class="dropdown">
                     <button class="btn btn-outline-secondary dropdown-toggle text-danger" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <i class="bi bi-trash"></i>
@@ -254,7 +254,7 @@ onMounted(async () => { await handleData() })
               </thead>
               <tbody>
                 <tr v-for="(row, index) in filteredAndPaginatedData" :key="index">
-                  <div class="form-check form-switch d-flex justify-content-end" style="height: 60px;" v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3 && dataPerfil.rol.id !== 4">
+                  <div class="form-check form-switch d-flex justify-content-end" style="height: 60px;" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
                       <label class="form-check-label" for="flexSwitchCheckDefault">
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" :checked="selectedRows.includes(row)" @change="filaIndividual(row)" :class="{ 'selected': selectedRows.includes(row) }">
                       </label>
@@ -263,7 +263,7 @@ onMounted(async () => { await handleData() })
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">
-                      <!-- <li v-if="dataPerfil.rol.id !== 2 && dataPerfil.rol.id !== 3 && dataPerfil.rol.id !== 4"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li> -->
+                      <!-- <li v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li> -->
                       <li v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export',(row.nombre) )"><i class="bi bi-upload"></i>Exportar</button></li>
                       <li v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
                         <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal" data-bs-target="#staticEditar" @click="handleData('fetch', '', row.id)">
