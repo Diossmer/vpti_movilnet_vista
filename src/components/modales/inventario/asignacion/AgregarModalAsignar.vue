@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, defineProps } from 'vue';
+import { ref, watch } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
@@ -36,6 +36,12 @@ const paramsA = ref({
   descripcion_id: [],
 });
 
+const resetParams = () => {
+  paramsA.value = {};
+  avisos.value = null;
+  avisosAlert.value = null;
+};
+
 watch([() => paramsA.value?.comentario], ([comentario]) => {
   const errors = [];
   const comentarioError = validacionesUtils().textareaValid(comentario);
@@ -56,7 +62,7 @@ watch(() => props.response, (newResponse) => {
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Agregar</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="avisos = null, avisosAlert = null"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetParams()"></button>
           </div>
           <Suspense>
             <template #default>
@@ -102,7 +108,7 @@ watch(() => props.response, (newResponse) => {
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="avisos = null, avisosAlert = null">Cancelar</button>
+                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="resetParams()">Cancelar</button>
                   <button class="btn btn-outline-secondary text-red" type="submit" :disabled="isLoadingImport">
                     <span v-if="!isLoadingImport">Agregar</span>
                     <span v-else>
