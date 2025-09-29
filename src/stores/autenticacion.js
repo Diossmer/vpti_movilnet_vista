@@ -111,18 +111,87 @@ export const useLoginStore = defineStore('login', ()=>{
     }
   };
 
-  
+  // 1. ACTUALIZA CAMPOS EDITABLES DEL PERFIL (usada por contenteditable)
+  const actualizarDatosPerfil = async (profilePayload) => {
+    try {
+      // Realiza la solicitud PATCH con los campos modificados
+      const data = await patch(
+        process.APP_URL + "/api/perfil/refrescar",
+        profilePayload,
+        localStorage.getItem('token')
+      );
 
-  onMounted(async () => {
-    watch(dataPerfil,async ()=>{
-    if(dataPerfil.value===''||dataPerfil.value===undefined||dataPerfil.value===null){
+      if (data.error) {
+        return { success: false, error: data.error };
+      }
+
+      if (data.access_token) {
+          const newExpiration = Date.now() + (data.expires_in * 1000);
+          localStorage.setItem('token', data.access_token);
+          localStorage.setItem('token_expiration', new Date(newExpiration).toISOString());
+      }
+
+      dataPerfil.value = { ...dataPerfil.value, ...data };
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error actualizando perfil:', error);
+      return { success: false, error: 'Error de red o servidor al actualizar datos.' };
+    }
+  }
+
+  // 2. CAMBIO DE CONTRASEÑA
+  const cambioContrasena = async (payload) => {
+    try {
+      const params = {
+        password_old: payload.passwordAntiguo,
+        password: payload.password,
+      }
+
+      const data = await patch(
+        process.APP_URL + "/api/perfil/contrasena",
+        params,
+        localStorage.getItem('token')
+      );
+
+      if (data.error) {
+        const errorMessage = data.error?.password_old?.[0] || data.error?.password?.[0] || data.mensaje || 'Error desconocido del servidor.';
+        return { success: false, error: errorMessage };
+      }
+
+      // Si el cambio de contraseña fue exitoso, se refresca el token
+      if (data.access_token && data.expires_in) {
+        const newExpiration = Date.now() + (data.expires_in * 1000);
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('token_expiration', new Date(newExpiration).toISOString());
+        
+        // Cerrar modal o reiniciar monitor de sesión si es necesario
+        if (typeof showExtensionDialog !== 'undefined') {
+            showExtensionDialog.value = false;
+        }
+        if (typeof iniciarSesion === 'function') {
+            iniciarSesion();
+        }
+      }
+
+      return { success: true };
+
+      } catch (err) {
+        console.error('Error cambiando contraseña:', err);
+        return { success: false, error: 'Error de red o servidor.' };
+      }
+    }
+
+    onMounted(async () => {
+      watch(dataPerfil,async ()=>{
+      if(dataPerfil.value===''||dataPerfil.value===undefined||dataPerfil.value===null){
+          await perfil();
+        }
+      });
+      if(localStorage.getItem("token") || dataPerfil.value === null){
         await perfil();
+        await iniciarSesion();
       }
     });
-    if(localStorage.getItem("token") || dataPerfil.value === null){
-      await perfil();
-      await iniciarSesion();
-    }
-  });
-  return { dataPerfil, isAuthenticated, ErrorStore, showExtensionDialog, tiempoRestante, perfil, ingresar, salir, iniciarSesion, extenderSesion };
+  return { dataPerfil, isAuthenticated, ErrorStore, showExtensionDialog, tiempoRestante, perfil, ingresar, salir, iniciarSesion, extenderSesion, cambioContrasena, actualizarDatosPerfil };
 })
