@@ -48,7 +48,7 @@ export const useLoginStore = defineStore('login', ()=>{
   const salir = async() =>{
     await post(process.APP_URL+"/api/salir",null, localStorage.getItem('token'))
     .then((data)=>{
-      console.log(data)
+      ErrorStore.value = data;
       isAuthenticated.value = false;
       showExtensionDialog.value = false;
       localStorage.removeItem('ingresar')
@@ -111,48 +111,51 @@ export const useLoginStore = defineStore('login', ()=>{
     }
   };
 
-  // 1. ACTUALIZA CAMPOS EDITABLES DEL PERFIL (usada por contenteditable)
   const actualizarDatosPerfil = async (profilePayload) => {
-    try {
-      // Realiza la solicitud PATCH con los campos modificados
-      const data = await patch(
-        process.APP_URL + "/api/perfil/refrescar",
-        profilePayload,
-        localStorage.getItem('token')
-      );
+  try {
+   // Realiza la solicitud PATCH con los campos modificados
+   const data = await patch(
+    process.APP_URL + "/api/perfil/refrescar",
+    profilePayload,
+    localStorage.getItem('token')
+   );
 
-      if (data.error) {
-        return { success: false, error: data.error };
-      }
+   if (data.error) {
+    // Si la API devuelve un error estructurado, lo devolvemos
+    return { success: false, error: data.error };
+   }
 
-      if (data.access_token) {
-          const newExpiration = Date.now() + (data.expires_in * 1000);
-          localStorage.setItem('token', data.access_token);
-          localStorage.setItem('token_expiration', new Date(newExpiration).toISOString());
-      }
+   if (data.access_token) {
+     const newExpiration = Date.now() + (data.expires_in * 1000);
+     localStorage.setItem('token', data.access_token);
+     localStorage.setItem('token_expiration', new Date(newExpiration).toISOString());
+   }
 
-      dataPerfil.value = { ...dataPerfil.value, ...data };
+   dataPerfil.value = { ...dataPerfil.value, ...data };
 
-      return { success: true };
-    } catch (error) {
-      console.error('Error actualizando perfil:', error);
-      return { success: false, error: 'Error de red o servidor al actualizar datos.' };
-    }
+   // ¡CAMBIO CLAVE AQUÍ!
+   // Devolvemos el mensaje de éxito. Asumo que el servidor podría devolver 'mensaje'.
+   // Si tu API no devuelve un 'mensaje', usa un valor estático más informativo.
+   return {
+    success: true,
+    mensaje: data.mensaje || 'Datos de perfil actualizados exitosamente.' // 👈 Mensaje del servidor o por defecto
+   };
+
+  } catch (error) {
+   console.error('Error actualizando perfil:', error);
+   // En caso de error de red/servidor, devolvemos un error.
+   return { success: false, error: 'Error de red o servidor al actualizar datos.' };
   }
+ }
 
-  // 2. CAMBIO DE CONTRASEÑA
   const cambioContrasena = async (payload) => {
     try {
       const params = {
-        password_old: payload.passwordAntiguo,
-        password: payload.password,
+        password_old: payload.password_antigua,
+        password: payload.nueva_password,
       }
 
-      const data = await patch(
-        process.APP_URL + "/api/perfil/contrasena",
-        params,
-        localStorage.getItem('token')
-      );
+      const data = await patch(process.APP_URL + "/api/perfil/contrasena",params,localStorage.getItem('token'));
 
       if (data.error) {
         const errorMessage = data.error?.password_old?.[0] || data.error?.password?.[0] || data.mensaje || 'Error desconocido del servidor.';
@@ -170,15 +173,27 @@ export const useLoginStore = defineStore('login', ()=>{
             showExtensionDialog.value = false;
         }
         if (typeof iniciarSesion === 'function') {
-            iniciarSesion();
+            await iniciarSesion();
         }
       }
 
-      return { success: true };
+      if(data){
+        ErrorStore.value = data.mensaje;
+        isAuthenticated.value = false;
+        showExtensionDialog.value = false;
+        localStorage.removeItem('ingresar')
+        localStorage.removeItem('token')
+        localStorage.removeItem('token_expiration');
+        router.push({ name: 'home' });
+      }
+      return { 
+        success: true,
+        mensaje: data.mensaje || 'Cambio de contraseña exitosamente.'
+      };
 
       } catch (err) {
         console.error('Error cambiando contraseña:', err);
-        return { success: false, error: 'Error de red o servidor.' };
+        await salir();
       }
     }
 

@@ -10,6 +10,7 @@ import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 const store = useLoginStore()
 const { isAuthenticated, dataPerfil } = storeToRefs(store)
+const configuración = ref({}); 
 
 onMounted(async()=>{
   isAuthenticated.value = localStorage.getItem('ingresar') === 'true'

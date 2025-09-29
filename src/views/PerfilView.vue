@@ -8,186 +8,175 @@ import { storeToRefs } from 'pinia';
 
 // --- Pinia Store y Router ---
 const store = useLoginStore();
-const { dataPerfil } = storeToRefs(store); // Datos del perfil reactivos
-const { cambioContrasena, actualizarDatosPerfil } = store; // Acciones del store
+const { dataPerfil } = storeToRefs(store);
+const { cambioContrasena, actualizarDatosPerfil } = store;
 const router = useRouter();
 
-// --- Estados Reactivos del Formulario de Contraseña ---
-const passwordVisible = ref(false);
-const passwordRepetir = ref("");
-const password = ref(""); // Nueva contraseña
-const passwordAntiguo = ref(""); // Contraseña vieja/antigua
+const avisosAlert = ref(null);
+const isEditingProfile = ref(false);
 
-// --- Estados de Edición de Perfil ---
-// Usamos editedProfile para rastrear lo que el usuario ha cambiado en el DOM
-const editedProfile = ref({});
+// --- ESTADOS REACTIVOS (Ref) ---
+const passwordAntiguo = ref(''); // Nuevo campo
+const password = ref('');         // Nueva Contraseña
+const passwordRepetir = ref('');  // Repetir Nueva Contraseña
+const passwordVisible = ref(false); // Controla la visibilidad de los campos
+const errorMensaje = ref('');     // Mensajes de error del frontend/backend
 
-// --- Estados de Alerta y Mensajes ---
-const validationErrors = ref(null); // Errores de validación de contraseña en tiempo real
-const avisosAlert = ref(null); // Mensajes de éxito/error después del submit
-
-// --- Lógica Computada ---
-
-// Comprueba si se está intentando cambiar la contraseña (al menos un campo no vacío)
-const isPasswordAttempt = computed(() => 
-    passwordAntiguo.value || password.value || passwordRepetir.value
-);
-
-// Comprueba si la validación de contraseña es válida (no hay errores y hay intento COMPLETO)
-const isPasswordValid = computed(() => {
-    // Si no hay intento, es válido (porque el botón estará deshabilitado de todas formas)
-    if (!isPasswordAttempt.value) return false;
-    
-    // Si hay errores de validación en tiempo real, no es válido
-    if (validationErrors.value !== null) return false;
-    
-    // Si los 3 campos están llenos Y no hay errores, es válido.
-    return !!passwordAntiguo.value && !!password.value && !!passwordRepetir.value;
-});
-
-// --- Funciones y Lógica ---
+// --- VALIDACIÓN DE CLIENTE (Computed) ---
 
 /**
- * Maneja el evento @blur (al salir del campo) en los campos contenteditable.
- * Captura el cambio y, si es diferente al valor original, lo actualiza inmediatamente.
- * @param {Event} event Evento DOM
- * @param {string} field Nombre del campo ('nombre', 'correo', etc.)
+ * Verifica si las nuevas contraseñas tienen al menos 8 caracteres.
+ * @returns {boolean}
  */
-const handleInputBlur = async (event, field) => {
+const isNewPasswordLengthValid = computed(() => {
+    // Verifica que la nueva contraseña no esté vacía y cumpla la longitud mínima
+    return password.value.length >= 8;
+});
 
-    // Obtenemos el contenido sin espacios extra
-    const newValue = event.target.innerText.trim();
-    // Valor actual en el store (puede ser nulo/indefinido)
-    const currentValue = dataPerfil.value?.[field] || '';
-  
-    // 1. Limpieza y Restauración si el valor se borró accidentalmente
-    if (newValue === '' && currentValue) {
-         // Si el usuario borró el contenido, restauramos el valor original para feedback visual
-         event.target.innerText = currentValue;
-         // Si no hubo cambio significativo, no hacemos nada más.
-         return; 
+/**
+ * Verifica si la nueva contraseña y la repetición son idénticas.
+ * @returns {boolean}
+ */
+const passwordsMatch = computed(() => {
+    // Si la nueva contraseña tiene contenido, verifica que coincida con la repetición
+    if (password.value) {
+        return password.value === passwordRepetir.value;
     }
+    return true; // Si está vacía, no mostramos el error de coincidencia aún.
+});
 
-    // 2. Si el valor es el mismo que el actual del store, no hacemos nada.
-    if (newValue === currentValue) {
-        // Aseguramos que el campo no esté marcado como editado si no hay cambio.
-        delete editedProfile.value[field];
+/**
+ * Validación general para habilitar el botón "Guardar Contraseña".
+ * @returns {boolean}
+ */
+const isPasswordValid = computed(() => {
+    // Todos los campos deben estar llenos Y las nuevas deben cumplir reglas
+    return (
+        passwordAntiguo.value.length > 0 && 
+        isNewPasswordLengthValid.value && 
+        passwordsMatch.value
+    );
+});
+
+// --- FUNCIÓN DE ENVÍO (Método) ---
+
+const handlePasswordChange = async () => {
+    avisosAlert.value = ''; // Limpiar errores
+
+    // 1. Revalidación de Cliente (Aunque el botón ya usa isPasswordValid)
+    if (!isPasswordValid.value) {
+        avisosAlert.value = 'Por favor, completa todos los campos y asegúrate de que las nuevas contraseñas coincidan y cumplan la longitud mínima.';
         return;
     }
-
-    // 3. Hay un cambio significativo. Preparamos la actualización inmediata.
-    editedProfile.value = { [field]: newValue }; // Solo el campo que acaba de cambiar
-
-    // 4. Ejecutamos la función de actualización inmediatamente.
-    avisosAlert.value = null; // Limpiar alertas
-
+    
+    // 2. Preparar datos
+    const payload = {
+        password_antigua: passwordAntiguo.value,
+        nueva_password: password.value,
+        password_repetir: passwordRepetir.value,
+    };
+    
+    // 3. Petición al Backend usando la acción de Pinia (asumo que `cambioContrasena` maneja el `fetch`)
     try {
-        const result = await actualizarDatosPerfil(editedProfile.value);
-        if (!result || !result.cambioContrasena) {
-            avisosAlert.value = { error: `Fallo al actualizar ${field}: ${result?.error || "Error desconocido."}` };
-            // Opcional: Revertir el campo a su valor original en caso de fallo
-            // event.target.innerText = currentValue;
-        } else {
-            // El store ya debe estar actualizado gracias a la acción 'actualizarDatosPerfil'
-            avisosAlert.value = { cambioContrasena: `Campo ${field} actualizado exitosamente.` };
-            editedProfile.value = {}; // Resetear estado de edición
+        // Asumo que cambioContrasena es una función async que recibe el payload 
+        // y devuelve true/false o lanza un error.
+        const data = await cambioContrasena(payload);
+        avisosAlert.value = data.mensaje;
+        // Limpiar campos
+        passwordAntiguo.value = '';
+        password.value = '';
+        passwordRepetir.value = '';
+
+    } catch (error) {
+        // Error de backend (ej. contraseña antigua incorrecta, nueva muy débil)
+        console.error('Error al cambiar contraseña:', error);
+
+        // Muestra un mensaje amigable o el error exacto del servidor
+        avisosAlert.value = error.response?.data?.detail || 
+                             error.message || 
+                             'Error desconocido al contactar al servidor.';
+    }
+};
+
+
+
+const handleInputBlur = async (e, field) => {
+    const newValue = event.target.innerText.trim();
+    const currentValue = dataPerfil.value?.[field] || '';
+    avisosAlert.value = null;
+
+    // esto es en caso de dejarlo vacio retoma el valor anterior.
+    if (newValue === '' && currentValue) {
+         event.target.innerText = currentValue;
+         return; 
+    }
+    // en cado de tener campos iguales se mantienen
+    if (newValue === currentValue) {
+        return;
+    }
+    const profilePayload = { [field]: newValue };
+    
+    try {
+        switch(Object.keys(profilePayload)[0]){
+            case 'nombre': {
+                avisosAlert.value = validacionesUtils().textValid(profilePayload.nombre)
+                break;
+            }
+            case 'apellido': {
+                avisosAlert.value = validacionesUtils().textValid(profilePayload.apellido)
+                break;
+            }
+            case 'ciudad': {
+                avisosAlert.value = validacionesUtils().textValid(profilePayload.ciudad)
+                break;
+            }
+            case 'estado': {
+                avisosAlert.value = validacionesUtils().textValid(profilePayload.estado)
+                break;
+            }
+            case 'telefono_casa': {
+                avisosAlert.value = validacionesUtils().phoneLocalValid(profilePayload.telefono_casa)
+                break;
+            }
+            case 'telefono_celular': {
+                avisosAlert.value = validacionesUtils().phoneValid(profilePayload.telefono_celular)
+                break;
+            }
+            case 'telefono_alternativo' : {
+                avisosAlert.value = validacionesUtils().phoneAlternativeValid(profilePayload.telefono_alternativo)
+                break;
+            }
+            case 'codigo_postal': {
+                avisosAlert.value = validacionesUtils().numberValid(profilePayload.codigo_postal)
+                break;
+            }
+            case 'correo': {
+                avisosAlert.value = validacionesUtils().emailValid(profilePayload.correo)
+                break;
+            }
+            case 'direccion': {
+                avisosAlert.value = validacionesUtils().textareaValid(profilePayload.direccion)
+                break;
+            }
+            default:
+                break;
+        }
+        
+        if (newValue !== currentValue && newValue !== '') {
+            // Opcional: Actualizar el store local inmediatamente para feedback visual
+            dataPerfil.value[field] = newValue;
+        }
+        
+        // dependiendo de la validacion del campo se guarda
+        if(avisosAlert.value.startsWith('✅')){
+            const result = await actualizarDatosPerfil(profilePayload);
+        }else if(avisosAlert.value.startsWith('❌')){
+
         }
     } catch (e) {
         avisosAlert.value = { error: `Error de red al actualizar ${field}.` };
     }
-    
-    // Nos aseguramos de limpiar el estado de edición después de intentar la actualización
-    editedProfile.value = {};
-};
-
-
-// Validación de contraseña en tiempo real usando watcher profundo
-watch([passwordAntiguo, passwordRepetir, password], () => {
-    if (!isPasswordAttempt.value) {
-        validationErrors.value = null;
-        return;
-    }
-    
-    const errors = [];
-    const util = validacionesUtils();
-    
-    // --- Lógica de Validación Detallada ---
-    
-    // 1. Validar que la contraseña antigua no esté vacía si hay intento de cambio
-    if (!passwordAntiguo.value) {
-        errors.push('La contraseña antigua es requerida.');
-    }
-    
-    // 2. Validar formato de la Nueva Contraseña
-    if (password.value) {
-        const nuevoError = util.passwordValid(password.value);
-        if (nuevoError) errors.push(`Nueva: ${nuevoError}`);
-    } else if (isPasswordAttempt.value) {
-        errors.push('La nueva contraseña es requerida.');
-    }
-    
-    // 3. Validar formato de la Contraseña de Repetición
-    if (passwordRepetir.value) {
-        const repetirError = util.passwordValid(passwordRepetir.value);
-        if (repetirError) errors.push(`Repetir: ${repetirError}`);
-    } else if (isPasswordAttempt.value) {
-        errors.push('Repetir contraseña es requerido.');
-    }
-
-    // 4. Validar que las nuevas contraseñas coincidan (solo si ambas tienen contenido y no tienen errores de formato)
-    const hasFormatErrors = errors.some(err => err.startsWith('Nueva:') || err.startsWith('Repetir:'));
-
-    if (password.value && passwordRepetir.value && !hasFormatErrors) {
-        const verificError = util.passwordVerificValid(password.value, passwordRepetir.value);
-        if (verificError) errors.push(verificError);
-    }
-    
-    // 5. Advertencia general si solo algunos campos están llenos
-    const allFieldsFilled = !!passwordAntiguo.value && !!password.value && !!passwordRepetir.value;
-    
-    if (isPasswordAttempt.value && !allFieldsFilled && errors.length === 0) {
-         errors.push('Completa los 3 campos de contraseña para cambiarla.');
-    }
-
-    validationErrors.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-}, { deep: true });
-
-
-// --- HANDLER PARA CAMBIAR LA CONTRASEÑA ---
-const handlePasswordChange = async () => {
-    avisosAlert.value = null; // Limpiar alertas anteriores
-
-    // 1. Verificar la validez final antes del submit
-    if (!isPasswordValid.value) {
-         avisosAlert.value = { error: "Corrige los errores y completa los 3 campos de contraseña." };
-         return;
-    }
-    
-    // 2. Ejecutar la acción de cambio de contraseña
-    const passwordPayload = { 
-        passwordAntiguo: passwordAntiguo.value,
-        password: password.value,
-        passwordRepetir: passwordRepetir.value,
-    };
-    
-    try {
-        // La acción 'cambioContrasena' debe encargarse de la validación de la contraseña antigua
-        const result = await cambioContrasena(passwordPayload); 
-        
-        if (!result || !result.cambioContrasena) {
-            avisosAlert.value = { error: "Fallo al cambiar la contraseña: " + (result?.error || "Error desconocido.") };
-        } else {
-            avisosAlert.value = { mensaje: "Contraseña actualizada exitosamente." };
-            // Limpiar campos de contraseña en éxito
-            passwordAntiguo.value = '';
-            password.value = '';
-            passwordRepetir.value = '';
-        }
-    } catch (e) {
-        avisosAlert.value = { error: "Error de red al cambiar la contraseña." };
-    }
-};
-
+}
 const goBack = () => {router.go(-1)}
 </script>
 
@@ -220,15 +209,7 @@ const goBack = () => {router.go(-1)}
                     
                     <!-- Sección de Cambio de Contraseña -->
                     <h4 class="mb-3 text-dark fw-bold">Cambiar Contraseña</h4>
-                    
-                    <!-- Correo (Solo Lectura) -->
-                    <div class="mb-3 row align-items-center">
-                        <label for="staticEmail" class="col-sm-5 col-form-label fw-semibold">Email</label>
-                        <div class="col-sm-7">
-                            <input type="text" readonly class="form-control-plaintext p-1 fw-bold text-primary-m" id="staticEmail" :value="dataPerfil?.correo">
-                        </div>
-                    </div>
-    
+                        
                     <!-- Contraseña Antigua -->
                     <div class="mb-3 row">
                         <label for="inputPasswordAntiguo" class="col-sm-5 col-form-label fw-semibold">Antígua</label>
@@ -394,8 +375,8 @@ const goBack = () => {router.go(-1)}
                     </div>
 
                     <!-- Alertas globales (para errores de validación en tiempo real y resultados de submit) -->
-                    <!-- Mantenemos la alerta fuera de las secciones para que sea visible en todo momento -->
                     <div class="mb-4">
+                        <!-- AlertComponents recibe los avisos de éxito/error del servidor (avisosAlert) y los errores de validación local (validationErrors) -->
                         <AlertComponents :avisos="avisosAlert" :avisosAlert="validationErrors"/>
                     </div>
 
