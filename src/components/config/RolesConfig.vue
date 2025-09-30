@@ -31,16 +31,29 @@ const selectedRowsAll = ref([]);
 const paramsE = ref({})
 const response = ref(null);
 const isLoadingImport = ref(false);
+
+
 const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
-    if (globalSearchQuery.value) {
-      return Object.values(row).some(cell =>
-        cell?.toString().toLowerCase().includes(globalSearchQuery.value.toLowerCase())
+    const globalQuery = globalSearchQuery.value?.toLowerCase();
+    // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
+    if (globalQuery) {
+      const standardMatch = Object.values(row).some(cell =>
+        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
       );
+      const descriptionMatch = row.descripciones?.some(desc => 
+        desc.serial?.toLowerCase().includes(globalQuery) || 
+        desc.modelo?.toLowerCase().includes(globalQuery)
+      );
+      return standardMatch || descriptionMatch;
     }
+    // --- 2. LÓGICA DE BÚSQUEDA POR COLUMNA ---
     return Object.values(row).every((cell, index) => {
-      const searchQuery = searchQueries.value[index];
-      return searchQuery ? cell?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true;
+      const searchQuery = searchQueries.value[index]?.toLowerCase();
+      if (!searchQuery) {return true;}
+      return Object.values(row).every(cell =>{
+        return String(row.nombre)?.toLowerCase().includes(searchQuery)
+      });
     });
   });
   const start = (currentPage.value - 1) * rowsPerPage.value;

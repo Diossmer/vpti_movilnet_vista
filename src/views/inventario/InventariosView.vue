@@ -34,65 +34,46 @@ const paramsE = ref({
 const response = ref(null);
 const isLoadingImport = ref(false);
 
-
-
-
 const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
-    
     const globalQuery = globalSearchQuery.value?.toLowerCase();
-
-    // --- 1. LÓGICA DE BÚSQUEDA GLOBAL (Funciona correctamente) ---
+    // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
     if (globalQuery) {
-      // 1a. Buscar en campos estándar (cantidad, entrada, salida, etc.)
       const standardMatch = Object.values(row).some(cell =>
-        // Excluimos arrays de la búsqueda estándar si el filtro es global
         !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
       );
-      
-      // 1b. Buscar en los campos anidados (serial y modelo) dentro de 'descripciones'
       const descriptionMatch = row.descripciones?.some(desc => 
         desc.serial?.toLowerCase().includes(globalQuery) || 
         desc.modelo?.toLowerCase().includes(globalQuery)
       );
-
       return standardMatch || descriptionMatch;
     }
-    
-    // --- 2. LÓGICA DE BÚSQUEDA POR COLUMNA (Optimización por índice) ---
+    // --- 2. LÓGICA DE BÚSQUEDA POR COLUMNA ---
     return Object.values(row).every((cell, index) => {
-      const searchQuery = searchQueries.value[index];
-      const query = searchQuery?.toLowerCase();
-
-      if (!query) {
-        return true; // No hay consulta para esta columna, pasa el filtro
-      }
-
-      // ** 2a. Caso especial: Manejo de la relación anidada 'descripciones' (ASUMIMOS ÍNDICE 4) **
-      // ** AJUSTA EL ÍNDICE '4' SI LA COLUMNA DE DESCRIPCIONES CAMBIA DE POSICIÓN EN TU TABLA **
+      const searchQuery = searchQueries.value[index]?.toLowerCase();
+      if (!searchQuery) {return true;}
       if (index === 4) { 
-        // 'cell' es row.descripciones
-        const relationMatch = Array.isArray(cell) && cell.some(desc =>
-          desc.serial?.toLowerCase().includes(query) ||
-          desc.modelo?.toLowerCase().includes(query)
+        const relationMatch = Array.isArray(row.descripciones) && row.descripciones.some(desc =>
+          desc.serial?.toLowerCase().includes(searchQuery) ||
+          desc.modelo?.toLowerCase().includes(searchQuery)
         );
         return relationMatch;
       }
-      
-      // 2b. Caso especial: Manejo de la relación anidada 'estatus' 
-      // Si la columna actual es el objeto estatus y el nombre coincide.
-      if (row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(query)) {
+      if (row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(searchQuery)) {
           return true;
       }
       
-      // 2c. Fallback para campos primitivos estándar (cantidad_existente, entrada, salida, etc.)
-      return cell?.toString().toLowerCase().includes(query);
+      return Object.values(row).every(cell =>{
+        return String(row.cantidad_existente)?.includes(searchQuery)||
+        String(row.entrada)?.includes(searchQuery)||
+        String(row.salida)?.includes(searchQuery)
+      });
     });
   });
-
   const start = (currentPage.value - 1) * rowsPerPage.value;
   return filteredData.value?.slice(start, start + rowsPerPage.value);
 });
+
 /* const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
     if (globalSearchQuery.value) {
@@ -114,9 +95,6 @@ const filteredAndPaginatedData = computed(() => {
   const start = (currentPage.value - 1) * rowsPerPage.value;
   return filteredData.value?.slice(start, start + rowsPerPage.value);
 }); */
-
-
-
 watch([globalSearchQuery, searchQueries, currentPage, rowsPerPage], () => {
   totalOfPage.value = Math.ceil(filteredData.value?.length / rowsPerPage.value);
 });

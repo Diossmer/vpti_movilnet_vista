@@ -39,26 +39,39 @@ const isLoadingImport = ref(false);
 
 const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
-    if (globalSearchQuery.value) {
-      return Object.values(row).some(cell =>
-        cell?.toString().toLowerCase().includes(globalSearchQuery.value.toLowerCase())
+    const globalQuery = globalSearchQuery.value?.toLowerCase();
+    // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
+    if (globalQuery) {
+      const standardMatch = Object.values(row).some(cell =>
+        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
       );
+      const descriptionMatch = row.descripciones?.some(desc => 
+        desc.serial?.toLowerCase().includes(globalQuery) || 
+        desc.modelo?.toLowerCase().includes(globalQuery)
+      );
+      return standardMatch || descriptionMatch;
     }
+    // --- 2. LÓGICA DE BÚSQUEDA POR COLUMNA ---
     return Object.values(row).every((cell, index) => {
-      const searchQuery = searchQueries.value[index];
-      if(row?.estatus?.nombre?.toLowerCase()===(searchQuery?.toLowerCase() || row?.estatus !== null)){
-        const searchRelation = Object.values(row?.estatus).filter((celda) => {
-          return searchQuery ? celda?.toString().toLowerCase().includes(searchQuery?.toLowerCase()) : true;
-        });
-        return searchQuery ? cell?.toString().includes(searchQuery.toLowerCase()) || searchRelation : true ;
+      const searchQuery = searchQueries.value[index]?.toLowerCase();
+      if (!searchQuery) {return true;}
+      if (index === 5) { 
+        const relationMatch = Array.isArray(row.descripciones) && row.descripciones.some(desc =>
+          desc.serial?.toLowerCase().includes(searchQuery) ||
+          desc.modelo?.toLowerCase().includes(searchQuery)
+        );
+        return relationMatch;
       }
-      if(row?.producto?.nombre?.toLowerCase()===(searchQuery?.toLowerCase() || row?.producto !== null)){
-        const searchRelation = Object.values(row?.producto).filter((celda) => {
-          return searchQuery ? celda?.toString().toLowerCase().includes(searchQuery?.toLowerCase()) : true;
-        });
-        return searchQuery ? cell?.toString().includes(searchQuery.toLowerCase()) || searchRelation : true ;
+      if (row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(searchQuery)) {
+          return true;
       }
-      return searchQuery ? cell?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true;
+      
+      return Object.values(row).every(cell =>{
+        return String(row.escala)?.toLowerCase().includes(searchQuery)||
+        String(row.compatibilidad)?.toLowerCase().includes(searchQuery)||
+        String(row.reemplazo)?.toLowerCase().includes(searchQuery)||
+        String(row.mantenimiento)?.toLowerCase().includes(searchQuery)
+      });
     });
   });
   const start = (currentPage.value - 1) * rowsPerPage.value;

@@ -35,26 +35,36 @@ const { dataPerfil } = storeToRefs(store);
 //Filtro de busqueda
 const filteredAndPaginatedData = computed(() => {
   filteredData.value = rowData.value.filter(row => {
-    if (globalSearchQuery.value) {
-      return Object.values(row).some(cell =>
-        cell?.toString().toLowerCase().includes(globalSearchQuery.value.toLowerCase())
+    const globalQuery = globalSearchQuery.value?.toLowerCase();
+    // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
+    if (globalQuery) {
+      const standardMatch = Object.values(row).some(cell =>
+        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
       );
+      const descriptionMatch = row.descripciones?.some(desc => 
+        desc.serial?.toLowerCase().includes(globalQuery) || 
+        desc.modelo?.toLowerCase().includes(globalQuery)
+      );
+      return standardMatch || descriptionMatch;
     }
+    // --- 2. LÓGICA DE BÚSQUEDA POR COLUMNA ---
     return Object.values(row).every((cell, index) => {
-      const searchQuery = searchQueries.value[index];
-      if(row?.estatus?.nombre?.toLowerCase()===(searchQuery?.toLowerCase() || row?.estatus !== null)){
-        const searchRelation = Object.values(row?.estatus).some((celda) => {
-          return searchQuery ? celda?.toString().toLowerCase().includes(searchQuery?.toLowerCase()) : true;
-        });
-        return searchQuery ? cell?.toString().includes(searchQuery.toLowerCase()) || searchRelation : true ;
+      const searchQuery = searchQueries.value[index]?.toLowerCase();
+      if (!searchQuery) {return true;}
+      
+      if (row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(searchQuery)) {
+          return true;
       }
-      if(row?.rol?.nombre?.toLowerCase()===(searchQuery?.toLowerCase() || row?.rol !== null)){
-        const searchRelation = Object.values(row?.rol).some((celda) => {
-          return searchQuery ? celda?.toString().toLowerCase().includes(searchQuery?.toLowerCase()) : true;
-        });
-        return searchQuery ? cell?.toString().includes(searchQuery.toLowerCase()) || searchRelation : true ;
+      if (row.rol && row.rol.nombre && row.rol.nombre.toLowerCase().includes(searchQuery)) {
+          return true;
       }
-      return searchQuery ? cell?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true;
+      return Object.values(row).every(cell =>{
+        return String(row.nombre)?.toLowerCase().includes(searchQuery)||
+        String(row.apellido)?.toLowerCase().includes(searchQuery)||
+        String(row.cedula)?.toLowerCase().includes(searchQuery)||
+        String(row.usuario)?.toLowerCase().includes(searchQuery)||
+        String(row.correo)?.toLowerCase().includes(searchQuery)
+      });
     });
   });
   const start = (currentPage.value - 1) * rowsPerPage.value;
