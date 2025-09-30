@@ -258,6 +258,9 @@ onMounted(async()=>{await handleData()})
                       </label>
                     </div>
                   <td>{{ row.nombre }}</td>
+                  <tr>
+                    <td v-for="descripcion in row?.descripciones">Serial: {{ descripcion?.serial }} Modelo: {{ descripcion?.modelo }}</td>
+                  </tr>
                   <td>{{ row.usuario?.usuario }}</td>
                   <td>{{ row.estatus?.nombre }}</td>
                   <td>
@@ -327,7 +330,7 @@ onMounted(async()=>{await handleData()})
 
     <EditarModalProductos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
-    <EliminarModalProductos :handleData="handleData" :paramsE="paramsE"/>
+    <EliminarModalProductos :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
     <MostrarModalProductos :paramsE="paramsE" :relations="relations" />
 

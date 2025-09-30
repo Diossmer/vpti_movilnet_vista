@@ -247,6 +247,9 @@ onMounted(async()=>{await handleData()})
                     <td>{{ row.entrada }}</td>
                     <td>{{ row.salida }}</td>
                     <td>{{ row.estatus?.nombre }}</td>
+                    <tr>
+                      <td v-for="descripcion in row?.descripciones">Serial: {{ descripcion?.serial }} Modelo: {{ descripcion?.modelo }}</td>
+                    </tr>
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">
@@ -314,7 +317,7 @@ onMounted(async()=>{await handleData()})
 
     <EditarModalPerifericos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
-    <EliminarModalPerifericos :handleData="handleData" :paramsE="paramsE"/>
+    <EliminarModalPerifericos :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
     <MostrarModalPerifericos :paramsE="paramsE" />
 

@@ -14,6 +14,11 @@ const props = defineProps({
     default: () => ({}),
     required: true,
   },
+  isLoadingImport: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
 });
 
 const { dataPerfil } = storeToRefs(useLoginStore());

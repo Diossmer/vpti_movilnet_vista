@@ -327,7 +327,7 @@ onMounted(async () => { await handleData() })
 
     <EditarModalEstatus :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" :response="response" />
 
-    <EliminarModalEstatus :handleData="handleData" :paramsE="paramsE"/>
+    <EliminarModalEstatus :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
     <MostrarModalEstatus :paramsE="paramsE" />
 

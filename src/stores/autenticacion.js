@@ -48,7 +48,7 @@ export const useLoginStore = defineStore('login', ()=>{
   const salir = async() =>{
     await post(process.APP_URL+"/api/salir",null, localStorage.getItem('token'))
     .then((data)=>{
-      ErrorStore.value = data;
+      ErrorStore.value = data[0];
       isAuthenticated.value = false;
       showExtensionDialog.value = false;
       localStorage.removeItem('ingresar')

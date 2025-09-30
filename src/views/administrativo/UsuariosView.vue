@@ -340,7 +340,7 @@ onMounted(async()=>{await handleData()})
 
     <EditarModalUsuarios :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
-    <EliminarModalUsuarios :handleData="handleData" :paramsE="paramsE"/>
+    <EliminarModalUsuarios :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
     <MostrarModalUsuarios :paramsE="paramsE" />
 

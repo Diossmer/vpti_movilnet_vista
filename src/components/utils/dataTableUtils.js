@@ -18,7 +18,6 @@ const dataTable = () => {
           'inventarios',
           'evaluaciones',
           'descripcion',
-          'descripciones',
           'direccion',
           'ciudad',
           'estado',

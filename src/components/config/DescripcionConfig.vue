@@ -311,7 +311,7 @@ onMounted(async()=>{await handleData()})
 
     <EditarModalDescripcion :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
-    <EliminarModaDescripcion :handleData="handleData" :paramsE="paramsE"/>
+    <EliminarModaDescripcion :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
     <MostrarModalDescripcion :paramsE="paramsE" />
 

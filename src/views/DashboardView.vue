@@ -60,10 +60,10 @@ const filteredProductos = computed(() => {
 });
 
 // Helpers
-const getUbicacion = (productoId) => Inventario.value.Ubicaciones.find(u => u?.id === productoId) || 'sin ubicación';
-const getInventarios = (inventarioId) => Inventario.value.Inventarios.find(i => i?.id === inventarioId) || 'sin ubicación';
-const getPerifericos = (perifericoId) => Inventario.value.Perifericos.find(p => p?.id === perifericoId) || 'sin ubicación';
-const getAsignacion = (productoId) => Inventario.value.Asignaciones.find(a => a?.id === productoId) || 'sin asignación';
+const getUbicacion = (productoId) => Inventario.value?.Ubicaciones.find(u => u?.id === productoId) || 'sin Productos';
+const getInventarios = (inventarioId) => Inventario.value?.Inventarios.find(i => i?.id === inventarioId) || 'sin periféricos';
+const getPerifericos = (perifericoId) => Inventario.value?.Perifericos.find(p => p?.id === perifericoId) || 'sin periféricos';
+const getAsignacion = (productoId) => Inventario.value?.Asignaciones.find(a => a?.id === productoId) || 'sin asignación';
 
 // Navegación
 const goBack = () => router.go(-1);

@@ -302,7 +302,7 @@ onMounted(async()=>{await handleData()})
 
     <EditarModalRoles :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" :response="response" />
 
-    <EliminarModalRoles :handleData="handleData" :paramsE="paramsE"/>
+    <EliminarModalRoles :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 
     <MostrarModalRoles :paramsE="paramsE" />
 
