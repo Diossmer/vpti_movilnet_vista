@@ -171,16 +171,12 @@ const manejadorEliminar=async(type)=>{
     if (type === 'individual' && selectedRows.value?.length > 0) {
       // Eliminación de seleccionados
       await Promise.all(selectedRows.value.map(row =>{
-        if(row.id !==1){
-          PerifericosServicios('delete', row.id)
-        }
+        PerifericosServicios('delete', row.id)
       }));
     } else if (type === 'all') {
       // Eliminación de todos los registros
       await Promise.all(selectedRowsAll.value.map(row =>{
-        if(row.id !==1){
-          PerifericosServicios('delete', row.id)
-        }
+        PerifericosServicios('delete', row.id)
       }));
     }
     await handleData('fetchAll');
