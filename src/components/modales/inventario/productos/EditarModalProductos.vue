@@ -66,13 +66,6 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-6" v-if="dataPerfil?.rol.id === 1">
-                      <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.usuario?.usuario }}</span>
-                      <select class="form-select" v-model="paramsE.usuario_id" required>
-                        <option v-for="(usuario, index) in relations[0]" :key="index" :value="usuario.id">{{ usuario.usuario }}</option>
-                      </select>
-                    </div>
                     <div class="col-6">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
                       <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>

@@ -41,23 +41,14 @@ const filteredAndPaginatedData = computed(() => {
       const standardMatch = Object.values(row).some(cell =>
         !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
       );
-      const descriptionMatch = row.descripciones?.some(desc => 
-        desc.serial?.toLowerCase().includes(globalQuery) || 
-        desc.modelo?.toLowerCase().includes(globalQuery)
-      );
+      const descriptionMatch = String(row.producto?.nombre)?.toLowerCase().includes(globalQuery)
+      
       return standardMatch || descriptionMatch;
     }
     // --- 2. LÓGICA DE BÚSQUEDA POR COLUMNA ---
     return Object.values(row).every((cell, index) => {
       const searchQuery = searchQueries.value[index]?.toLowerCase();
       if (!searchQuery) {return true;}
-      if (index === 1) { 
-        const relationMatch = Array.isArray(row.descripciones) && row.descripciones.some(desc =>
-          desc.serial?.toLowerCase().includes(searchQuery) ||
-          desc.modelo?.toLowerCase().includes(searchQuery)
-        );
-        return relationMatch;
-      }
       if (row.producto && row.producto.nombre && row.producto.nombre.toLowerCase().includes(searchQuery)) {
           return true;
       }

@@ -43,11 +43,17 @@ const filteredAndPaginatedData = computed(() => {
     // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
     if (globalQuery) {
       const standardMatch = Object.values(row).some(cell =>
-        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
+        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery) ||
+        String(row.estatus.nombre)?.toLowerCase().includes(globalQuery)
       );
       const descriptionMatch = row.descripciones?.some(desc => 
-        desc.serial?.toLowerCase().includes(globalQuery) || 
-        desc.modelo?.toLowerCase().includes(globalQuery)
+        String(desc.codigo)?.includes(globalQuery) ||
+        String(desc.dispositivo)?.toLowerCase().includes(globalQuery) ||
+        String(desc.marca)?.toLowerCase().includes(globalQuery) ||
+        String(desc.modelo)?.toLowerCase().includes(globalQuery) ||
+        String(desc.serial)?.toLowerCase().includes(globalQuery) ||
+        String(desc.codigo_inv)?.toLowerCase().includes(globalQuery) ||
+        String(desc.producto.nombre)?.toLowerCase().includes(globalQuery)
       );
       return standardMatch || descriptionMatch;
     }
@@ -57,8 +63,13 @@ const filteredAndPaginatedData = computed(() => {
       if (!searchQuery) {return true;}
       if (index === 5) { 
         const relationMatch = Array.isArray(row.descripciones) && row.descripciones.some(desc =>
-          desc.serial?.toLowerCase().includes(searchQuery) ||
-          desc.modelo?.toLowerCase().includes(searchQuery)
+          String(desc.codigo)?.includes(searchQuery) ||
+          String(desc.dispositivo)?.toLowerCase().includes(searchQuery) ||
+          String(desc.marca)?.toLowerCase().includes(searchQuery) ||
+          String(desc.modelo)?.toLowerCase().includes(searchQuery) ||
+          String(desc.serial)?.toLowerCase().includes(searchQuery) ||
+          String(desc.codigo_inv)?.toLowerCase().includes(searchQuery) ||
+          String(desc.producto.nombre)?.toLowerCase().includes(searchQuery)
         );
         return relationMatch;
       }
@@ -272,7 +283,7 @@ onMounted(async()=>{await handleData()})
                   <td>{{ row.mantenimiento }}</td>
                   <td>{{ row.estatus?.nombre }}</td>
                   <tr>
-                    <td v-for="descripcion in row?.descripciones">Serial: {{ descripcion?.serial }} Modelo: {{ descripcion?.modelo }}</td>
+                    <td v-for="descripcion in row?.descripciones">producto: {{ descripcion?.producto.nombre }} Modelo: {{ descripcion?.modelo }}</td>
                   </tr>
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>

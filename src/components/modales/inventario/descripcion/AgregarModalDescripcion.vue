@@ -36,7 +36,9 @@ const paramsA = ref({
 });
 
 const resetParams = () => {
-  paramsA.value = {};
+  paramsA.value = {
+    descripcion_id: [],
+  };
   avisos.value = null;
   avisosAlert.value = null;
 };

@@ -37,17 +37,42 @@ const modalEditar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
 
-watch(() => props.paramsE,() =>{},{ deep: true });
+// **1. ESTADO LOCAL PARA LA EDICIÓN**
+const formData = ref({});
+
+// **2. SINCRONIZACIÓN Y CLONACIÓN MEJORADA**
+watch(() => props.paramsE, (newParamsE) => {
+    // Clonación profunda
+    const clonedParams = JSON.parse(JSON.stringify(newParamsE));
+    // 2.1. INICIALIZACIÓN CLAVE para el SELECT MULTIPLE:
+    // Mapeamos los IDs de las descripciones que ya vienen cargadas.
+    // Esto asegura que el v-model se inicialice con un array de IDs.
+    const descripcionIds = (clonedParams.descripciones && Array.isArray(clonedParams.descripciones))
+        ? clonedParams.descripciones.map(d => d.id) : [];
+    // 2.2. Construimos el nuevo formData
+    formData.value = {
+        ...clonedParams,
+        // Usamos la lista de IDs mapeados para el v-model (formData.descripcion_id)
+        descripcion_id: descripcionIds,
+        // Aseguramos que los demás campos obligatorios/modificables existan
+        estatus_id: clonedParams.estatus_id || null, // Para el select simple
+        // Los demás campos (escala, compatibilidad, etc.) ya vienen en clonedParams
+    };
+    // Si el backend requiere que el campo se llame distinto al v-model
+    // si el campo en el backend se llama 'descripciones', tendrías que cambiar el v-model o hacer un pre-procesamiento aquí.
+    // Pero asumiendo que el backend espera 'descripcion_id' (como sugiere el error), esta estructura es correcta.
+}, { deep: true, immediate: true });
 watch([
-() => props.paramsE?.escala,
-() => props.paramsE?.compatibilidad,
-() => props.paramsE?.reemplazo,
-() => props.paramsE?.mantenimiento], ([
+() => formData.value?.escala,
+() => formData.value?.compatibilidad,
+() => formData.value?.reemplazo,
+() => formData.value?.mantenimiento], ([
   escala,
   compatibilidad,
   reemplazo,
   mantenimiento]) => {
   const errors = [];
+  // Usamos el helper validacionesUtils para las validaciones existentes
   const CompatibilidadError = validacionesUtils().textValid(compatibilidad);
   if (CompatibilidadError) errors.push(CompatibilidadError);
   const ReemplazoError = validacionesUtils().textValid(reemplazo);
@@ -56,13 +81,17 @@ watch([
   if (mantenimientoError) errors.push(mantenimientoError);
   const escalaError = validacionesUtils().sizeValid(escala);
   if (escalaError) errors.push(escalaError);
+
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((compatibilidad==='' || compatibilidad===undefined)
-  && (reemplazo==='' || reemplazo===undefined)
-  && (mantenimiento==='' || mantenimiento===undefined)
-  && (escala==='' || escala===undefined))
-  avisosAlert.value = null;
-});
+  
+  // Limpiar el aviso si todos los campos opcionales están vacíos
+  if ((!compatibilidad || compatibilidad === '')
+  && (!reemplazo || reemplazo === '')
+  && (!mantenimiento || mantenimiento === '')
+  && (!escala || escala === '')) {
+    avisosAlert.value = null;
+  }
+}, { deep: true });
 
 watch(() => props.response, (newResponse) => {
   if (newResponse) {
@@ -81,41 +110,55 @@ watch(() => props.response, (newResponse) => {
           </div>
           <Suspense>
             <template #default>
-              <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
+              <!-- 4. USAMOS formData EN EL SUBMIT -->
+              <form @submit.prevent="handleData('update', formData, formData.id)">
                 <div class="modal-body">
                   <div class="row">
                     <div class="col-8">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
-                      <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
+                      <select class="form-select" v-model="formData.descripcion_id" multiple required disabled v-if="dataPerfil.rol?.id === 2">
+                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                      </select>
+                      <select class="form-select" v-model="formData.descripcion_id" multiple required v-else>
                         <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
                       </select>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
-                      <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
-                      <select class="form-select" v-model="paramsE.estatus_id" required>
+                      <span class="badge text-secondary">{{ formData.estatus?.nombre }}</span>
+                      <select class="form-select" v-model="formData.estatus_id" required>
                         <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
                       </select>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">escala</label>
-                      <input type="text" maxlength="20" pattern="^(critico|alto|medio|bajo|regular|resuelto)$" class="form-control" :class="{'is-invalid': paramsE.escala && !/^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsE.escala),'is-valid': paramsE.escala && /^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsE.escala)}" v-model="paramsE.escala" placeholder="Escala"  />
+                      <!-- 5. USAMOS formData.escala para el v-model y las validaciones -->
+                      <input type="text" v-if="dataPerfil.rol?.id === 2" disabled maxlength="20" pattern="^(critico|alto|medio|bajo|regular|resuelto)$" class="form-control" :class="{'is-invalid': formData.escala && !/^(critico|alto|medio|bajo|regular|resuelto)$/.test(formData.escala),'is-valid': formData.escala && /^(critico|alto|medio|bajo|regular|resuelto)$/.test(formData.escala)}" v-model="formData.escala" placeholder="Escala"  />
+                      <input type="text" v-else maxlength="20" pattern="^(critico|alto|medio|bajo|regular|resuelto)$" class="form-control" :class="{'is-invalid': formData.escala && !/^(critico|alto|medio|bajo|regular|resuelto)$/.test(formData.escala),'is-valid': formData.escala && /^(critico|alto|medio|bajo|regular|resuelto)$/.test(formData.escala)}" v-model="formData.escala" placeholder="Escala"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">compatibilidad</label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.compatibilidad),'is-valid': paramsE.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.compatibilidad)}" v-model="paramsE.compatibilidad" placeholder="Compatibilidad"  />
+                      <!-- 5. USAMOS formData.compatibilidad para el v-model y las validaciones -->
+                      <input type="text" v-if="dataPerfil.rol?.id === 2" disabled disabledmaxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad),'is-valid': formData.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad)}" v-model="formData.compatibilidad" placeholder="Compatibilidad"  />
+                      <input type="text" v-else maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad),'is-valid': formData.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad)}" v-model="formData.compatibilidad" placeholder="Compatibilidad"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">reemplazo</label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.reemplazo && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.reemplazo),'is-valid': paramsE.reemplazo && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.reemplazo)}" v-model="paramsE.reemplazo" placeholder="Reemplazo"  />
+                      <!-- 5. USAMOS formData.reemplazo para el v-model y las validaciones -->
+                      <input type="text" v-if="dataPerfil.rol?.id === 2" disabled maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.reemplazo && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.reemplazo),'is-valid': formData.reemplazo && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.reemplazo)}" v-model="formData.reemplazo" placeholder="Reemplazo"  />
+                      <input type="text" v-else maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.reemplazo && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.reemplazo),'is-valid': formData.reemplazo && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.reemplazo)}" v-model="formData.reemplazo" placeholder="Reemplazo"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">mantenimiento</label>
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsE.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento),'is-valid': paramsE.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsE.mantenimiento)}" v-model="paramsE.mantenimiento" placeholder="mantenimiento"  />
+                      <!-- 5. USAMOS formData.mantenimiento para el v-model y las validaciones -->
+                      <input type="text" v-if="dataPerfil.rol?.id === 2" disabled maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.mantenimiento),'is-valid': formData.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.mantenimiento)}" v-model="formData.mantenimiento" placeholder="mantenimiento"  />
+                      <input type="text" v-else maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.mantenimiento && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.mantenimiento),'is-valid': formData.mantenimiento && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.mantenimiento)}" v-model="formData.mantenimiento" placeholder="mantenimiento"  />
                     </div>
                     <div class="col-8">
                       <label for="" class="badge text-secondary">Observación</label>
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.notas && !/^[^<>{}\[\]]+$/.test(paramsE.notas), 'is-valid':paramsE.notas && /^[^<>{}\[\]]+$/.test(paramsE.notas) }" placeholder="Observación" v-model="paramsE.notas"></textarea>
+                      <!-- 5. USAMOS formData.notas para el v-model y las validaciones -->
+                      <textarea class="form-control" v-if="dataPerfil.rol?.id === 2" disabled :class="{ 'is-invalid': formData.notas && !/^[^<>{}\[\]]+$/.test(formData.notas), 'is-valid':formData.notas && /^[^<>{}\[\]]+$/.test(formData.notas) }" placeholder="Observación" v-model="formData.notas"></textarea>
+                      <textarea class="form-control" v-else :class="{ 'is-invalid': formData.notas && !/^[^<>{}\[\]]+$/.test(formData.notas), 'is-valid':formData.notas && /^[^<>{}\[\]]+$/.test(formData.notas) }" placeholder="Observación" v-model="formData.notas"></textarea>
                     </div>
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
                   </div>
