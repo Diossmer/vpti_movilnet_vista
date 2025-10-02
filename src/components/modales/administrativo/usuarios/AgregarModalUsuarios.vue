@@ -115,7 +115,7 @@ const filteredRoles = computed(() => {
   const restrictedRolNames = ['SuperUsuario', 'Administrador', 'Activo'];
   if (dataPerfil.value?.rol?.id !== 1) {
     return allRol?.filter(rol =>
-      !restrictedRolNames.includes(rol.nombre)
+      !restrictedRolNames?.includes(rol.nombre)
     );
   }
   return allRol;

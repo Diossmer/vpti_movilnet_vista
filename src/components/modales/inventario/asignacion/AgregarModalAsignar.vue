@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
@@ -56,6 +56,16 @@ watch(() => props.response, (newResponse) => {
     avisos.value = newResponse;
   }
 });
+const filteredUsuario = computed(() => {
+  const allUsuario = props.relations[1];
+  const restrictedUsuarioNames = ['admin', 'administrador', 'activo'];
+  if (dataPerfil.value?.usuario?.id !== 1) {
+    return allUsuario?.filter(usuario =>
+      !restrictedUsuarioNames?.includes(usuario.usuario)
+    );
+  }
+  return allUsuario;
+});
 </script>
 
 <template>
@@ -86,7 +96,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-3">
                       <label for="" class="badge text-secondary">usuarios<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.usuario_id" required>
-                        <option v-for="(usuario, index) in relations[1]" :key="index" :value="usuario.id">{{ usuario.usuario }}</option>
+                        <option v-for="(usuario, index) in filteredUsuario" :key="index" :value="usuario.id">{{ usuario.usuario }}</option>
                       </select>
                     </div>
                     <div class="col-4">

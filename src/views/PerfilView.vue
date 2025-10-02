@@ -98,8 +98,6 @@ const handlePasswordChange = async () => {
     }
 };
 
-
-
 const handleInputBlur = async (e, field) => {
     const newValue = event.target.innerText.trim();
     const currentValue = dataPerfil.value?.[field] || '';
@@ -215,7 +213,7 @@ const goBack = () => {router.go(-1)}
                         <label for="inputPasswordAntiguo" class="col-sm-5 col-form-label fw-semibold">Antígua</label>
                         <div class="col-sm-7 input-group">
                             <input :type="passwordVisible ? 'text' : 'password'" v-model="passwordAntiguo" id="inputPasswordAntiguo" 
-                                   class="form-control" placeholder="Contraseña Antígua" :required="isPasswordAttempt" autocomplete="current-password" maxlength="20" />
+                                   class="form-control" :class="{'is-invalid':passwordAntiguo && !/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{4,}$/.test(passwordAntiguo),'is-valid':passwordAntiguo && /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{4,}$/.test(passwordAntiguo)}" placeholder="Contraseña Antígua" :required="isPasswordAttempt" autocomplete="current-password" maxlength="20" />
                             <button type="button" @click="passwordVisible = !passwordVisible" class="btn btn-outline-secondary">
                                 <i :class="passwordVisible ? 'bi bi-eye-fill' : 'bi bi-eye-slash-fill'"></i>
                             </button>
@@ -227,7 +225,7 @@ const goBack = () => {router.go(-1)}
                         <label for="inputPasswordNuevo" class="col-sm-5 col-form-label fw-semibold">Nueva</label>
                         <div class="col-sm-7 input-group">
                             <input :type="passwordVisible ? 'text' : 'password'" v-model="password" id="inputPasswordNuevo" 
-                                   class="form-control" placeholder="Mín. 8 caracteres" :required="isPasswordAttempt" autocomplete="new-password" maxlength="20" />
+                                   class="form-control" :class="{'is-invalid':password && !/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(password),'is-valid':password && /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(password)}" placeholder="Mín. 8 caracteres" :required="isPasswordAttempt" autocomplete="new-password" maxlength="20" />
                             <button type="button" @click="passwordVisible = !passwordVisible" class="btn btn-outline-secondary">
                                 <i :class="passwordVisible ? 'bi bi-eye-fill' : 'bi bi-eye-slash-fill'"></i>
                             </button>
@@ -239,7 +237,7 @@ const goBack = () => {router.go(-1)}
                         <label for="inputPasswordRepetir" class="col-sm-5 col-form-label fw-semibold">Repetir</label>
                         <div class="col-sm-7 input-group">
                             <input :type="passwordVisible ? 'text' : 'password'" v-model="passwordRepetir" id="inputPasswordRepetir" 
-                                   class="form-control" placeholder="Confirma la nueva" :required="isPasswordAttempt" autocomplete="new-password" maxlength="20" />
+                                   class="form-control" :class="{'is-invalid':passwordRepetir && !/^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(passwordRepetir),'is-valid':passwordRepetir && /^(?=.*[A-Za-z])(?=.*[A-Z])(?=.*\d)(?=.*)[a-zA-Z\d@.*-_+]{8,}$/.test(passwordRepetir)}" placeholder="Confirma la nueva" :required="isPasswordAttempt" autocomplete="new-password" maxlength="20" />
                             <button type="button" @click="passwordVisible = !passwordVisible" class="btn btn-outline-secondary">
                                 <i :class="passwordVisible ? 'bi bi-eye-fill' : 'bi bi-eye-slash-fill'"></i>
                             </button>
