@@ -77,9 +77,9 @@ const myModalAlternative = new bootstrap.Modal('#myModal', options) */
                   <label for="" class="badge text-secondary">nombre<span class="text-danger">*</span></label>
                   <input 
                     type="text" 
-                    pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" 
+                    pattern="^[A-Za-zÁ-Úá-úñÑ\s\d]+$" 
                     class="form-control" 
-                    :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.nombre)}" 
+                    :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre)}" 
                     v-model="paramsA.nombre" 
                     placeholder="Nombre" 
                     required 
