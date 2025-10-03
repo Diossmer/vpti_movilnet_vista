@@ -39,7 +39,13 @@ const filteredAndPaginatedData = computed(() => {
     // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
     if (globalQuery) {
       const standardMatch = Object.values(row).some(cell =>
-        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
+        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery) ||
+        String(row.codigo)?.toLowerCase().includes(globalQuery)||
+        String(row.modelo)?.toLowerCase().includes(globalQuery)||
+        String(row.dispositivo)?.toLowerCase().includes(globalQuery)||
+        String(row.serial)?.toLowerCase().includes(globalQuery)||
+        String(row.marca)?.toLowerCase().includes(globalQuery)||
+        String(row.codigo_inv)?.toLowerCase().includes(globalQuery)
       );
       const descriptionMatch = String(row.producto?.nombre)?.toLowerCase().includes(globalQuery)
       

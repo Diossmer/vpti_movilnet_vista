@@ -39,13 +39,17 @@ const filteredAndPaginatedData = computed(() => {
     // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
     if (globalQuery) {
       const standardMatch = Object.values(row).some(cell =>
-        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
+        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery) ||
+        row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(globalQuery) ||
+        row.rol && row.rol.nombre && row.rol.nombre.toLowerCase().includes(globalQuery) ||
+        String(row.nombre)?.toLowerCase().includes(globalQuery)||
+        String(row.apellido)?.toLowerCase().includes(globalQuery)||
+        String(row.cedula)?.toLowerCase().includes(globalQuery)||
+        String(row.usuario)?.toLowerCase().includes(globalQuery)||
+        String(row.correo)?.toLowerCase().includes(globalQuery) ||
+        String(row.cargo)?.toLowerCase().includes(globalQuery)
       );
-      const descriptionMatch = row.descripciones?.some(desc => 
-        desc.serial?.toLowerCase().includes(globalQuery) || 
-        desc.modelo?.toLowerCase().includes(globalQuery)
-      );
-      return standardMatch || descriptionMatch;
+      return standardMatch;
     }
     // --- 2. LÓGICA DE BÚSQUEDA POR COLUMNA ---
     return Object.values(row).every((cell, index) => {
@@ -63,7 +67,8 @@ const filteredAndPaginatedData = computed(() => {
         String(row.apellido)?.toLowerCase().includes(searchQuery)||
         String(row.cedula)?.toLowerCase().includes(searchQuery)||
         String(row.usuario)?.toLowerCase().includes(searchQuery)||
-        String(row.correo)?.toLowerCase().includes(searchQuery)
+        String(row.correo)?.toLowerCase().includes(searchQuery) ||
+        String(row.cargo)?.toLowerCase().includes(searchQuery)
       });
     });
   });
@@ -281,6 +286,7 @@ onMounted(async()=>{await handleData()})
                   <td>{{ row.cedula }}</td>
                   <td>{{ row.usuario }}</td>
                   <td>{{ row.correo }}</td>
+                  <td>{{ row.cargo }}</td>
                   <td>{{ row.estatus?.nombre }}</td>
                   <td>{{ row.rol?.nombre }}</td>
                   <td>

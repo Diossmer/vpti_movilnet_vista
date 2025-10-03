@@ -49,6 +49,7 @@ watch([
   () => paramsA.value?.password,
   () => paramsA.value?.ciudad,
   () => paramsA.value?.estado,
+  () => paramsA.value?.cargo,
   () => paramsA.value?.telefono_casa,
   () => paramsA.value?.telefono_celular,
   () => paramsA.value?.telefono_alternativo,
@@ -58,7 +59,7 @@ watch([
   ([
   nombre, apellido, cedula,
   usuario, correo, password,
-  ciudad, estado, telefono_casa,
+  ciudad, estado, cargo, telefono_casa,
   telefono_celular, telefono_alternativo, codigo_postal,
   direccion,
   ]) => {
@@ -79,6 +80,8 @@ watch([
   if (ciudadError) errors.push(ciudadError);
   const estadoError = validacionesUtils().textValid(estado);
   if (estadoError) errors.push(estadoError);
+  const cargoError = validacionesUtils().textValid(cargo);
+  if (cargoError) errors.push(cargoError);
   const telefono_casaError = validacionesUtils().phoneLocalValid(telefono_casa);
   if (telefono_casaError) errors.push(telefono_casaError);
   const telefono_celularError = validacionesUtils().phoneValid(telefono_celular);
@@ -97,6 +100,7 @@ watch([
   && (correo==='' || correo===undefined)
   && (ciudad==='' || ciudad===undefined)
   && (estado==='' || estado===undefined)
+  && (cargo==='' || cargo===undefined)
   && (telefono_celular==='' || telefono_celular===undefined)
   && (telefono_alternativo==='' || telefono_alternativo===undefined)
   && (codigo_postal==='' || codigo_postal===undefined)
@@ -192,6 +196,10 @@ const filteredRoles = computed(() => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Estado</label>
                       <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsA.estado && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.estado),'is-valid':paramsA.estado && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.estado)}" v-model="paramsA.estado" placeholder="Estado geográfico" autocomplete="on"/>
+                    </div>
+                    <div class="col-4">
+                      <label for="" class="badge text-secondary">Cargo</label>
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s]+$" class="form-control" :class="{'is-invalid':paramsA.cargo && !/^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.cargo),'is-valid':paramsA.cargo && /^[A-Za-zÁ-Úá-úñÑ\s]+$/.test(paramsA.cargo)}" v-model="paramsA.cargo" placeholder="Cargo geográfico" autocomplete="on"/>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Telefono de casa</label>

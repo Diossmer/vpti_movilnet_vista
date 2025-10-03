@@ -46,13 +46,13 @@ const filteredAndPaginatedData = computed(() => {
         !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
       );
       const descriptionMatch = row.descripciones?.some(desc => 
-        String(desc.codigo)?.includes(searchQuery) ||
-        String(desc.dispositivo)?.toLowerCase().includes(searchQuery) ||
-        String(desc.marca)?.toLowerCase().includes(searchQuery) ||
-        String(desc.modelo)?.toLowerCase().includes(searchQuery) ||
-        String(desc.serial)?.toLowerCase().includes(searchQuery) ||
-        String(desc.codigo_inv)?.toLowerCase().includes(searchQuery) ||
-        String(desc.producto.nombre)?.toLowerCase().includes(searchQuery)
+        String(desc.codigo)?.includes(globalQuery) ||
+        String(desc.dispositivo)?.toLowerCase().includes(globalQuery) ||
+        String(desc.marca)?.toLowerCase().includes(globalQuery) ||
+        String(desc.modelo)?.toLowerCase().includes(globalQuery) ||
+        String(desc.serial)?.toLowerCase().includes(globalQuery) ||
+        String(desc.codigo_inv)?.toLowerCase().includes(globalQuery) ||
+        String(desc.producto.nombre)?.toLowerCase().includes(globalQuery)
       );
       return standardMatch || descriptionMatch;
     }

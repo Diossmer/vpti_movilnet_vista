@@ -107,7 +107,7 @@ watch(() => props.response, (newResponse) => {
                       <input type="text" maxlength="6" pattern="^\d+$" class="form-control" :class="{'is-invalid':paramsA.codigo && !/^\d+$/.test(paramsA.codigo),'is-valid':paramsA.codigo && /^\d+$/.test(paramsA.codigo)}" v-model="paramsA.codigo" placeholder="codigo" />
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">dispositivo<span class="text-danger">*</span></label>
+                      <label for="" class="badge text-secondary">dispositivo</label>
                       <!-- Corrected pattern attribute with a valid regex -->
                       <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsA.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo),'is-valid':paramsA.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo)}" v-model="paramsA.dispositivo" placeholder="dispositivo" />
                     </div>

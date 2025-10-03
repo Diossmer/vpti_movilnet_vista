@@ -39,11 +39,18 @@ const filteredAndPaginatedData = computed(() => {
     // --- 1. LÓGICA DE BÚSQUEDA GLOBAL ---
     if (globalQuery) {
       const standardMatch = Object.values(row).some(cell =>
-        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery)
+        !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery) ||
+        row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(globalQuery) ||
+        row.usuario && row.usuario.nombre && row.usuario.nombre.toLowerCase().includes(globalQuery)
       );
       const descriptionMatch = row.descripciones?.some(desc => 
-        desc.serial?.toLowerCase().includes(globalQuery) || 
-        desc.modelo?.toLowerCase().includes(globalQuery)
+          String(desc.codigo)?.includes(globalQuery) ||
+          String(desc.dispositivo)?.toLowerCase().includes(globalQuery) ||
+          String(desc.marca)?.toLowerCase().includes(globalQuery) ||
+          String(desc.modelo)?.toLowerCase().includes(globalQuery) ||
+          String(desc.serial)?.toLowerCase().includes(globalQuery) ||
+          String(desc.codigo_inv)?.toLowerCase().includes(globalQuery) ||
+          String(desc.producto.nombre)?.toLowerCase().includes(globalQuery)
       );
       return standardMatch || descriptionMatch;
     }
@@ -53,8 +60,13 @@ const filteredAndPaginatedData = computed(() => {
       if (!searchQuery) {return true;}
       if (index === 1) { 
         const relationMatch = Array.isArray(row.descripciones) && row.descripciones.some(desc =>
-          desc.serial?.toLowerCase().includes(searchQuery) ||
-          desc.modelo?.toLowerCase().includes(searchQuery)
+          String(desc.codigo)?.includes(searchQuery) ||
+          String(desc.dispositivo)?.toLowerCase().includes(searchQuery) ||
+          String(desc.marca)?.toLowerCase().includes(searchQuery) ||
+          String(desc.modelo)?.toLowerCase().includes(searchQuery) ||
+          String(desc.serial)?.toLowerCase().includes(searchQuery) ||
+          String(desc.codigo_inv)?.toLowerCase().includes(searchQuery) ||
+          String(desc.producto.nombre)?.toLowerCase().includes(searchQuery)
         );
         return relationMatch;
       }

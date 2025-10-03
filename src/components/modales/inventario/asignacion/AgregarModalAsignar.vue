@@ -59,12 +59,14 @@ watch(() => props.response, (newResponse) => {
 const filteredUsuario = computed(() => {
   const allUsuario = props.relations[1];
   const restrictedUsuarioNames = ['admin', 'administrador', 'activo'];
-  if (dataPerfil.value?.usuario?.id !== 1) {
+  const esAdministrador = dataPerfil.value?.rol?.nombre?.toLowerCase() === 'superusuario';
+  if (!esAdministrador) {
     return allUsuario?.filter(usuario =>
       !restrictedUsuarioNames?.includes(usuario.usuario)
     );
+  } else {
+    return allUsuario;
   }
-  return allUsuario;
 });
 </script>
 
