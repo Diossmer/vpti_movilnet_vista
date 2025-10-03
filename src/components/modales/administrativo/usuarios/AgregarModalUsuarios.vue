@@ -203,7 +203,7 @@ const filteredRoles = computed(() => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Telefono de casa</label>
-                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?212)-?\d{7}$" class="form-control" :class="{'is-invalid': paramsA.telefono_casa && !/^(0?212)-?\d{7}$/.test(paramsA.telefono_casa),'is-valid': paramsA.telefono_casa && /^(0?212)-?\d{7}$/.test(paramsA.telefono_casa)}" v-model="paramsA.telefono_casa" placeholder="Telefono de casa" autocomplete="on"/>
+                      <input type="text" inputmode="tel" maxlength="12" pattern="^(0?[1-9]|0?212)-?\d{7}$" class="form-control" :class="{'is-invalid': paramsA.telefono_casa && !/^(0?[1-9]|0?212)-?\d{7}$/.test(paramsA.telefono_casa),'is-valid': paramsA.telefono_casa && /^(0?[1-9]|0?212)-?\d{7}$/.test(paramsA.telefono_casa)}" v-model="paramsA.telefono_casa" placeholder="Telefono de casa" autocomplete="on"/>
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">Telefono de celular<span class="text-danger">*</span></label>

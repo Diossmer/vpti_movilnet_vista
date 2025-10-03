@@ -270,6 +270,7 @@ const goBack = () => {router.go(-1)}
                       <label class="col-form-label fw-bolder text-secondary">Nombre:</label>
                       <span 
                         contenteditable="true" 
+                        maxlength="20"
                         class="editable-data flex-grow-1"
                         @blur="handleInputBlur($event, 'nombre')"
                       >{{ dataPerfil?.nombre }}</span>
@@ -287,11 +288,11 @@ const goBack = () => {router.go(-1)}
                     <!-- Cédula y Usuario (No Editables) -->
                     <div class="col-12 col-md-6 profile-field">
                       <label class="col-form-label fw-bolder text-secondary">Cédula:</label>
-                      <span class="non-editable">{{ dataPerfil?.cedula }}</span>
+                      <span class="non-editable text-red">{{ dataPerfil?.cedula }}</span>
                     </div>
                     <div class="col-12 col-md-6 profile-field">
                       <label class="col-form-label fw-bolder text-secondary">Usuario:</label>
-                      <span class="non-editable">{{ dataPerfil?.usuario }}</span>
+                      <span class="non-editable text-red">{{ dataPerfil?.usuario }}</span>
                     </div>
     
                     <!-- Ubicación y Contacto Editables -->
@@ -310,6 +311,11 @@ const goBack = () => {router.go(-1)}
                         class="editable-data flex-grow-1"
                         @blur="handleInputBlur($event, 'estado')"
                       >{{ dataPerfil?.estado }}</span>
+                    </div>
+                    <!-- Cargo (No Editables) -->
+                    <div class="col-12 col-md-6 profile-field">
+                      <label class="col-form-label fw-bolder text-secondary">Cargo:</label>
+                      <span class="non-editable text-red fw-bold">{{ dataPerfil.cargo }}</span>
                     </div>
                     <div class="col-12 col-md-6 profile-field">
                       <label class="col-form-label fw-bolder text-secondary">Casa:</label>
@@ -347,11 +353,11 @@ const goBack = () => {router.go(-1)}
                     <!-- Estatus y Rol (No Editables) -->
                     <div class="col-12 col-md-6 profile-field">
                       <label class="col-form-label fw-bolder text-secondary">Estatus:</label>
-                      <span class="non-editable text-cambioContrasena fw-bold">{{ dataPerfil?.estatus?.nombre }}</span>
+                      <span class="non-editable text-red fw-bold">{{ dataPerfil?.estatus?.nombre }}</span>
                     </div>
                     <div class="col-12 col-md-6 profile-field">
                       <label class="col-form-label fw-bolder text-secondary">Rol:</label>
-                      <span class="non-editable text-info fw-bold">{{ dataPerfil?.rol?.nombre }}</span>
+                      <span class="non-editable text-red fw-bold">{{ dataPerfil?.rol?.nombre }}</span>
                     </div>
     
                     <!-- Correo y Dirección (Ancho completo) -->

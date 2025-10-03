@@ -101,21 +101,21 @@ export function validacionesUtils() {
     const phoneRegex = /^(0?41[246]|0?42[46])-?\d{7}$/;
     return phoneRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo codigos de area permitidos";
+      : "❌Solo número de telefono de area permitidos";
   }
 
   const phoneLocalValid = (params) => {
-    const phoneLocalRegex = /^(0?212)-?\d{7}$/;
+    const phoneLocalRegex = /^(0?[1-9]|0?212)-?\d{7}$/;
     return phoneLocalRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo codigos de area local permitidos";
+      : "❌Solo número de telefono de area local está permitido.";
   }
 
   const phoneAlternativeValid = (params) => {
     const phoneAlternativeRegex = /^(0?41[246]|0?42[46]|0?212)-?\d{7}$/;
     return phoneAlternativeRegex.test(params)
       ? "✅Correcto."
-      : "❌Solo codigos de area permitidos";
+      : "❌Solo número de codigos de telefono de area permitidos";
   }
 
   const formatValid = (params) => {
