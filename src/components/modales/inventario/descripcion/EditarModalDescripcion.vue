@@ -36,6 +36,7 @@ const { dataPerfil } = storeToRefs(useLoginStore());
 const modalEditar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
+const dispositivos = ref(['entrada', 'salida'])
 
 watch(() => props.paramsE,() =>{},{ deep: true });
 watch([
@@ -102,10 +103,13 @@ watch(() => props.response, (newResponse) => {
                       <label for="" class="badge text-secondary">codigo</label>
                       <input type="text" maxlength="6" pattern="^\d+$" class="form-control" :class="{'is-invalid':paramsE.codigo && !/^\d+$/.test(paramsE.codigo),'is-valid':paramsE.codigo && /^\d+$/.test(paramsE.codigo)}" v-model="paramsE.codigo" placeholder="codigo" />
                     </div>
-                    <div class="col-2">
-                      <label for="" class="badge text-secondary">dispositivo</label>
-                      <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo),'is-valid':paramsE.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.dispositivo)}" v-model="paramsE.dispositivo" placeholder="dispositivo" />
+                    <div class="col-4">
+                      <label for="" class="badge text-secondary">dispositivo<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsE.dispositivo }}</span>
+                      <select class="form-select" v-model="paramsE.dispositivo" required>
+                        <option v-for="(dispositivo, index) in dispositivos" :key="index" :value="dispositivo" v-if="relations.length > 0">{{ dispositivo }}</option>
+                        <option selected v-else>Sin productos</option>
+                      </select>
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">marca<span class="text-danger">*</span></label>

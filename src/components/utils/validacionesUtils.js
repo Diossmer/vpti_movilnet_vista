@@ -27,7 +27,7 @@ export function validacionesUtils() {
   }
 
   const textValid = (params) => {
-    const textRegex = /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/;
+    const textRegex = /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$/;
     return textRegex.test(params)
       ? "✅Correcto."
       : "❌Solo debe contener letras, espacios y los símbolos permitidos.";

@@ -39,14 +39,14 @@ const router = createRouter({
           name: 'dashboard',
           component: () => import('@/views/DashboardView.vue'),
         },
-        {
+        /* {
           path: '/sin-perifericos',
           name: 'dashboard.sin-perifericos',
           component: () => import('@/views/inventario/InventariosView.vue'),
           meta: { requiresAuth: true },
-        },
+        }, */
         {
-          path: '/perifericos',
+          path: '/despachos',
           name: 'dashboard.perifericos',
           component: () => import('@/views/inventario/PerifericosView.vue'),
           meta: { requiresAuth: true },

@@ -28,7 +28,7 @@ const props = defineProps({
 });
 
 const { dataPerfil } = storeToRefs(useLoginStore());
-const modalAgregar = ref(null);
+const dispositivos = ref(['entrada', 'salida'])
 const avisos = ref(null);
 const avisosAlert = ref(null);
 const paramsA = ref({
@@ -90,7 +90,7 @@ watch(() => props.response, (newResponse) => {
 </script>
 
 <template>
-  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar">
+  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -107,9 +107,12 @@ watch(() => props.response, (newResponse) => {
                       <input type="text" maxlength="6" pattern="^\d+$" class="form-control" :class="{'is-invalid':paramsA.codigo && !/^\d+$/.test(paramsA.codigo),'is-valid':paramsA.codigo && /^\d+$/.test(paramsA.codigo)}" v-model="paramsA.codigo" placeholder="codigo" />
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">dispositivo</label>
-                      <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsA.dispositivo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo),'is-valid':paramsA.dispositivo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.dispositivo)}" v-model="paramsA.dispositivo" placeholder="dispositivo" />
+                      <label for="" class="badge text-secondary">dispositivo<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsA.dispositivo }}</span>
+                      <select class="form-select" v-model="paramsA.dispositivo" required>
+                        <option v-for="(dispositivo, index) in dispositivos" :key="index" :value="dispositivo" v-if="relations.length > 0">{{ dispositivo }}</option>
+                        <option selected v-else>Sin productos</option>
+                      </select>
                     </div>
                     <div class="col-2">
                       <label for="" class="badge text-secondary">marca<span class="text-danger">*</span></label>
@@ -119,7 +122,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">modelo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsA.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.modelo),'is-valid':paramsA.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.modelo)}" v-model="paramsA.modelo" placeholder="Modelo" />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$" class="form-control" :class="{'is-invalid':paramsA.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$/.test(paramsA.modelo),'is-valid':paramsA.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$/.test(paramsA.modelo)}" v-model="paramsA.modelo" placeholder="Modelo" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">serial<span class="text-danger">*</span></label>

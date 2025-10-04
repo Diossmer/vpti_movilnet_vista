@@ -16,7 +16,8 @@ onMounted(async()=>{
   isAuthenticated.value = localStorage.getItem('ingresar') === 'true'
 })
 const includedModulesAdmin = ref(['usuarios']);
-const includedModulesInven = ref(['sin-perifericos', 'perifericos', 'evaluaciones', 'asignaciones', 'ubicaciones']);
+/* const includedModulesInven = ref(['sin-perifericos', 'perifericos', 'evaluaciones', 'asignaciones', 'ubicaciones']); */
+const includedModulesInven = ref(['despachos', 'evaluaciones', 'asignaciones', 'ubicaciones']);
 const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripciones']);
 </script>
 <template>
@@ -82,8 +83,8 @@ const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripcione
                 <li class="panel_nav_li" v-for="(modulo,index) in includedModulesInven" :key="index">
                   <RouterLink :to="modulo" class=""
                     v-if="!(modulo ==='evaluaciones' && dataPerfil?.rol.id === 3)">
-                    <i class="bi bi-box-seam" v-if="modulo ==='perifericos'"></i>
-                    <i class="bi bi-box2" v-if="modulo ==='sin-perifericos'"></i>
+                    <i class="bi bi-box-seam" v-if="modulo ==='despachos'"></i>
+                    <!-- <i class="bi bi-box2" v-if="modulo ==='sin-perifericos'"></i> -->
                     <i class="bi bi-geo-fill" v-if="modulo ==='ubicaciones'"></i>
                     <i class="bi bi-hand-thumbs-up" v-if="modulo ==='evaluaciones'"></i>
                     <i class="bi bi-person-badge-fill" v-if="modulo ==='asignaciones'"></i>

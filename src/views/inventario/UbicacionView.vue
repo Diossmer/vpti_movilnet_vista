@@ -197,7 +197,7 @@ onMounted(async()=>{await handleData()})
 
 <template>
     <button @click="goBack" class="btn btn-outline-red-m btn-lg"><i class="bi bi-arrow-left-circle"></i> Regresar</button>
-    <span class="badge fs-1"><i class="bi bi-geo-fill"></i> Ubicación</span>
+    <span class="badge fs-1"><i class="bi bi-geo-fill"></i> Ubicación del almacén</span>
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
@@ -229,7 +229,7 @@ onMounted(async()=>{await handleData()})
                   <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">📁Archivos</button>
                   <ul class="dropdown-menu">
                     <li v-if="dataPerfil.rol?.id !== 3"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li>
-                    <li v-if="dataPerfil.rol?.id !== 3"><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','ubicacion')"><i class="bi bi-upload"></i> Exportar</button></li>
+                    <li><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','ubicacion')"><i class="bi bi-upload"></i> Exportar</button></li>
                     <li v-if="dataPerfil.rol?.id !== 2"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticImportar"><i class="bi bi-download"></i> Importar</button></li>
                   </ul>
                 </div>
