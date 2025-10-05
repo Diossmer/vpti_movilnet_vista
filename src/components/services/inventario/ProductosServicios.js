@@ -63,7 +63,7 @@ export  default async function ProductosServicios(action, data = null, params = 
       return {
         mostrarT: await get(`${process.APP_URL}/api/productos`, localStorage.getItem('token')),
         usuarios: await get(`${process.APP_URL}/api/usuarios`, localStorage.getItem('token')),
-        estatus: await get(`${process.APP_URL}/api/estatus`, localStorage.getItem('token')),
+        // estatus: await get(`${process.APP_URL}/api/estatus`, localStorage.getItem('token')),
       };
     }
   }

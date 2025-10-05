@@ -44,13 +44,13 @@ watch(() => props.paramsE, (newVal) => {
     newVal.producto_id = [];
   }
 }, { immediate: true });
-watch([() => props.paramsE?.cantidad_existente,
+watch([() =>/*  props.paramsE?.cantidad_existente, */
 () => props.paramsE?.entrada,
 () => props.paramsE?.salida,
-() => props.paramsE?.descripcion], ([cantidad_existente, entrada, salida, descripcion]) => {
+() => props.paramsE?.descripcion], ([/* cantidad_existente, */ entrada, salida, descripcion]) => {
   const errors = [];
-  const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
-  if (cantidad_existenteError) errors.push(cantidad_existenteError);
+  /* const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
+  if (cantidad_existenteError) errors.push(cantidad_existenteError); */
   const entradaError = validacionesUtils().numberValid(entrada);
   if (entradaError) errors.push(entradaError);
   const salidaError = validacionesUtils().numberValid(salida);
@@ -58,8 +58,8 @@ watch([() => props.paramsE?.cantidad_existente,
   const descripcionError = validacionesUtils().textareaValid(descripcion);
   if (descripcionError) errors.push(descripcionError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((cantidad_existente==='' || cantidad_existente===undefined)
-  && (entrada==='' || entrada===undefined)
+  if (/* (cantidad_existente==='' || cantidad_existente===undefined) */
+  (entrada==='' || entrada===undefined)
   && (salida==='' || salida===undefined)
   && (descripcion==='' || descripcion===undefined))
   avisosAlert.value = null;

@@ -78,8 +78,8 @@ const filteredAndPaginatedData = computed(() => {
       }
       
       return Object.values(row).every(cell =>{
-        return String(row.cantidad_existente)?.includes(searchQuery)||
-        String(row.entrada)?.includes(searchQuery)||
+         /* String(row.cantidad_existente)?.includes(searchQuery)|| */
+        return String(row.entrada)?.includes(searchQuery)||
         String(row.salida)?.includes(searchQuery)
       });
     });
@@ -202,7 +202,7 @@ onMounted(async()=>{await handleData()})
 <template>
   <div>
     <button @click="goBack" class="btn btn-outline-red-m btn-lg"><i class="bi bi-arrow-left-circle"></i> Regresar</button>
-    <span class="badge fs-1"><i class="bi bi-box-seam"></i> Despacho (entrada y salida)</span>
+    <span class="badge fs-1"><i class="bi bi-box-seam"></i> Despachos (entrada y salida)</span>
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
@@ -273,7 +273,7 @@ onMounted(async()=>{await handleData()})
                         <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" :checked="selectedRows.includes(row)" @change="filaIndividual(row)" :class="{ 'selected': selectedRows.includes(row) }">
                       </label>
                     </div>
-                    <td>{{ row.cantidad_existente }}</td>
+                    <!-- <td>{{ row.cantidad_existente }}</td> -->
                     <td>{{ row.entrada }}</td>
                     <td>{{ row.salida }}</td>
                     <td>{{ row.estatus?.nombre }}</td>

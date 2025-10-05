@@ -44,13 +44,13 @@ watch(() => props.paramsE, (newVal) => {
     newVal.producto_id = [];
   }
 }, { immediate: true });
-watch([() => props.paramsE?.cantidad_existente,
+watch([() => /* props.paramsE?.cantidad_existente, */
 () => props.paramsE?.entrada,
 () => props.paramsE?.salida,
-() => props.paramsE?.descripcion], ([cantidad_existente, entrada, salida, descripcion]) => {
+() => props.paramsE?.descripcion], ([/* cantidad_existente, */ entrada, salida, descripcion]) => {
   const errors = [];
-  const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
-  if (cantidad_existenteError) errors.push(cantidad_existenteError);
+  /* const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
+  if (cantidad_existenteError) errors.push(cantidad_existenteError); */
   const entradaError = validacionesUtils().numberValid(entrada);
   if (entradaError) errors.push(entradaError);
   const salidaError = validacionesUtils().numberValid(salida);
@@ -58,8 +58,8 @@ watch([() => props.paramsE?.cantidad_existente,
   const descripcionError = validacionesUtils().textareaValid(descripcion);
   if (descripcionError) errors.push(descripcionError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((cantidad_existente==='' || cantidad_existente===undefined)
-  && (entrada==='' || entrada===undefined)
+  if (//(cantidad_existente==='' || cantidad_existente===undefined)
+  (entrada==='' || entrada===undefined)
   && (salida==='' || salida===undefined)
   && (descripcion==='' || descripcion===undefined))
   avisosAlert.value = null;
@@ -85,7 +85,7 @@ watch(() => props.response, (newResponse) => {
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-8">
+                    <div class="col-12">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
                         <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
@@ -104,10 +104,10 @@ watch(() => props.response, (newResponse) => {
                         <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
                       </select>
                     </div>
-                    <div class="col-2">
+                    <!-- <div class="col-2">
                       <label for="" class="badge text-secondary">Cantidad Existente<span class="text-danger">*</span></label>
                       <input type="text" inputmode="numeric" maxlength="10"  pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsE.cantidad_existente && !/^\d+(^\.\d+)?$/.test(paramsE.cantidad_existente),'is-valid': paramsE.cantidad_existente && /^\d+(^\.\d+)?$/.test(paramsE.cantidad_existente)}" v-model="paramsE.cantidad_existente" placeholder="Cantidad Existente" required />
-                    </div>
+                    </div> -->
                     <div class="col-2">
                       <label for="" class="badge text-secondary">Entrada</label>
                       <input type="text" inputmode="numeric" maxlength="10" pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsE.entrada && !/^\d+(^\.\d+)?$/.test(paramsE.entrada),'is-valid': paramsE.entrada && /^\d+(^\.\d+)?$/.test(paramsE.entrada)}" v-model="paramsE.entrada" placeholder="Entrada"/>

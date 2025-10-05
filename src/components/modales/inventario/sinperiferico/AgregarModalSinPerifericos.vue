@@ -44,13 +44,13 @@ const resetParams = () => {
   avisosAlert.value = null;
 };
 
-watch([() => paramsA.value?.cantidad_existente,
+watch([() => /* paramsA.value?.cantidad_existente, */
 () => paramsA.value?.entrada,
 () => paramsA.value?.salida,
-() => paramsA.value?.descripcion], ([cantidad_existente, entrada, salida, descripcion]) => {
+() => paramsA.value?.descripcion], ([/* cantidad_existente, */ entrada, salida, descripcion]) => {
   const errors = [];
-  const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
-  if (cantidad_existenteError) errors.push(cantidad_existenteError);
+  /* const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
+  if (cantidad_existenteError) errors.push(cantidad_existenteError); */
   const entradaError = validacionesUtils().numberValid(entrada);
   if (entradaError) errors.push(entradaError);
   const salidaError = validacionesUtils().numberValid(salida);
@@ -58,8 +58,8 @@ watch([() => paramsA.value?.cantidad_existente,
   const descripcionError = validacionesUtils().textareaValid(descripcion);
   if (descripcionError) errors.push(descripcionError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  if ((cantidad_existente==='' || cantidad_existente===undefined)
-  && (entrada==='' || entrada===undefined)
+  if (/* (cantidad_existente==='' || cantidad_existente===undefined) */
+  (entrada==='' || entrada===undefined)
   && (salida==='' || salida===undefined)
   && (descripcion==='' || descripcion===undefined))
   avisosAlert.value = null;
@@ -95,7 +95,7 @@ const filtereddescripcion = computed(() => {
               <form @submit.prevent="handleData('create', paramsA)">
                 <div class="modal-body">
                   <div class="row">
-                    <div class="col-8">
+                    <div class="col-12">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.descripcion_id" multiple required>
                         <option v-for="(descripcion, index) in filtereddescripcion" :key="index" :value="descripcion.id" selected v-if="relations.length > 0">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
@@ -114,10 +114,10 @@ const filtereddescripcion = computed(() => {
                         <option v-for="(producto, index) in relations[1]" :key="index" :value="producto.id" selected>{{ producto.nombre }}</option>
                       </select>
                     </div> -->
-                    <div class="col-2">
+                    <!-- <div class="col-2">
                       <label for="" class="badge text-secondary">Cantidad Existente<span class="text-danger">*</span></label>
                       <input type="text" inputmode="numeric" maxlength="10"  pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsA.cantidad_existente && !/^\d+(^\.\d+)?$/.test(paramsA.cantidad_existente),'is-valid': paramsA.cantidad_existente && /^\d+(^\.\d+)?$/.test(paramsA.cantidad_existente)}" v-model="paramsA.cantidad_existente" placeholder="Cantidad Existente" required />
-                    </div>
+                    </div> -->
                     <div class="col-2">
                       <label for="" class="badge text-secondary">Entrada</label>
                       <input type="text" inputmode="numeric" maxlength="10" pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsA.entrada && !/^\d+(^\.\d+)?$/.test(paramsA.entrada),'is-valid': paramsA.entrada && /^\d+(^\.\d+)?$/.test(paramsA.entrada)}" v-model="paramsA.entrada" placeholder="Entrada"/>

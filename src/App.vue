@@ -65,8 +65,10 @@ const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripcione
         <div class="administrativo">
           <ul class="panelnav_ul" >
             <li class="panelnav_li">
+              <!-- Panel de control -->
               <RouterLink to="dashboard" class="btn p-0"><span class="fs-5"><i class="bi bi-pc-display-horizontal"></i> Panel de control</span></RouterLink>
             </li>
+            <!-- Administrativo -->
             <li class="panelnav_li" :hidden="includedModulesAdmin?.length<=0" v-if="dataPerfil?.rol.id !== 2 && dataPerfil?.rol.id !== 4 && dataPerfil?.rol?.id < 5">
               <span class="fs-5"><i class="bi bi-person-workspace"></i> Administrativo</span>
               <ul class="panel_nav_ul">
@@ -77,6 +79,7 @@ const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripcione
                 </li>
               </ul>
             </li>
+            <!-- Inventario -->
             <li class="panelnav_li" :hidden="includedModulesInven?.length<=0" v-if="dataPerfil?.rol?.id < 5">
               <span class="fs-5"><i class="bi bi-calendar2-event"></i> Inventario</span>
               <ul class="panel_nav_ul">
@@ -92,10 +95,9 @@ const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripcione
                 </li>
               </ul>
             </li>
-            <li class="panelnav_li" :hidden="configuración?.length <= 0" v-if="dataPerfil?.rol.id !== 2 && dataPerfil?.rol?.id < 5">
-
+            <!-- Configuración -->
+            <li class="panelnav_li" :hidden="configuración?.length <= 0" v-if="dataPerfil?.rol.id !== 2 && dataPerfil?.rol?.id !== 4 && dataPerfil?.rol?.id < 5">
               <span class="fs-5"><i class="bi bi-nut"></i> Configuración</span>
-
               <ul class="panel_nav_ul">
                 <li class="panel_nav_li" v-for="(modulo,index) in includedModulesConfi" :key="modulo.id">
                   <RouterLink :to="modulo" class=""

@@ -40,7 +40,7 @@ const filteredAndPaginatedData = computed(() => {
     if (globalQuery) {
       const standardMatch = Object.values(row).some(cell =>
         !Array.isArray(cell) && cell?.toString().toLowerCase().includes(globalQuery) ||
-        row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(globalQuery) ||
+        /* row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(globalQuery) || */
         row.usuario && row.usuario.nombre && row.usuario.nombre.toLowerCase().includes(globalQuery)
       );
       const descriptionMatch = row.descripciones?.some(desc => 
@@ -70,9 +70,9 @@ const filteredAndPaginatedData = computed(() => {
         );
         return relationMatch;
       }
-      if (row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(searchQuery)) {
+      /* if (row.estatus && row.estatus.nombre && row.estatus.nombre.toLowerCase().includes(searchQuery)) {
           return true;
-      }
+      } */
       if (row.usuario && row.usuario.usuario && row.usuario.usuario.toLowerCase().includes(searchQuery)) {
           return true;
       }
@@ -106,7 +106,7 @@ const handleData = async (action = null, params = null, id = null) => {
     console.error('Error al manejar los datos:', error);
   } finally {
     isLoadingImport.value = false
-    const {mostrarT,usuarios,estatus} = await ProductosServicios('fetchAll');
+    const {mostrarT,usuarios} = await ProductosServicios('fetchAll');
     if (Array.isArray(mostrarT)) {
       col.value = columns(mostrarT);
       rowData.value = mostrarT;
@@ -114,7 +114,7 @@ const handleData = async (action = null, params = null, id = null) => {
       rowData.value = [];
       col.value = columns([]);
     }
-    relations.value = [usuarios,estatus];
+    relations.value = [usuarios];
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };
@@ -282,7 +282,7 @@ onMounted(async()=>{await handleData()})
                     <td v-for="descripcion in row?.descripciones">Serial: {{ descripcion?.serial }} Modelo: {{ descripcion?.modelo }}</td>
                   </tr>
                   <td>{{ row.usuario?.usuario }}</td>
-                  <td>{{ row.estatus?.nombre }}</td>
+                  <!-- <td>{{ row.estatus?.nombre }}</td> -->
                   <td>
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                     <ul class="dropdown-menu p-2 gap-3">

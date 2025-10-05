@@ -111,7 +111,7 @@ watch(() => props.response, (newResponse) => {
                       <span class="badge text-secondary">{{ paramsA.dispositivo }}</span>
                       <select class="form-select" v-model="paramsA.dispositivo" required>
                         <option v-for="(dispositivo, index) in dispositivos" :key="index" :value="dispositivo" v-if="relations.length > 0">{{ dispositivo }}</option>
-                        <option selected v-else>Sin productos</option>
+                        <option selected v-else>Sin dispositivo</option>
                       </select>
                     </div>
                     <div class="col-2">

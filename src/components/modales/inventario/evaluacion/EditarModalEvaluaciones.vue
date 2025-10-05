@@ -157,8 +157,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-8">
                       <label for="" class="badge text-secondary">Observación</label>
                       <!-- 5. USAMOS formData.notas para el v-model y las validaciones -->
-                      <textarea class="form-control" v-if="dataPerfil.rol?.id === 2" disabled :class="{ 'is-invalid': formData.notas && !/^[^<>{}\[\]]+$/.test(formData.notas), 'is-valid':formData.notas && /^[^<>{}\[\]]+$/.test(formData.notas) }" placeholder="Observación" v-model="formData.notas"></textarea>
-                      <textarea class="form-control" v-else :class="{ 'is-invalid': formData.notas && !/^[^<>{}\[\]]+$/.test(formData.notas), 'is-valid':formData.notas && /^[^<>{}\[\]]+$/.test(formData.notas) }" placeholder="Observación" v-model="formData.notas"></textarea>
+                      <textarea class="form-control" :class="{ 'is-invalid': formData.notas && !/^[^<>{}\[\]]+$/.test(formData.notas), 'is-valid':formData.notas && /^[^<>{}\[\]]+$/.test(formData.notas) }" placeholder="Observación" v-model="formData.notas"></textarea>
                     </div>
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
                   </div>

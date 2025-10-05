@@ -65,14 +65,14 @@ watch(() => props.response, (newResponse) => {
             <template #default>
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
-                  <div class="row">
-                    <div class="col-6">
+                  <div class="row justify-content-center">
+                    <!-- <div class="col-6">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
                       <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
                       <select class="form-select" v-model="paramsE.estatus_id" required>
                         <option v-for="(estatus, index) in relations[1]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
                       </select>
-                    </div>
+                    </div> -->
                     <div class="col-6">
                       <label for="" class="badge text-secondary">producto<span class="text-danger">*</span></label>
                       <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\d]+$" class="form-control" :class="{'is-invalid':paramsE.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsE.nombre),'is-valid':paramsE.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsE.nombre)}" v-model="paramsE.nombre" placeholder="Nombre" required />

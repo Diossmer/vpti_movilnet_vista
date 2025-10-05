@@ -108,7 +108,7 @@ watch(() => props.response, (newResponse) => {
                       <span class="badge text-secondary">{{ paramsE.dispositivo }}</span>
                       <select class="form-select" v-model="paramsE.dispositivo" required>
                         <option v-for="(dispositivo, index) in dispositivos" :key="index" :value="dispositivo" v-if="relations.length > 0">{{ dispositivo }}</option>
-                        <option selected v-else>Sin productos</option>
+                        <option selected v-else>Sin dispositivo</option>
                       </select>
                     </div>
                     <div class="col-2">
@@ -119,7 +119,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">modelo<span class="text-danger">*</span></label>
                       <!-- Corrected pattern attribute with a valid regex -->
-                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$" class="form-control" :class="{'is-invalid':paramsE.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo),'is-valid':paramsE.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsE.modelo)}" v-model="paramsE.modelo" placeholder="Modelo" />
+                      <input type="text" maxlength="20" pattern="^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$" class="form-control" :class="{'is-invalid':paramsE.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$/.test(paramsE.modelo),'is-valid':paramsE.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$/.test(paramsE.modelo)}" v-model="paramsE.modelo" placeholder="Modelo" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">serial<span class="text-danger">*</span></label>
