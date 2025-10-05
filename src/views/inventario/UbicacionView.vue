@@ -221,8 +221,8 @@ onMounted(async()=>{await handleData()})
                       Eliminar
                     </button>
                     <ul class="dropdown-menu">
-                      <li><button class="dropdown-item" type="button" @click="(e)=>manejadorEliminar('all')">Todo el registro ({{ selectedRowsAll.length }})</button></li>
-                      <li><button class="dropdown-item" type="button" @click="(e)=>manejadorEliminar('individual')" :disabled="selectedRows.length === 0">Seleccionados ({{ selectedRows.length }})</button></li>
+                      <li><button class="dropdown-item" type="button" @click="(e)=>manejadorEliminar('all')">Todo el registro ({{ selectedRowsAll?.length }})</button></li>
+                      <li><button class="dropdown-item" type="button" @click="(e)=>manejadorEliminar('individual')" :disabled="selectedRows?.length === 0">Seleccionados ({{ selectedRows?.length }})</button></li>
                     </ul>
                   </div>
                 <div class="dropdown">
@@ -249,7 +249,7 @@ onMounted(async()=>{await handleData()})
               <tr class="">
                 <div class="p-2 text-nowrap" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><i class="bi bi-ui-checks"></i></div>
                     <div class="form-check form-switch d-flex justify-content-end px-5" style="height: 60px;" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
-                      <input class="form-check-input" :class="{ 'selected': selectedRowsAll.length }" type="checkbox" role="switch" id="flexSwitchCheckDefault" @change="(e)=>handleMasivoDelete(e)" :checked="selectedRowsAll.length === rowData.length">
+                      <input class="form-check-input" :class="{ 'selected': selectedRowsAll.length }" type="checkbox" role="switch" id="flexSwitchCheckDefault" @change="(e)=>handleMasivoDelete(e)" :checked="selectedRowsAll?.length === rowData?.length">
                       <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                     </div>
                 <th class="" v-for="(column, index) in col" :key="index" @click="sortTable(rowData, col, index)">
@@ -278,10 +278,10 @@ onMounted(async()=>{await handleData()})
                 <td>
                   <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">⚙️</button>
                   <ul class="dropdown-menu p-2 gap-3">
-                      <li v-if="dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row.id)"><i class="bi bi-file-pdf"></i>PDF</button></li>
+                      <li v-if="dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row?.id)"><i class="bi bi-file-pdf"></i>PDF</button></li>
                       <li v-if="dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export',(row.producto?.nombre) )"><i class="bi bi-upload"></i>Exportar</button></li>
                       <li v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3">
-                        <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal" data-bs-target="#staticEditar" @click="handleData('fetch', '', row.id)">
+                        <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal" data-bs-target="#staticEditar" @click="handleData('fetch', '', row?.id)">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px;">
                             <path fill="currentcolor" d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152L0 424c0 48.6 39.4 88 88 88l272 0c48.6 0 88-39.4 88-88l0-112c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 112c0 22.1-17.9 40-40 40L88 464c-22.1 0-40-17.9-40-40l0-272c0-22.1 17.9-40 40-40l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24L88 64z"/>
                           </svg>
@@ -289,7 +289,7 @@ onMounted(async()=>{await handleData()})
                         </button>
                       </li>
                       <li>
-                        <button type="button" class="btn btn-outline-warning text-red dropdown-item p-0" title="Mostrar" data-bs-toggle="modal" data-bs-target="#staticMostrar" @click="handleData('fetch', '', row.id)">
+                        <button type="button" class="btn btn-outline-warning text-red dropdown-item p-0" title="Mostrar" data-bs-toggle="modal" data-bs-target="#staticMostrar" @click="handleData('fetch', '', row?.id)">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 20px; height: 20px;">
                             <path fill="currentcolor" d="M32 32C14.3 32 0 46.3 0 64l0 96c0 17.7 14.3 32 32 32s32-14.3 32-32l0-64 64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32L32 32zM64 352c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 96c0 17.7 14.3 32 32 32l96 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0 0-64zM320 32c-17.7 0-32 14.3-32 32s14.3 32 32 32l64 0 0 64c0 17.7 14.3 32 32 32s32-14.3 32-32l0-96c0-17.7-14.3-32-32-32l-96 0zM448 352c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 64-64 0c-17.7 0-32 14.3-32 32s14.3 32 32 32l96 0c17.7 0 32-14.3 32-32l0-96z"/>
                           </svg>
@@ -297,7 +297,7 @@ onMounted(async()=>{await handleData()})
                         </button>
                       </li>
                       <li v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
-                        <button type="button" class="btn btn-outline-secondary text-danger dropdown-item p-0" title="Eliminar" data-bs-toggle="modal" data-bs-target="#staticEliminar" @click="handleData('fetch', '', row.id)">
+                        <button type="button" class="btn btn-outline-secondary text-danger dropdown-item p-0" title="Eliminar" data-bs-toggle="modal" data-bs-target="#staticEliminar" @click="handleData('fetch', '', row?.id)">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 20px; height: 20px;">
                             <path fill="currentcolor" d="M177.7 32l92.5 0c5.5 0 10.6 2.8 13.6 7.5L299.1 64 148.9 64l15.3-24.5c2.9-4.7 8.1-7.5 13.6-7.5zM336.9 64L311 22.6C302.2 8.5 286.8 0 270.3 0L177.7 0C161.2 0 145.8 8.5 137 22.6L111.1 64 64.1 64 32 64 16 64C7.2 64 0 71.2 0 80s7.2 16 16 16l18.3 0L59.8 452.6C62.1 486.1 90 512 123.6 512l200.8 0c33.6 0 61.4-25.9 63.8-59.4L413.7 96 432 96c8.8 0 16-7.2 16-16s-7.2-16-16-16l-16 0-32.1 0-47.1 0zm44.8 32L356.3 450.3C355.1 467 341.2 480 324.4 480l-200.8 0c-16.8 0-30.7-13-31.9-29.7L66.4 96l315.3 0z"/>
                           </svg>

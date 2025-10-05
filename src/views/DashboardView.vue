@@ -30,8 +30,7 @@ const handleData = async (action = null, params = null) => {
     
     // Traer todos los productos y asignarlos
     const { mostrarT } = await BuscadorServices('fetchAll');
-    Inventario.value.Productos = mostrarT || []; // Asigna el arreglo de productos
-
+    Inventario.value.Productos = mostrarT || [];
   } catch (error) {
     console.error('Error al manejar los datos:', error);
     Inventario.value.Productos = [];
@@ -75,7 +74,7 @@ const filteredProductos = computed(() => {
     const matchedDescripciones = [];
     
     // Iteramos sobre las descripciones del producto
-    producto.descripciones?.forEach(descripcion => {
+    producto.descripciones?.map(descripcion => {
       // Coincidencia en campos de Descripción
       const matchByDescripcion = 
         descripcion.serial?.toLowerCase().includes(query) ||
@@ -110,6 +109,21 @@ const filteredProductos = computed(() => {
   return results;
 });
 
+
+const total = computed(() => {
+  // 1. Extraer las longitudes de las descripciones en un nuevo array (Ej: [4, 1])
+  const longitudes = Inventario.value.Productos.map((producto) => {
+    return producto.descripciones?.length || 0;
+  });
+  // 2. Sumar todos los números del array de longitudes usando 'reduce()'
+  const sumaTotal = longitudes.reduce((acumulador, valorActual) => {
+    return acumulador + valorActual;
+  }, 0); // El '0' es el valor inicial del acumulador.
+
+  // Devolvemos la suma total de las descripciones encontradas.
+  return sumaTotal; 
+});
+
 // --- Navigation ---
 const goBack = () => router.go(-1);
 
@@ -142,7 +156,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-
+          <span class="text-red">Cantidad de productos: <b>{{ total }}</b></span>
             <div v-if="searchQuery" class="space-y-4 rounded-3">
               <div v-for="producto in filteredProductos" 
                 :key="producto?.id" 
@@ -163,33 +177,33 @@ onMounted(() => {
                     <p class="col-6 ">correo <strong class="text-red-600">{{ producto?.usuario.correo || 'Sin cedula' }}</strong></p>
                 </div>
 
-                <div v-for="(descripcion, descIndex) in producto.descripciones" 
-                  :key="`desc-${producto.id}-${descIndex}`"
+                <div v-for="(descripcion, descIndex) in producto?.descripciones" 
+                  :key="`desc-${producto?.id}-${descIndex}`"
                   class="border-start border-5 border-danger ps-3 mb-4 pt-2">
                   <p class="fw-bolder">Descripción del producto {{ descIndex + 1 }}:</p>
                   <hr class="border-2 border-red-m opacity-75 mt-0 mb-3">
                   <div class="row">
-                      <p class="col-6">codigo <strong class="text-red-600">{{ descripcion.codigo || 'Sin dato' }}</strong></p> 
-                      <p class="col-6">modelo <strong class="text-red-600">{{ descripcion.modelo || 'Sin dato' }}</strong></p> 
-                      <p class="col-6">dispositivo <strong class="text-red-600">{{ descripcion.dispositivo || 'Sin dato' }}</strong></p> 
-                      <p class="col-6">serial <strong class="text-red-600">{{ descripcion.serial || 'Sin dato' }}</strong></p> 
-                      <p class="col-6">marca <strong class="text-red-600">{{ descripcion.marca || 'Sin dato' }}</strong></p> 
-                      <p class="col-6">codigo_inv <strong class="text-red-600">{{ descripcion.codigo_inv || 'Sin dato' }}</strong></p>
-                      <p class="col-12">observacion <strong class="text-red-600">{{ descripcion.observacion || 'Sin dato' }}</strong></p> 
+                      <p class="col-6">codigo <strong class="text-red-600">{{ descripcion?.codigo || 'Sin dato' }}</strong></p> 
+                      <p class="col-6">modelo <strong class="text-red-600">{{ descripcion?.modelo || 'Sin dato' }}</strong></p> 
+                      <p class="col-6">dispositivo <strong class="text-red-600">{{ descripcion?.dispositivo || 'Sin dato' }}</strong></p> 
+                      <p class="col-6">serial <strong class="text-red-600">{{ descripcion?.serial || 'Sin dato' }}</strong></p> 
+                      <p class="col-6">marca <strong class="text-red-600">{{ descripcion?.marca || 'Sin dato' }}</strong></p> 
+                      <p class="col-6">codigo_inv <strong class="text-red-600">{{ descripcion?.codigo_inv || 'Sin dato' }}</strong></p>
+                      <p class="col-12">observacion <strong class="text-red-600">{{ descripcion?.observacion || 'Sin dato' }}</strong></p> 
                   </div>
 
                   <div class="mt-4 row">
                     <div class="col-6">
                       <p class="fw-bolder">Asignaciones (Descripción {{ descIndex + 1 }}):</p>
                       <hr class="border-2 border-red-m opacity-75 mt-0 mb-3">
-                      <div class="row ps-3" v-if="descripcion.asignaciones && descripcion.asignaciones.length > 0">
-                          <div v-for="(asignacion, asigIndex) in descripcion.asignaciones" 
-                              :key="`asig-${producto.id}-${descIndex}-${asigIndex}`" 
+                      <div class="row ps-3" v-if="descripcion?.asignaciones && descripcion.asignaciones?.length > 0">
+                          <div v-for="(asignacion, asigIndex) in descripcion?.asignaciones" 
+                              :key="`asig-${producto?.id}-${descIndex}-${asigIndex}`" 
                               class="col-6 border-bottom border-secondary-subtle py-2">
                               <p class="fw-bold">Asignación #{{ asigIndex + 1 }}</p>
-                              <p class="col-6">fecha asignar <strong class="text-red-600">{{ asignacion.fecha_asignar || 'sin asignación' }}</strong></p>
-                              <p class="col-6">fecha_devolucion <strong class="text-red-600">{{ asignacion.fecha_devolucion || "Sin devolución" }}</strong></p>
-                              <p class="col-6">destino <strong class="text-red-600">{{ asignacion.destino || 'sin destino' }}</strong></p>
+                              <p class="col-6">fecha asignar <strong class="text-red-600">{{ asignacion?.fecha_asignar || 'sin asignación' }}</strong></p>
+                              <p class="col-6">fecha_devolucion <strong class="text-red-600">{{ asignacion?.fecha_devolucion || "Sin devolución" }}</strong></p>
+                              <p class="col-6">destino <strong class="text-red-600">{{ asignacion?.destino || 'sin destino' }}</strong></p>
                               <p class="col-6">Estado <strong class="text-red-600">{{ asignacion.estatus?.nombre || 'sin estado' }}</strong></p>
                               <p class="fw-bold text-red-600 mt-2">Usuario Asignado:</p>
                               <p class="col-6">nombre <strong class="text-red-600">{{ asignacion.usuario?.nombre || 'sin nombre' }}</strong></p>
@@ -206,16 +220,16 @@ onMounted(() => {
                     <div class="col-6">
                       <p class="fw-bolder">Ubicaciones (Descripción {{ descIndex + 1 }}):</p>
                       <hr class="border-2 border-red-m opacity-75 mt-0 mb-3">
-                      <div class="row ps-3" v-if="descripcion.ubicaciones && descripcion.ubicaciones.length > 0">
+                      <div class="row ps-3" v-if="descripcion?.ubicaciones && descripcion.ubicaciones?.length > 0">
                           <div v-for="(ubicacion, ubiIndex) in descripcion.ubicaciones" 
-                              :key="`ubi-${producto.id}-${descIndex}-${ubiIndex}`" 
+                              :key="`ubi-${producto?.id}-${descIndex}-${ubiIndex}`" 
                               class="col-6 border-bottom border-secondary-subtle py-2">
-                            <p class="col-6">origen <strong class="text-red-600">{{ ubicacion.origen || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">destino <strong class="text-red-600">{{ ubicacion.destino || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">piso <strong class="text-red-600">{{ ubicacion.piso || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">region <strong class="text-red-600">{{ ubicacion.region || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">estado <strong class="text-red-600">{{ ubicacion.estado || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">capital <strong class="text-red-600">{{ ubicacion.capital || 'sin ubicación' }}</strong></p>
+                            <p class="col-6">origen <strong class="text-red-600">{{ ubicacion?.origen || 'sin ubicación' }}</strong></p>
+                            <p class="col-6">destino <strong class="text-red-600">{{ ubicacion?.destino || 'sin ubicación' }}</strong></p>
+                            <p class="col-6">piso <strong class="text-red-600">{{ ubicacion?.piso || 'sin ubicación' }}</strong></p>
+                            <p class="col-6">region <strong class="text-red-600">{{ ubicacion?.region || 'sin ubicación' }}</strong></p>
+                            <p class="col-6">estado <strong class="text-red-600">{{ ubicacion?.estado || 'sin ubicación' }}</strong></p>
+                            <p class="col-6">capital <strong class="text-red-600">{{ ubicacion?.capital || 'sin ubicación' }}</strong></p>
                           </div>
                       </div>
                       <p class="col-12 mt-1" v-else><strong class="text-red-600">No hay datos de Ubicación.</strong></p>
@@ -226,12 +240,12 @@ onMounted(() => {
                       <div class="col-6">
                           <p class="fw-bolder">Periféricos (Desc. {{ descIndex + 1 }}):</p>
                           <hr class="border-2 border-red-m opacity-75 mt-0 mb-3">
-                          <div class="row ps-3" v-if="descripcion.perifericos && descripcion.perifericos.length > 0">
+                          <div class="row ps-3" v-if="descripcion?.perifericos && descripcion.perifericos?.length > 0">
                               <div v-for="(periferico, periIndex) in descripcion.perifericos" 
-                                  :key="`peri-${producto.id}-${descIndex}-${periIndex}`" 
+                                  :key="`peri-${producto?.id}-${descIndex}-${periIndex}`" 
                                   class="col-12 border-bottom border-secondary-subtle py-2">
-                                  <p class="col-6">Entrada <strong class="text-red-600">{{ periferico.entrada || "Sin entrada" }}</strong></p>
-                                  <p class="col-6">Salida <strong class="text-red-600">{{ periferico.salida || 'sin salida' }}</strong></p>
+                                  <p class="col-6">Entrada <strong class="text-red-600">{{ periferico?.entrada || "Sin entrada" }}</strong></p>
+                                  <p class="col-6">Salida <strong class="text-red-600">{{ periferico?.salida || 'sin salida' }}</strong></p>
                                   <p class="col-12">Estado <strong class="text-red-600">{{ periferico.estatus?.nombre || 'sin estado' }}</strong></p>
                               </div>
                           </div>
@@ -241,14 +255,14 @@ onMounted(() => {
                       <div class="col-6">
                           <p class="fw-bolder">Evaluaciones: (Desc. {{ descIndex + 1 }}):</p>
                           <hr class="border-2 border-red-m opacity-75 mt-0 mb-3">
-                          <div class="row ps-3" v-if="descripcion.evaluaciones && descripcion.evaluaciones.length > 0">
+                          <div class="row ps-3" v-if="descripcion?.evaluaciones && descripcion.evaluaciones?.length > 0">
                               <div v-for="(evaluacion, invIndex) in descripcion.evaluaciones" 
-                                  :key="`inv-${producto.id}-${descIndex}-${invIndex}`" 
+                                  :key="`inv-${producto?.id}-${descIndex}-${invIndex}`" 
                                   class="col-12 border-bottom border-secondary-subtle py-2">
-                                  <p class="col-6">Escala <strong class="text-red-600">{{ evaluacion.escala || "Sin escala" }}</strong></p>
-                                  <p class="col-12">Sistema operativo(compatibilidad) <strong class="text-red-600">{{ evaluacion.compatibilidad || "Sin compatibilidad" }}</strong></p>
-                                  <p class="col-6">Reemplazo <strong class="text-red-600">{{ evaluacion.reemplazo || 'sin reemplazo' }}</strong></p>
-                                  <p class="col-12">Mantenimiento <strong class="text-red-600">{{ evaluacion.mantenimiento || 'sin mantenimiento' }}</strong></p>
+                                  <p class="col-6">Escala <strong class="text-red-600">{{ evaluacion?.escala || "Sin escala" }}</strong></p>
+                                  <p class="col-12">Sistema operativo(compatibilidad) <strong class="text-red-600">{{ evaluacion?.compatibilidad || "Sin compatibilidad" }}</strong></p>
+                                  <p class="col-6">Reemplazo <strong class="text-red-600">{{ evaluacion?.reemplazo || 'sin reemplazo' }}</strong></p>
+                                  <p class="col-12">Mantenimiento <strong class="text-red-600">{{ evaluacion?.mantenimiento || 'sin mantenimiento' }}</strong></p>
                               </div>
                           </div>
                           <p class="col-12 mt-1" v-else><strong class="text-red-600">No hay datos de Evaluaciones.</strong></p>
@@ -256,7 +270,7 @@ onMounted(() => {
                   </div>
                 </div>
 
-                <div v-if="!producto.descripciones || producto.descripciones.length === 0" class="col-12 mt-3">
+                <div v-if="!producto?.descripciones || producto?.descripciones?.length === 0" class="col-12 mt-3">
                     <p><strong class="text-red-600">No hay descripciones asociadas a este producto.</strong></p>
                 </div>
               </div>

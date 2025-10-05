@@ -315,7 +315,7 @@ const goBack = () => {router.go(-1)}
                     <!-- Cargo (No Editables) -->
                     <div class="col-12 col-md-6 profile-field">
                       <label class="col-form-label fw-bolder text-secondary">Cargo:</label>
-                      <span class="non-editable text-red fw-bold">{{ dataPerfil.cargo }}</span>
+                      <span class="non-editable text-red fw-bold">{{ dataPerfil?.cargo }}</span>
                     </div>
                     <div class="col-12 col-md-6 profile-field">
                       <label class="col-form-label fw-bolder text-secondary">Casa:</label>
