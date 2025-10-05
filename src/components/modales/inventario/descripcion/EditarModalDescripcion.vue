@@ -139,7 +139,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-8">
                       <label for="" class="badge text-secondary">observación</label>
                       <!-- Corrected pattern in textarea's class binding -->
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.observacion && !/^[A-Za-zÁ-Úá-úñÑ\s\d\.,-]+$/.test(paramsE.observacion), 'is-valid':paramsE.observacion && /^[A-Za-zÁ-Úá-úñÑ\s\d\.,-]+$/.test(paramsE.observacion) }" placeholder="Observación" v-model="paramsE.observacion"></textarea>
+                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.observacion && !/^[^<>{}\[\]]+$/.test(paramsE.observacion), 'is-valid':paramsE.observacion && /^[^<>{}\[\]]+$/.test(paramsE.observacion) }" placeholder="Observación" v-model="paramsE.observacion"></textarea>
                     </div>
 
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>

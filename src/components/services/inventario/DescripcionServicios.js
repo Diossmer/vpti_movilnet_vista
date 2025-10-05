@@ -1,7 +1,7 @@
 import querySettings from "@/components/api/querySettings";
 const { get, post, put, blob, destroy, formData } = querySettings();
 export  default async function DescripcionServicios(action, data = null, params = null){
-  try {
+  try {    
     if(action != 'fetchAll'){
       let response,FileReader,url,a;
       switch (action) {

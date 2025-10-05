@@ -1,7 +1,6 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
-// Se importa validacionesUtils para manejar la validación de los campos.
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
 import AlertComponents from '@/components/AlertComponents.vue';
 
@@ -13,52 +12,42 @@ const props = defineProps({
     default: null,
     required: true,
   },
-  // Se asume que relations[2] contiene la lista de Estatus (roles ya no es necesario).
-  relations: {
-    type: Array,
-    default: () => [[], [], []], // Usaremos relations[2] para Estatus
-  },
   isLoadingImport: {
     type: Boolean,
     default: false,
     required: true,
   },
   response: {
-    type: Object,
-    default: null,
-    required: false,
+    type: Boolean,
+    default: false,
+    required: true,
   },
 });
 
-const { dataPerfil } = useLoginStore(); // No se usa storeToRefs ya que no se necesita reactividad en dataPerfil aquí.
+const { dataPerfil } = useLoginStore();
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
+const dispositivos = ref(['entrada', 'salida'])
 
 // --- ESTADO INICIAL PARA EL REGISTRO DE PRODUCTO Y DESCRIPCION ---
 const paramsA = ref({
   // PRODUCTOS Fields
   nombre: '',
-  estatus_id: null,
   // DESCRIPCION Fields
   codigo: '',
   modelo: '',
-  dispositivo: '',
   serial: '',
   marca: '',
   codigo_inv: '',
   observacion: '',
-  // Nota: El usuario_id de productos y el producto_id de descripcion 
-  // deben ser añadidos en la función handleData del componente padre.
 });
 
 const resetParams = () => {
   paramsA.value = {
     nombre: '',
-    estatus_id: null,
     codigo: '',
     modelo: '',
-    dispositivo: '',
     serial: '',
     marca: '',
     codigo_inv: '',
@@ -69,50 +58,64 @@ const resetParams = () => {
 };
 
 // --- VALIDACIONES DE CAMPOS ---
-// Validamos el nombre (requerido, sin números al inicio) y campos de texto/textarea
-watch(
-  [
-    () => paramsA.value?.nombre, 
-    () => paramsA.value?.serial, 
-    () => paramsA.value?.observacion
-  ], 
-  ([nombre, serial, observacion]) => {
+// Validamos el nombre (requerido, sin números al inicio) y campos de texto/textarea del mismo orden del HTML
+watch([
+  () => paramsA.value?.nombre,
+  () => paramsA.value?.serial,
+  () => paramsA.value?.modelo,
+  () => paramsA.value?.marca,
+  () => paramsA.value?.codigo,
+  () => paramsA.value?.codigo_inv,
+  () => paramsA.value?.observacion,
+],
+  ([
+  nombre, serial, modelo, marca, codigo, codigo_inv, observacion
+  ]) => {
   const errors = [];
-  
-  // 1. Validar Nombre (patrón: no debe empezar con números o contener caracteres especiales)
-  const nombrePattern = /^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$/;
-  if (nombre && !nombrePattern.test(nombre)) {
-      errors.push("El nombre es inválido (no debe empezar con números o contener caracteres especiales).");
-  }
+  const nombreError = validacionesUtils().nombreValid(nombre);
+  if (nombreError) errors.push(nombreError);
 
-  // 2. Validar Serial y Observación (evitar caracteres peligrosos como <, >, etc.)
-  const safeTextPattern = /^[^<>{}\[\]]+$/;
+  const serialError = validacionesUtils().serialValid(serial);
+  if (serialError) errors.push(serialError);
 
-  if (serial && !safeTextPattern.test(serial)) {
-      errors.push("El serial contiene caracteres especiales no permitidos (<, >, {, }, [, ]).");
-  }
-  
-  if (observacion && !safeTextPattern.test(observacion)) {
-      errors.push("La observación contiene caracteres especiales no permitidos (<, >, {, }, [, ]).");
-  }
+  const modeloError = validacionesUtils().textValid(modelo);
+  if (modeloError) errors.push(modeloError);
+
+  const marcaError = validacionesUtils().textValid(marca);
+  if (marcaError) errors.push(marcaError);
+
+  const codigoError = validacionesUtils().formatValid(codigo);
+  if (codigoError) errors.push(codigoError);
+
+  const codigo_invError = validacionesUtils().skuValid(codigo_inv);
+  if (codigo_invError) errors.push(codigo_invError);
+
+  const observacionError = validacionesUtils().textareaValid(observacion);
+  if (observacionError) errors.push(observacionError);
   
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
-  // Si los campos están vacíos, no mostramos alerta.
-  if ((!nombre && !serial && !observacion)) avisosAlert.value = null;
+  if ((nombre==='' || nombre===undefined)
+  && (serial==='' || serial===undefined)
+  && (modelo==='' || modelo===undefined)
+  && (marca==='' || marca===undefined)
+  && (codigo==='' || codigo===undefined)
+  && (codigo_inv==='' || codigo_inv===undefined)
+  && (observacion==='' || observacion===undefined))
+  avisosAlert.value = null;
 });
 
+// Se define una variable para deshabilitar el botón de registrar si faltan campos requeridos
+const isFormInvalid = computed(() => {
+  const isRequiredFieldMissing = !paramsA.value.nombre || 
+                                 !paramsA.value.serial || 
+                                 !paramsA.value.modelo || 
+                                 !paramsA.value.marca
+  return isRequiredFieldMissing;
+});
 watch(() => props.response, (newResponse) => {
   if (newResponse) {
     avisos.value = newResponse;
   }
-});
-
-// Se elimina la función filteredUsuario ya que no es relevante para el registro de productos.
-
-// Se define una variable para deshabilitar el botón de envío si faltan campos requeridos
-const isFormInvalid = computed(() => {
-  const isRequiredFieldMissing = !paramsA.value.nombre || !paramsA.value.estatus_id;
-  return isRequiredFieldMissing || props.isLoadingImport || !!avisosAlert.value;
 });
 </script>
 
@@ -127,10 +130,10 @@ const isFormInvalid = computed(() => {
           </div>
           <Suspense>
             <template #default>
-              <!-- La función handleData('create', paramsA) debe manejar la lógica de crear ambas entidades. -->
+              <!-- La función handleData('createall', paramsA) debe manejar la lógica de crear ambas entidades. -->
               <form @submit.prevent="handleData('create', paramsA)">
                 <div class="modal-body">
-                  <div class="row">
+                  <div class="row justify-content-center">
                     
                     <!-- PRODUCTOS FIELDS (SECCIÓN REQUERIDA) -->
                     <h5 class="fw-bold mb-3 mt-0 text-red-600">Datos del Producto <span class="text-danger">(Requeridos)</span></h5>
@@ -141,58 +144,53 @@ const isFormInvalid = computed(() => {
                         id="nombreProducto"
                         type="text" 
                         class="form-control" 
-                        pattern="^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$"
-                        :class="{'is-invalid':paramsA.nombre && !/^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[^0-9][A-Za-zÁ-Úá-úñÑ\s\-\{\}\(\)\+\*]+$/.test(paramsA.nombre)}" 
+                        pattern="^[A-Za-zÁ-Úá-úñÑ\s\d]+$"
+                        :class="{'is-invalid':paramsA.nombre && !/^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre),'is-valid':paramsA.nombre && /^[A-Za-zÁ-Úá-úñÑ\s\d]+$/.test(paramsA.nombre)}" 
                         v-model="paramsA.nombre" 
-                        placeholder="Nombre único del producto (e.g., Laptop HP Pavilion)" 
+                        placeholder="Nombre único del producto" 
                         required 
                       />
-                      <div class="form-text text-muted">Ej: Laptop, Monitor, Mouse. Debe ser único.</div>
                     </div>
                     
-                    <div class="col-6 mb-3">
-                      <label for="estatusProducto" class="badge text-secondary">Estatus<span class="text-danger">*</span></label>
-                      <select id="estatusProducto" class="form-select" v-model="paramsA.estatus_id" required>
-                        <option :value="null" disabled>Seleccione un estatus</option>
-                        <!-- Asumiendo que relations[2] contiene la lista de Estatus -->
-                        <option v-for="(estatus, index) in relations[2]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
-                      </select>
-                    </div>
-
                     <!-- DESCRIPCION FIELDS (SECCIÓN OPCIONAL/DETALLE) -->
                     <h5 class="fw-bold mb-3 mt-3 text-red-600">Detalles y Especificaciones (Descripción)</h5>
 
                     <div class="col-4 mb-3">
-                      <label for="serialDesc" class="badge text-secondary">Serial</label>
+                      <label for="serialDesc" class="badge text-secondary">Serial<span class="text-danger">*</span></label>
                       <input 
                         id="serialDesc"
                         type="text" 
                         class="form-control" 
-                        :class="{ 'is-invalid': paramsA.serial && !/^[^<>{}\[\]]+$/.test(paramsA.serial), 'is-valid':paramsA.serial && paramsA.serial.length > 0 && /^[^<>{}\[\]]+$/.test(paramsA.serial)}"
+                        :class="{ 'is-invalid': paramsA.serial && !/^[^<>/'`]{6,20}$/.test(paramsA.serial), 'is-valid':paramsA.serial && paramsA.serial.length > 0 && /^[^<>/'`]{6,20}$/.test(paramsA.serial)}"
                         v-model="paramsA.serial" 
-                        placeholder="Número de serie" 
+                        placeholder="Número de serie"
+                        required
                       />
                     </div>
                     
                     <div class="col-4 mb-3">
-                      <label for="modeloDesc" class="badge text-secondary">Modelo</label>
+                      <label for="modeloDesc" class="badge text-secondary">Modelo<span class="text-danger">*</span></label>
                       <input 
                         id="modeloDesc"
                         type="text" 
-                        class="form-control" 
+                        class="form-control"
+                        :class="{'is-invalid':paramsA.modelo && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$/.test(paramsA.modelo),'is-valid':paramsA.modelo && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*\d]+$/.test(paramsA.modelo)}"
                         v-model="paramsA.modelo" 
-                        placeholder="Modelo del dispositivo" 
+                        placeholder="Modelo del dispositivo"
+                        required
                       />
                     </div>
 
                     <div class="col-4 mb-3">
-                      <label for="marcaDesc" class="badge text-secondary">Marca</label>
+                      <label for="marcaDesc" class="badge text-secondary">Marca<span class="text-danger">*</span></label>
                       <input 
                         id="marcaDesc"
                         type="text" 
-                        class="form-control" 
+                        class="form-control"
+                        :class="{'is-invalid':paramsA.marca && !/^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.marca),'is-valid':paramsA.marca && /^[A-Za-zÁ-Úá-úñÑ\s\-\(\)\*]+$/.test(paramsA.marca)}"
                         v-model="paramsA.marca" 
-                        placeholder="Marca del dispositivo" 
+                        placeholder="Marca del dispositivo"
+                        required
                       />
                     </div>
 
@@ -201,7 +199,8 @@ const isFormInvalid = computed(() => {
                       <input 
                         id="codigoDesc"
                         type="text" 
-                        class="form-control" 
+                        class="form-control"
+                        :class="{'is-invalid':paramsA.codigo && !/^\d+$/.test(paramsA.codigo),'is-valid':paramsA.codigo && /^\d+$/.test(paramsA.codigo)}"
                         v-model="paramsA.codigo" 
                         placeholder="Código interno o de fabricante" 
                       />
@@ -212,23 +211,21 @@ const isFormInvalid = computed(() => {
                       <input 
                         id="codigoInvDesc"
                         type="text" 
-                        class="form-control" 
+                        class="form-control"
+                        :class="{'is-invalid':paramsA.codigo_inv && !/^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv),'is-valid':paramsA.codigo_inv && /^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv)}"
                         v-model="paramsA.codigo_inv" 
                         placeholder="Código de inventario interno" 
                       />
                     </div>
 
-                    <div class="col-4 mb-3">
-                      <label for="dispositivoDesc" class="badge text-secondary">Dispositivo</label>
-                      <input 
-                        id="dispositivoDesc"
-                        type="text" 
-                        class="form-control" 
-                        v-model="paramsA.dispositivo" 
-                        placeholder="Tipo de dispositivo" 
-                      />
+                    <div class="col-4">
+                      <label for="" class="badge text-secondary">Dispositivo<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsA.dispositivo }}</span>
+                      <select class="form-select" v-model="paramsA.dispositivo" required>
+                        <option v-for="(dispositivo, index) in dispositivos" :key="index" :value="dispositivo" v-if="dispositivos?.length > 0">{{ dispositivo }}</option>
+                        <option selected v-else>Sin dispositivo</option>
+                      </select>
                     </div>
-
                     <div class="col-12 mb-3">
                       <label for="observacionDesc" class="badge text-secondary">Observación</label>
                       <textarea 
@@ -248,8 +245,7 @@ const isFormInvalid = computed(() => {
                   <button 
                     class="btn btn-outline-secondary text-red" 
                     type="submit" 
-                    :disabled="isFormInvalid"
-                  >
+                    :disabled="isFormInvalid">
                     <span v-if="!isLoadingImport">Registrar</span>
                     <span v-else>
                     <span class="spinner-border spinner-border-sm" role="status"></span>

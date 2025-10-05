@@ -31,6 +31,14 @@ const { dataPerfil } = storeToRefs(useLoginStore());
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
+const escalas = ref([
+    {escala:'critico'}, 
+    {escala:'alto'}, 
+    {escala:'medio'}, 
+    {escala:'bajo'}, 
+    {escala:'regular'}, 
+    {escala:'resuelto'}
+]);
 const paramsA = ref({
   producto_id: [],
   descripcion_id: [],
@@ -45,11 +53,9 @@ const resetParams = () => {
 };
 
 watch([
-() => paramsA.value?.escala,
 () => paramsA.value?.compatibilidad,
 () => paramsA.value?.reemplazo,
 () => paramsA.value?.mantenimiento], ([
-  escala,
   compatibilidad,
   reemplazo,
   mantenimiento]) => {
@@ -60,13 +66,10 @@ watch([
   if (ReemplazoError) errors.push(ReemplazoError);
   const mantenimientoError = validacionesUtils().textValid(mantenimiento);
   if (mantenimientoError) errors.push(mantenimientoError);
-  const escalaError = validacionesUtils().sizeValid(escala);
-  if (escalaError) errors.push(escalaError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
   if ((compatibilidad==='' || compatibilidad===undefined)
   && (reemplazo==='' || reemplazo===undefined)
-  && (mantenimiento==='' || mantenimiento===undefined)
-  && (escala==='' || escala===undefined))
+  && (mantenimiento==='' || mantenimiento===undefined))
   avisosAlert.value = null;
 });
 watch(() => props.response, (newResponse) => {
@@ -103,11 +106,15 @@ watch(() => props.response, (newResponse) => {
                       </select>
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">escala</label>
-                      <input type="text" maxlength="20" pattern="^(critico|alto|medio|bajo|regular|resuelto)$" class="form-control" :class="{'is-invalid': paramsA.escala && !/^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsA.escala),'is-valid': paramsA.escala && /^(critico|alto|medio|bajo|regular|resuelto)$/.test(paramsA.escala)}" v-model="paramsA.escala" placeholder="Escala"  />
+                      <label for="" class="badge text-secondary">escala<span class="text-danger">*</span></label>
+                      <span class="badge text-secondary">{{ paramsA.escala }}</span>
+                      <select class="form-select" v-model="paramsA.escala" required>
+                        <option v-for="(escala, index) in escalas" :key="index" :value="escala?.escala" v-if="relations?.length > 0">{{ escala?.escala }}</option>
+                        <option selected v-else>Sin Escala</option>
+                      </select>
                     </div>
                     <div class="col-4">
-                      <label for="" class="badge text-secondary">compatibilidad</label>
+                      <label for="" class="badge text-secondary">sistema operativo(compatibilidad)</label>
                       <!-- Regex corrected to escape special characters -->
                       <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsA.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.compatibilidad),'is-valid': paramsA.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.compatibilidad)}" v-model="paramsA.compatibilidad" placeholder="Compatibilidad"  />
                     </div>
