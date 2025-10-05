@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, defineProps } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
@@ -70,10 +70,20 @@ watch(() => props.response, (newResponse) => {
     avisos.value = newResponse;
   }
 });
+const filtereddescripcion = computed(() => {
+  const alldescripcion = Array.isArray(props.relations[1]) ? props.relations[1] : [];;
+  const restricteddescripcionNames = ['entrada'];
+  if (dataPerfil.value?.descripcion?.id !== 1) {
+    return alldescripcion?.filter(descripcion =>
+      !restricteddescripcionNames?.includes(descripcion?.dispositivo)
+    );
+  }
+  return alldescripcion;
+});
 </script>
 
 <template>
-  <div class="modal fade" id="staticEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalEditar">
+  <div class="modal fade" id="staticEditar2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalEditar">
       <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -88,7 +98,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-8">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
-                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                        <option v-for="(descripcion, index) in filtereddescripcion" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
                       </select>
                     </div>
                     <div class="col-4">
@@ -105,10 +115,10 @@ watch(() => props.response, (newResponse) => {
                         <option v-for="(producto, index) in relations[1]" :key="index" :value="producto.id">{{ producto.nombre }}</option>
                       </select>
                     </div> -->
-                    <div class="col-2">
+                    <!-- <div class="col-2">
                       <label for="" class="badge text-secondary">Cantidad Existente<span class="text-danger">*</span></label>
                       <input type="text" inputmode="numeric" maxlength="10"  pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsE.cantidad_existente && !/^\d+(^\.\d+)?$/.test(paramsE.cantidad_existente),'is-valid': paramsE.cantidad_existente && /^\d+(^\.\d+)?$/.test(paramsE.cantidad_existente)}" v-model="paramsE.cantidad_existente" placeholder="Cantidad Existente" required />
-                    </div>
+                    </div> -->
                     <div class="col-2">
                       <label for="" class="badge text-secondary">Entrada</label>
                       <input type="text" inputmode="numeric" maxlength="10" pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsE.entrada && !/^\d+(^\.\d+)?$/.test(paramsE.entrada),'is-valid': paramsE.entrada && /^\d+(^\.\d+)?$/.test(paramsE.entrada)}" v-model="paramsE.entrada" placeholder="Entrada"/>

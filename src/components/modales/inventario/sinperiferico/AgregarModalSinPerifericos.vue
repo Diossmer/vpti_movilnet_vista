@@ -48,7 +48,7 @@ watch([() => /* paramsA.value?.cantidad_existente, */
 () => paramsA.value?.entrada,
 () => paramsA.value?.salida,
 () => paramsA.value?.descripcion], ([/* cantidad_existente, */ entrada, salida, descripcion]) => {
-  const errors = [];
+  const errors = [];  
   /* const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
   if (cantidad_existenteError) errors.push(cantidad_existenteError); */
   const entradaError = validacionesUtils().numberValid(entrada);

@@ -2,8 +2,9 @@
 import { ref, watch, computed } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
-import { validacionesUtils } from '@/components/utils/validacionesUtils';
 import AlertComponents from '@/components/AlertComponents.vue';
+
+const emit = defineEmits(['reset-params-e']); 
 
 const props = defineProps({
   isLoadingImport: {
@@ -16,6 +17,17 @@ const props = defineProps({
     default: null,
     required: false,
   },
+  paramsE: {
+    type: Object,
+    // Aseguramos que paramsE tenga las propiedades clave al inicializarse.
+    default: () => ({
+      id: null,
+      seleccion: null, 
+      producto_id: [],
+      descripcion_id: []
+    }),
+    required: true,
+  },
 });
 
 const { dataPerfil } = storeToRefs(useLoginStore());
@@ -26,13 +38,54 @@ const paramsA = ref({
   seleccion:null,
 });
 
+const isEditing = computed(() => {
+    return !!props.paramsE.seleccion || (props.paramsE.id !== undefined && props.paramsE.id !== null);
+});
+
+const currentSelection = computed({
+    get() {
+        // Devuelve el valor del estado que corresponda (Edición o Agregar)
+        return isEditing.value ? props.paramsE.seleccion : paramsA.value.seleccion;
+    },
+    set(newValue) {
+        // Modifica el estado que corresponda
+        if (isEditing.value) {
+            props.paramsE.seleccion = newValue;
+        } else {
+            paramsA.value.seleccion = newValue;
+        }
+    }
+});
+
 const targetModalId = computed(() => {
-  if (paramsA.value.seleccion === 'entrada') {
-    return '#staticAgregar1'; // Abre AgregarModalPerifericos
-  } else if (paramsA.value.seleccion === 'salida') {
-    return '#staticAgregar2'; // Abre el nuevo modal para Salida
+  const selection = currentSelection.value;
+  if (!selection) return '';
+
+  if (isEditing.value) {
+    // LÓGICA DE EDICIÓN
+    return selection === 'entrada' ? '#staticEditar1' : '#staticEditar2';
+  } else {
+    // LÓGICA DE AGREGAR
+    return selection === 'entrada' ? '#staticAgregar1' : '#staticAgregar2';
   }
-  return '';
+});
+
+const resetState = () => {
+    // Emite el evento para que el padre limpie paramsE
+    emit('reset-params-e'); 
+    
+    // Limpia el estado local de paramsA
+    paramsA.value.seleccion = null;
+    
+    // Limpia avisos
+    avisos.value = null;
+    avisosAlert.value = null;
+};
+
+watch(() => props.response, (newResponse) => {
+  if (newResponse) {
+    avisos.value = newResponse;
+  }
 });
 </script>
 
@@ -41,21 +94,19 @@ const targetModalId = computed(() => {
       <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">Agregar Dispositivo (Entrada/Salida)</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <h1 class="modal-title fs-5 fw-bolder" id="staticBackdropLabel">{{ isEditing ? 'Editar Dispositivo' : 'Agregar Dispositivo' }} (Entrada/Salida)</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="resetState"></button>
           </div>
           <Suspense>
             <template #default>
-              <!-- Nota: La acción de submit actualmente llama a 'create' en el padre, pero el modal
-                   parece ser para la selección inicial. Mantendremos el form por consistencia. -->
               <form>
                 <div class="modal-body">
                   <div class="row d-flex justify-content-center">
                     <div class="col-6">
                       <label for="dispositivoSelect" class="badge text-secondary">Selecciona el tipo de dispositivo<span class="text-danger">*</span></label>
-                      <select id="dispositivoSelect" class="form-select" v-model="paramsA.seleccion" required>
+                      
+                      <select id="dispositivoSelect" class="form-select" v-model="currentSelection" required>
                         <option :value="null" disabled>-- Seleccione una dispositivo --</option>
-                        <!-- Iteramos directamente sobre las opciones de tipo de dispositivo -->
                         <option v-for="dispositivo in dispositivos" :key="dispositivo" :value="dispositivo">
                           {{ dispositivo.charAt(0).toUpperCase() + dispositivo.slice(1) }}
                         </option>
@@ -65,8 +116,15 @@ const targetModalId = computed(() => {
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal">Cancelar</button>
-                  <button class="btn btn-outline-secondary text-red" type="button" :disabled="isLoadingImport || !paramsA.seleccion" data-bs-toggle="modal" :data-bs-target="targetModalId" data-bs-dismiss="modal" >
+                  <button type="button" class="btn btn-outline-secondary text-red" data-bs-dismiss="modal" @click="resetState">Cancelar</button>
+                  <button 
+                    class="btn btn-outline-secondary text-red" 
+                    type="button" 
+                    :disabled="isLoadingImport || !currentSelection" 
+                    data-bs-toggle="modal" 
+                    :data-bs-target="targetModalId" 
+                    data-bs-dismiss="modal" 
+                  >
                     <span v-if="!isLoadingImport">Continuar</span>
                     <span v-else>
                     <span class="spinner-border spinner-border-sm" role="status"></span>
@@ -89,6 +147,3 @@ const targetModalId = computed(() => {
       </div>
     </div>
 </template>
-<style scoped>
-/* Agrega tus estilos aquí si son necesarios para el componente DispositivoComponents */
-</style>

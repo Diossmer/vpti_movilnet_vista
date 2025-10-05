@@ -13,6 +13,7 @@ import PdfModalPerifericos from '@/components/modales/inventario/perifericos/Pdf
 import EliminarModalPerifericos from '@/components/modales/inventario/perifericos/EliminarModalPerifericos.vue';
 import DispositivoComponents from '@/components/DispositivoComponents.vue';
 import AgregarModalSinPerifericos from '@/components/modales/inventario/sinperiferico/AgregarModalSinPerifericos.vue';
+import EditarModalSinPerifericos from '@/components/modales/inventario/sinperiferico/EditarModalSinPerifericos.vue';
 const store = useLoginStore()
 const { dataPerfil } = storeToRefs(store)
 
@@ -32,7 +33,15 @@ const selectedRowsAll = ref([]);
 const paramsE = ref({
   producto_id: [],
   descripcion_id: [],
+  seleccion: null,
 })
+const resetParamsE = () => {
+  paramsE.value = {
+    producto_id: [],
+    descripcion_id: [],
+    seleccion: null,
+  };
+};
 const response = ref(null);
 const isLoadingImport = ref(false);
 
@@ -100,7 +109,13 @@ const handleData = async (action = null, params = null, id = null, dispositivo =
       await PerifericosServicios(action, id);
       await handleData('fetchAll');
     } else if (action === 'fetch') {
-      paramsE.value = await PerifericosServicios('fetch', id);
+      const fetchedData = await PerifericosServicios('fetch', id);
+      // **Aseguramos que los campos de selección múltiple sean arrays**
+      paramsE.value = {
+        ...fetchedData,
+        producto_id: Array.isArray(fetchedData.producto_id) ? fetchedData.producto_id : [],
+        descripcion_id: Array.isArray(fetchedData.descripcion_id) ? fetchedData.descripcion_id : [],
+      };
     }
   } catch (error) {
     console.error('Error al manejar los datos:', error);
@@ -207,7 +222,7 @@ onMounted(async()=>{await handleData()})
       <div class="card-body p-5">
         <div class="w-100 d-flex justify-content-end" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 4">
           <!-- <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticAgregar"> </a> -->
-          <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticDispositivo">
+          <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticDispositivo" @click="resetParamsE">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px; height: 20px;">
               <path fill="currentcolor" d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
             </svg>
@@ -285,7 +300,7 @@ onMounted(async()=>{await handleData()})
                       <li v-if="dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><button class="btn btn-outline-secondary text-red dropdown-item fs-5 p-0" title="PDF" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF" @click="handleData('fetch', '', row?.id)"><i class="bi bi-file-pdf"></i>PDF</button></li>
                       <li v-if="dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4"><button class="btn btn-outline-warning text-red dropdown-item fs-5 p-0" title="Exportar" type="button" @click="fileData(row,'export','periferico' )"><i class="bi bi-upload"></i>Exportar</button></li>
                       <li v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3">
-                        <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal" data-bs-target="#staticEditar" @click="handleData('fetch', '', row?.id)">
+                        <button type="button" class="btn btn-outline-secondary text-red dropdown-item p-0" title="Editar" data-bs-toggle="modal"  data-bs-target="#staticDispositivo" @click="handleData('fetch', '', row?.id)">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 20px; height: 20px;">
                             <path fill="currentcolor" d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152L0 424c0 48.6 39.4 88 88 88l272 0c48.6 0 88-39.4 88-88l0-112c0-13.3-10.7-24-24-24s-24 10.7-24 24l0 112c0 22.1-17.9 40-40 40L88 464c-22.1 0-40-17.9-40-40l0-272c0-22.1 17.9-40 40-40l112 0c13.3 0 24-10.7 24-24s-10.7-24-24-24L88 64z"/>
                           </svg>
@@ -342,12 +357,13 @@ onMounted(async()=>{await handleData()})
       </div>
     </div>
 
-    <DispositivoComponents :isLoadingImport="isLoadingImport" :response="response" />
+    <DispositivoComponents :isLoadingImport="isLoadingImport" :response="response" :paramsE="paramsE" :handleData="handleData" @reset-params-e="resetParamsE"/>
 
     <AgregarModalPerifericos :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
     <AgregarModalSinPerifericos :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
     <EditarModalPerifericos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
+    <EditarModalSinPerifericos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
     <EliminarModalPerifericos :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 

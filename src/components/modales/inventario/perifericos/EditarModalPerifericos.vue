@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, defineProps } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useLoginStore } from '@/stores/autenticacion';
 import { storeToRefs } from 'pinia';
 import { validacionesUtils } from '@/components/utils/validacionesUtils';
@@ -70,10 +70,21 @@ watch(() => props.response, (newResponse) => {
     avisos.value = newResponse;
   }
 });
+const filtereddescripcion = computed(() => {
+  const alldescripcion = Array.isArray(props.relations[1]) ? props.relations[1] : []; 
+  const restricteddescripcionNames = ['salida'];
+  if (dataPerfil.value?.descripcion?.id !== 1) {
+    return alldescripcion?.filter(descripcion =>
+      !restricteddescripcionNames.includes(descripcion?.dispositivo)
+    );
+  }
+  
+  return alldescripcion;
+});
 </script>
 
 <template>
-  <div class="modal fade" id="staticEditar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalEditar">
+  <div class="modal fade" id="staticEditar1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalEditar">
       <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -88,7 +99,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-12">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsE.descripcion_id" multiple required>
-                        <option v-for="(descripcion, index) in relations[1]" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
+                        <option v-for="(descripcion, index) in filtereddescripcion" :key="index" :value="descripcion.id">{{ descripcion?.producto?.nombre }} || {{ descripcion?.dispositivo }} || {{ descripcion?.modelo }} || {{ descripcion?.marca }} || {{ descripcion?.serial }}</option>
                       </select>
                     </div>
                     <!-- <div class="col-3">
@@ -101,7 +112,7 @@ watch(() => props.response, (newResponse) => {
                       <label for="" class="badge text-secondary">estatus actual<span class="text-danger">*</span></label>
                       <span class="badge text-secondary">{{ paramsE.estatus?.nombre }}</span>
                       <select class="form-select" v-model="paramsE.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
+                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus?.nombre }}</option>
                       </select>
                     </div>
                     <!-- <div class="col-2">
