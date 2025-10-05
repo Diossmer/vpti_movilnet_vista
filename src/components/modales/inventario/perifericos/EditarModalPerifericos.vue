@@ -96,6 +96,7 @@ const filtereddescripcion = computed(() => {
               <form @submit.prevent="handleData('update', paramsE, paramsE.id)">
                 <div class="modal-body">
                   <div class="row">
+                    <span class="text-red">cantidad seleccionada: <b>{{ paramsE.descripcion_id.length }}</b></span>
                     <div class="col-12">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsE.descripcion_id" multiple required>

@@ -112,7 +112,7 @@ const filteredProductos = computed(() => {
 
 const total = computed(() => {
   // 1. Extraer las longitudes de las descripciones en un nuevo array (Ej: [4, 1])
-  const longitudes = Inventario.value.Productos.map((producto) => {
+  const longitudes = Inventario.value?.Productos.map((producto) => {
     return producto.descripciones?.length || 0;
   });
   // 2. Sumar todos los números del array de longitudes usando 'reduce()'
