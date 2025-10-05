@@ -71,11 +71,11 @@ watch(() => props.response, (newResponse) => {
 });
 
 const filtereddescripcion = computed(() => {
-  const alldescripcion = props.relations[1];
+  const alldescripcion = Array.isArray(props.relations[1]) ? props.relations[1] : [];;
   const restricteddescripcionNames = ['entrada'];
   if (dataPerfil.value?.descripcion?.id !== 1) {
     return alldescripcion?.filter(descripcion =>
-      !restricteddescripcionNames?.includes(descripcion.dispositivo)
+      !restricteddescripcionNames?.includes(descripcion?.dispositivo)
     );
   }
   return alldescripcion;

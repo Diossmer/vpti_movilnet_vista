@@ -69,13 +69,18 @@ watch(() => props.response, (newResponse) => {
 });
 
 const filtereddescripcion = computed(() => {
-  const alldescripcion = props.relations[1];
+  // 1. You correctly made this line safe. alldescripcion is now guaranteed to be an array.
+  const alldescripcion = Array.isArray(props.relations[1]) ? props.relations[1] : []; 
+  
   const restricteddescripcionNames = ['salida'];
+  
   if (dataPerfil.value?.descripcion?.id !== 1) {
+    // 2. The fix: Remove the optional chaining (?.), as alldescripcion is an Array.
     return alldescripcion?.filter(descripcion =>
-      !restricteddescripcionNames?.includes(descripcion.dispositivo)
+      !restricteddescripcionNames.includes(descripcion?.dispositivo)
     );
   }
+  
   return alldescripcion;
 });
 </script>

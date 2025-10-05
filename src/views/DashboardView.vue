@@ -35,14 +35,7 @@ const loadData = async () => {
   isLoading.value = true;
   try {
     // Cargar todos los datos
-    const [
-      productosRes,
-      descripcionesRes,
-      ubicacionesRes,
-      asignacionesRes,
-      inventariosRes,
-      perifericosRes
-    ] = await Promise.all([
+    const results = await Promise.allSettled([
       ProductosServicios('fetchAll'),
       DescripcionServicios('fetchAll'),
       UbicacionServicios('fetchAll'),
@@ -51,12 +44,20 @@ const loadData = async () => {
       PerifericosServicios('fetchAll')
     ]);
 
-    Inventario.value.Productos = productosRes?.mostrarT || [];
-    Inventario.value.Descripciones = descripcionesRes?.mostrarT || [];
-    Inventario.value.Ubicaciones = ubicacionesRes?.mostrarT || [];
-    Inventario.value.Asignaciones = asignacionesRes?.mostrarT || [];
-    Inventario.value.Inventarios = inventariosRes?.mostrarT || [];
-    Inventario.value.Perifericos = perifericosRes?.mostrarT || [];
+    // Función auxiliar para obtener los datos si la promesa fue exitosa
+    const getSuccessfulData = (result) => {
+      // Un resultado 'fulfilled' (cumplido) tiene la data en result.value
+      // Usamos || [] como fallback si mostrarT no existe o no es un array
+      return result.status === 'fulfilled' && Array.isArray(result.value?.mostrarT) ? result.value.mostrarT : [];
+    };
+
+    // Asignar los datos usando la función auxiliar
+    Inventario.value.Productos = getSuccessfulData(results[0]);
+    Inventario.value.Descripciones = getSuccessfulData(results[1]);
+    Inventario.value.Ubicaciones = getSuccessfulData(results[2]);
+    Inventario.value.Asignaciones = getSuccessfulData(results[3]);
+    Inventario.value.Inventarios = getSuccessfulData(results[4]);
+    Inventario.value.Perifericos = getSuccessfulData(results[5]);
 
   } catch (error) {
     console.error('Error al cargar datos:', error);
@@ -70,23 +71,23 @@ const loadData = async () => {
 const descripcionMap = computed(() => {
   // Asume que la descripción se relaciona con el producto por un campo como 'producto_id'
   // Si el helper original asume que d.id === producto.id, lo mantendremos para evitar errores de relación
-  return new Map(Inventario.value.Descripciones.map(d => [d.id, d]));
+  return new Map(Inventario.value?.Descripciones.map(d => [d.id, d]));
 });
 
 const ubicacionMap = computed(() => {
-  return new Map(Inventario.value.Ubicaciones.map(u => [u.id, u]));
+  return new Map(Inventario.value?.Ubicaciones.map(u => [u.id, u]));
 });
 
 const asignacionMap = computed(() => {
-  return new Map(Inventario.value.Asignaciones.map(a => [a.id, a]));
+  return new Map(Inventario.value?.Asignaciones.map(a => [a.id, a]));
 });
 
 const perifericoMap = computed(() => {
-  return new Map(Inventario.value.Perifericos.map(p => [p.id, p]));
+  return new Map(Inventario.value?.Perifericos.map(p => [p.id, p]));
 });
 
 const inventarioMap = computed(() => {
-  return new Map(Inventario.value.Inventarios.map(i => [i.id, i]));
+  return new Map(Inventario.value?.Inventarios.map(i => [i.id, i]));
 });
 
 // --- Complex Search Logic ---
@@ -98,17 +99,17 @@ const filteredProductos = computed(() => {
     return [];
   }
 
-  return Inventario.value.Productos.filter(producto => {
+  return Inventario.value?.Productos.filter(producto => {
     // 1. OBTENER DATOS RELACIONADOS
-    const descripcion = descripcionMap.value.get(producto?.id);
-    const ubicacion = ubicacionMap.value.get(producto?.id);
-    const asignacion = asignacionMap.value.get(producto?.id);
+    const descripcion = descripcionMap?.value.get(producto?.id);
+    const ubicacion = ubicacionMap?.value.get(producto?.id);
+    const asignacion = asignacionMap?.value.get(producto?.id);
 
     // 2. CRITERIO: BUSQUEDA POR ID
-    const idMatch = producto.id.toString() === query;
+    const idMatch = producto?.id.toString() === query;
 
     // 3. CRITERIO: BUSQUEDA POR NOMBRE DEL PRODUCTO
-    const nombreMatch = producto.nombre?.toLowerCase().includes(query);
+    const nombreMatch = producto?.nombre?.toLowerCase().includes(query);
 
     // 4. CRITERIO: BUSQUEDA POR SERIAL (clave)
     // El serial está en la descripción
@@ -179,8 +180,8 @@ onMounted(() => {
             </div>
           </div>
 
-            <div class="space-y-4">
-              <div v-for="producto in filteredProductos" :key="producto?.id" class="bg-white shadow-md p-6 hover:shadow-lg transition-shadow">
+            <div class="space-y-4 rounded-3">
+              <div v-for="producto in filteredProductos" :key="producto?.id" class="bg-white shadow-md p-6 hover:shadow-lg transition-shadow border rounded-3 border-danger">
                 <div class="flex justify-between items-start mb-4">
                   <h2 class="text-xl font-semibold text-gray-800">{{ producto?.nombre }}</h2>
                   <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
@@ -282,7 +283,7 @@ onMounted(() => {
               </div>
             </div>
           </div>
-          <PrincipalModal />
+          <PrincipalModal :handleData="loadData" :isLoadingImport="isLoading" />
         </div>
       </div>
     </div>

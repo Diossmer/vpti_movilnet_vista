@@ -13,7 +13,6 @@ import PdfModalPerifericos from '@/components/modales/inventario/perifericos/Pdf
 import EliminarModalPerifericos from '@/components/modales/inventario/perifericos/EliminarModalPerifericos.vue';
 import DispositivoComponents from '@/components/DispositivoComponents.vue';
 import AgregarModalSinPerifericos from '@/components/modales/inventario/sinperiferico/AgregarModalSinPerifericos.vue';
-import EditarModalSinPerifericos from '@/components/modales/inventario/sinperiferico/EditarModalSinPerifericos.vue';
 const store = useLoginStore()
 const { dataPerfil } = storeToRefs(store)
 
@@ -349,7 +348,6 @@ onMounted(async()=>{await handleData()})
     <AgregarModalSinPerifericos :handleData="handleData" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
     <EditarModalPerifericos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
-    <EditarModalSinPerifericos :handleData="handleData" :paramsE="paramsE" :relations="relations" :isLoadingImport="isLoadingImport" :response="response" />
 
     <EliminarModalPerifericos :handleData="handleData" :paramsE="paramsE" :isLoadingImport="isLoadingImport" />
 

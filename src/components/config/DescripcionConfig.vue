@@ -99,7 +99,7 @@ const handleData = async (action = null, params = null, id = null) => {
       rowData.value = [];
       col.value = columns([]);
     }
-    relations.value = productos;
+    relations.value = [productos];
     totalOfPage.value = Math.ceil(rowData.value.length / rowsPerPage.value);
   }
 };
