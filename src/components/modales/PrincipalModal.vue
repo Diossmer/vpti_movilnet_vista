@@ -18,14 +18,12 @@ const props = defineProps({
     required: true,
   },
   response: {
-    type: Boolean,
-    default: false,
-    required: true,
+    type: [Object, null], 
+    default: null,
   },
 });
 
 const { dataPerfil } = useLoginStore();
-const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
 const dispositivos = ref(['entrada', 'salida'])
@@ -120,7 +118,7 @@ watch(() => props.response, (newResponse) => {
 </script>
 
 <template>
-  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" ref="modalAgregar">
+  <div class="modal fade" id="staticAgregar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -212,7 +210,7 @@ watch(() => props.response, (newResponse) => {
                         id="codigoInvDesc"
                         type="text" 
                         class="form-control"
-                        :class="{'is-invalid':paramsA.codigo_inv && !/^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv),'is-valid':paramsA.codigo_inv && /^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv)}"
+                        :class="{'is-invalid':paramsA.codigo_inv && !/^[^<>/'`]{3,}[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv),'is-valid':paramsA.codigo_inv && /^[^<>/'`]{3,}[A-Z0-9]{3,8}$/.test(paramsA.codigo_inv)}"
                         v-model="paramsA.codigo_inv" 
                         placeholder="Código de inventario interno" 
                       />

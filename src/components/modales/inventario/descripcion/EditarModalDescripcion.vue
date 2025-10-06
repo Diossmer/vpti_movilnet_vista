@@ -127,7 +127,7 @@ watch(() => props.response, (newResponse) => {
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">codigo_inv</label>
-                      <input type="text" maxlength="15" pattern="^[^<>/'`]{3,}-[A-Z0-9]{3,8}$" class="form-control" :class="{'is-invalid':paramsE.codigo_inv && !/^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv),'is-valid':paramsE.codigo_inv && /^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv)}" v-model="paramsE.codigo_inv" placeholder="PBA-A000123" />
+                      <input type="text" maxlength="15" pattern="^[^<>/'`]{3,}[A-Z0-9]{3,8}$" class="form-control" :class="{'is-invalid':paramsE.codigo_inv && !/^[^<>/'`]{3,}[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv),'is-valid':paramsE.codigo_inv && /^[^<>/'`]{3,}[A-Z0-9]{3,8}$/.test(paramsE.codigo_inv)}" v-model="paramsE.codigo_inv" placeholder="PBA-A000123" />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">productos<span class="text-danger">*</span></label>

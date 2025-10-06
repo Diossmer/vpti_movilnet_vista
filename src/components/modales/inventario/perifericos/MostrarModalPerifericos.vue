@@ -49,7 +49,7 @@ const filteredDescripcion = computed(() => {
                 <p><b>salida: </b>{{ paramsE.salida }}</p>
               </div>
               <div class="col-6">
-                <p><b>descripción: </b>{{ paramsE?.descripcion }}</p>
+                <p><b>observacvión: </b>{{ paramsE?.observacion }}</p>
               </div>
               <hr class="border-2 border-success opacity-75">
               <div class="col-6">
