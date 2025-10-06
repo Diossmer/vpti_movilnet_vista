@@ -47,7 +47,7 @@ watch(() => props.paramsE, (newVal) => {
 watch([() => /* props.paramsE?.cantidad_existente, */
 () => props.paramsE?.entrada,
 () => props.paramsE?.salida,
-() => props.paramsE?.descripcion], ([/* cantidad_existente, */ entrada, salida, descripcion]) => {
+() => props.paramsE?.observacion], ([/* cantidad_existente, */ entrada, salida, observacion]) => {
   const errors = [];
   /* const cantidad_existenteError = validacionesUtils().numberValid(cantidad_existente);
   if (cantidad_existenteError) errors.push(cantidad_existenteError); */
@@ -55,13 +55,13 @@ watch([() => /* props.paramsE?.cantidad_existente, */
   if (entradaError) errors.push(entradaError);
   const salidaError = validacionesUtils().numberValid(salida);
   if (salidaError) errors.push(salidaError);
-  const descripcionError = validacionesUtils().textareaValid(descripcion);
-  if (descripcionError) errors.push(descripcionError);
+  const observacionError = validacionesUtils().textareaValid(observacion);
+  if (observacionError) errors.push(observacionError);
   avisosAlert.value = errors.length > 0 ? { error: errors.join(' | ') } : null;
   if (//(cantidad_existente==='' || cantidad_existente===undefined)
   (entrada==='' || entrada===undefined)
   && (salida==='' || salida===undefined)
-  && (descripcion==='' || descripcion===undefined))
+  && (observacion==='' || observacion===undefined))
   avisosAlert.value = null;
 });
 
@@ -129,8 +129,8 @@ const filtereddescripcion = computed(() => {
                       <input type="text" inputmode="numeric" maxlength="10" pattern="^\d+(^\.\d+)?$" class="form-control" :class="{'is-invalid': paramsE.salida && !/^\d+(^\.\d+)?$/.test(paramsE.salida),'is-valid': paramsE.salida && /^\d+(^\.\d+)?$/.test(paramsE.salida)}" v-model="paramsE.salida" placeholder="Salida"/>
                     </div>
                     <div class="col-12">
-                      <label for="" class="badge text-secondary">descripción</label>
-                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.descripcion && !/^[^<>{}\[\]]+$/.test(paramsE.descripcion), 'is-valid':paramsE.descripcion && /^[^<>{}\[\]]+$/.test(paramsE.descripcion)}" placeholder="Descripción" v-model="paramsE.descripcion"></textarea>
+                      <label for="" class="badge text-secondary">observación</label>
+                      <textarea class="form-control" :class="{ 'is-invalid': paramsE.observacion && !/^[^<>{}\[\]]+$/.test(paramsE.observacion), 'is-valid':paramsE.observacion && /^[^<>{}\[\]]+$/.test(paramsE.observacion)}" placeholder="Descripción" v-model="paramsE.observacion"></textarea>
                     </div>
                     <AlertComponents :avisos="avisos" :avisosAlert="avisosAlert"/>
                   </div>

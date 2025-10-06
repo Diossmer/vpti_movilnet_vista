@@ -207,7 +207,7 @@ onMounted(async()=>{await handleData()})
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">
-        <div class="w-100 d-flex justify-content-end" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
+        <div class="w-100 d-flex justify-content-end" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 4">
           <a type="button" class="btn btn-outline-secondary text-red" title="Agregar" data-bs-toggle="modal" data-bs-target="#staticAgregar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" style="width: 15px; height: 20px;">
               <path fill="currentcolor" d="M64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80zM0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96zM200 344l0-64-64 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l64 0 0-64c0-13.3 10.7-24 24-24s24 10.7 24 24l0 64 64 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-64 0 0 64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/>
@@ -220,7 +220,7 @@ onMounted(async()=>{await handleData()})
                 <input type="text" class="form-control" v-model="globalSearchQuery" placeholder="Buscar globalmente...">
               </div>
               <div class="row d-flex justify-content-between">
-                <div class="col-6 btn-group" v-if=" dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
+                <div class="col-6 btn-group" v-if="dataPerfil.rol?.id !== 4">
                   <div class="dropdown" v-if="dataPerfil.rol?.id !== 2 && dataPerfil.rol?.id !== 3">
                     <button class="btn btn-outline-secondary dropdown-toggle text-danger" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                       <i class="bi bi-trash"></i>
@@ -231,11 +231,11 @@ onMounted(async()=>{await handleData()})
                       <li><button class="dropdown-item" type="button" @click="(e)=>manejadorEliminar('individual')" :disabled="selectedRows.length === 0">Seleccionados ({{ selectedRows.length }})</button></li>
                     </ul>
                   </div>
-                  <div class="dropdown" v-if="dataPerfil.rol?.id !== 3 && dataPerfil.rol?.id !== 4">
+                  <div class="dropdown" v-if="dataPerfil.rol?.id !== 4">
                     <button class="btn btn-outline-secondary text-red dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">📁Archivos</button>
                     <ul class="dropdown-menu">
                       <li v-if="dataPerfil.rol?.id !== 3"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticPDF"><i class="bi bi-file-pdf"></i> PDF</button></li>
-                      <li v-if="dataPerfil.rol?.id !== 3"><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','evaluaciones')"><i class="bi bi-upload"></i> Exportar</button></li>
+                      <li><button class="dropdown-item" type="button" @click="fileData(rowData,'exportAll','evaluaciones')"><i class="bi bi-upload"></i> Exportar</button></li>
                       <li v-if="dataPerfil.rol?.id !== 2"><button class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#staticImportar"><i class="bi bi-download"></i> Importar</button></li>
                     </ul>
                   </div>

@@ -84,8 +84,8 @@ const includedModulesConfi = ref(['estatus', 'roles', 'productos', 'descripcione
               <span class="fs-5"><i class="bi bi-calendar2-event"></i> Inventario</span>
               <ul class="panel_nav_ul">
                 <li class="panel_nav_li" v-for="(modulo,index) in includedModulesInven" :key="index">
-                  <RouterLink :to="modulo" class=""
-                    v-if="!(modulo ==='evaluaciones' && dataPerfil?.rol?.id === 3)">
+                  <RouterLink :to="modulo" class="">
+                    <!-- v-if="!(modulo ==='evaluaciones' && dataPerfil?.rol?.id === 3)"> -->
                     <i class="bi bi-box-seam" v-if="modulo ==='despachos'"></i>
                     <!-- <i class="bi bi-box2" v-if="modulo ==='sin-perifericos'"></i> -->
                     <i class="bi bi-geo-fill" v-if="modulo ==='ubicaciones'"></i>
