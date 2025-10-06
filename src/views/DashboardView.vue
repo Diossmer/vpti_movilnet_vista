@@ -170,6 +170,7 @@ onMounted(() => {
                     Cantidad de productos: <b>{{ producto?.descripciones?.length }}</b>
                   </span>
                 </div>
+                <p class="fw-bolder text-red font-semibold text-gray-800 px-2">Responsable usuario:</p>
                 <div class="row ps-3 mb-4 pt-2">
                     <p class="col-6">nombre <strong class="text-red-600">{{ producto?.usuario?.nombre || 'Sin nombre' }}</strong></p> 
                     <p class="col-6">apellido <strong class="text-red-600">{{ producto?.usuario.apellido || 'Sin apellido' }}</strong></p> 
@@ -199,20 +200,20 @@ onMounted(() => {
                       <div class="row ps-3" v-if="descripcion?.asignaciones && descripcion.asignaciones?.length > 0">
                           <div v-for="(asignacion, asigIndex) in descripcion?.asignaciones" 
                               :key="`asig-${producto?.id}-${descIndex}-${asigIndex}`" 
-                              class="col-6 border-bottom border-secondary-subtle py-2">
+                              class="col-12 border-bottom border-secondary-subtle py-2">
                               <p class="fw-bold">Asignación #{{ asigIndex + 1 }}</p>
                               <p class="col-6">fecha asignar <strong class="text-red-600">{{ asignacion?.fecha_asignar || 'sin asignación' }}</strong></p>
                               <p class="col-6">fecha_devolucion <strong class="text-red-600">{{ asignacion?.fecha_devolucion || "Sin devolución" }}</strong></p>
-                              <p class="col-6">destino <strong class="text-red-600">{{ asignacion?.destino || 'sin destino' }}</strong></p>
-                              <p class="col-6">Estado <strong class="text-red-600">{{ asignacion.estatus?.nombre || 'sin estado' }}</strong></p>
+                              <p class="col-12">destino <strong class="text-red-600">{{ asignacion?.destino || 'sin destino' }}</strong></p>
+                              <p class="col-12">Estado <strong class="text-red-600">{{ asignacion.estatus?.nombre || 'sin estado' }}</strong></p>
                               <p class="fw-bold text-red-600 mt-2">Usuario Asignado:</p>
-                              <p class="col-6">nombre <strong class="text-red-600">{{ asignacion.usuario?.nombre || 'sin nombre' }}</strong></p>
-                              <p class="col-6">apellido <strong class="text-red-600">{{ asignacion.usuario?.apellido || 'sin apellido' }}</strong></p>
-                              <p class="col-6">cedula <strong class="text-red-600">{{ asignacion.usuario?.cedula || 'sin cedula'}}</strong></p>
-                              <p class="col-6">usuario <strong class="text-red-600">{{ asignacion.usuario?.usuario || 'sin usuario' }}</strong></p>
-                              <p class="col-6">correo <strong class="text-red-600">{{ asignacion.usuario?.correo || 'sin correo' }}</strong></p>
-                              <p class="col-6">teléfono celular <strong class="text-red-600">{{ asignacion.usuario?.telefono_celular || 'sin asignación' }}</strong></p>
-                              <p class="col-6">teléfono alternativo <strong class="text-red-600">{{ asignacion.usuario?.telefono_alternativo || 'sin asignación' }}</strong></p>
+                              <p class="col-12">nombre <strong class="text-red-600">{{ asignacion.usuario?.nombre || 'sin nombre' }}</strong></p>
+                              <p class="col-12">apellido <strong class="text-red-600">{{ asignacion.usuario?.apellido || 'sin apellido' }}</strong></p>
+                              <p class="col-12">cedula <strong class="text-red-600">{{ asignacion.usuario?.cedula || 'sin cedula'}}</strong></p>
+                              <p class="col-12">usuario <strong class="text-red-600">{{ asignacion.usuario?.usuario || 'sin usuario' }}</strong></p>
+                              <p class="col-12">correo <strong class="text-red-600">{{ asignacion.usuario?.correo || 'sin correo' }}</strong></p>
+                              <p class="col-12">teléfono celular <strong class="text-red-600">{{ asignacion.usuario?.telefono_celular || 'sin asignación' }}</strong></p>
+                              <p class="col-12">teléfono alternativo <strong class="text-red-600">{{ asignacion.usuario?.telefono_alternativo || 'sin asignación' }}</strong></p>
                           </div>
                       </div>
                       <p class="col-12 mt-1" v-else><strong class="text-red-600">No hay datos de Asignación.</strong></p>
@@ -224,12 +225,12 @@ onMounted(() => {
                           <div v-for="(ubicacion, ubiIndex) in descripcion.ubicaciones" 
                               :key="`ubi-${producto?.id}-${descIndex}-${ubiIndex}`" 
                               class="col-6 border-bottom border-secondary-subtle py-2">
-                            <p class="col-6">origen <strong class="text-red-600">{{ ubicacion?.origen || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">destino <strong class="text-red-600">{{ ubicacion?.destino || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">piso <strong class="text-red-600">{{ ubicacion?.piso || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">region <strong class="text-red-600">{{ ubicacion?.region || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">estado <strong class="text-red-600">{{ ubicacion?.estado || 'sin ubicación' }}</strong></p>
-                            <p class="col-6">capital <strong class="text-red-600">{{ ubicacion?.capital || 'sin ubicación' }}</strong></p>
+                            <p class="col-12">origen <strong class="text-red-600">{{ ubicacion?.origen || 'sin ubicación' }}</strong></p>
+                            <p class="col-12">destino <strong class="text-red-600">{{ ubicacion?.destino || 'sin ubicación' }}</strong></p>
+                            <p class="col-12">piso <strong class="text-red-600">{{ ubicacion?.piso || 'sin ubicación' }}</strong></p>
+                            <p class="col-12">region <strong class="text-red-600">{{ ubicacion?.region || 'sin ubicación' }}</strong></p>
+                            <p class="col-12">estado <strong class="text-red-600">{{ ubicacion?.estado || 'sin ubicación' }}</strong></p>
+                            <p class="col-12">capital <strong class="text-red-600">{{ ubicacion?.capital || 'sin ubicación' }}</strong></p>
                           </div>
                       </div>
                       <p class="col-12 mt-1" v-else><strong class="text-red-600">No hay datos de Ubicación.</strong></p>
@@ -244,8 +245,8 @@ onMounted(() => {
                               <div v-for="(periferico, periIndex) in descripcion.perifericos" 
                                   :key="`peri-${producto?.id}-${descIndex}-${periIndex}`" 
                                   class="col-12 border-bottom border-secondary-subtle py-2">
-                                  <p class="col-6">Entrada <strong class="text-red-600">{{ periferico?.entrada || "Sin entrada" }}</strong></p>
-                                  <p class="col-6">Salida <strong class="text-red-600">{{ periferico?.salida || 'sin salida' }}</strong></p>
+                                  <p class="col-12">Entrada <strong class="text-red-600">{{ periferico?.entrada || "Sin entrada" }}</strong></p>
+                                  <p class="col-12">Salida <strong class="text-red-600">{{ periferico?.salida || 'sin salida' }}</strong></p>
                                   <p class="col-12">Estado <strong class="text-red-600">{{ periferico.estatus?.nombre || 'sin estado' }}</strong></p>
                               </div>
                           </div>
@@ -259,9 +260,9 @@ onMounted(() => {
                               <div v-for="(evaluacion, invIndex) in descripcion.evaluaciones" 
                                   :key="`inv-${producto?.id}-${descIndex}-${invIndex}`" 
                                   class="col-12 border-bottom border-secondary-subtle py-2">
-                                  <p class="col-6">Escala <strong class="text-red-600">{{ evaluacion?.escala || "Sin escala" }}</strong></p>
+                                  <p class="col-12">Escala <strong class="text-red-600">{{ evaluacion?.escala || "Sin escala" }}</strong></p>
                                   <p class="col-12">Sistema operativo(compatibilidad) <strong class="text-red-600">{{ evaluacion?.compatibilidad || "Sin compatibilidad" }}</strong></p>
-                                  <p class="col-6">Reemplazo <strong class="text-red-600">{{ evaluacion?.reemplazo || 'sin reemplazo' }}</strong></p>
+                                  <p class="col-12">Reemplazo <strong class="text-red-600">{{ evaluacion?.reemplazo || 'sin reemplazo' }}</strong></p>
                                   <p class="col-12">Mantenimiento <strong class="text-red-600">{{ evaluacion?.mantenimiento || 'sin mantenimiento' }}</strong></p>
                               </div>
                           </div>
