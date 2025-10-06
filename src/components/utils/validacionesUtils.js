@@ -91,10 +91,10 @@ export function validacionesUtils() {
   };
 
   const skuValid = (params) => {
-    const skuRegex = /^[^<>/'`]{3,}-[A-Z0-9]{3,8}$/;
+    const skuRegex = /^[^<>/'`]{3,}[A-Z0-9]{3,8}$/;
     return skuRegex.test(params)
       ? "✅Correcto."
-      : "❌No se permiten los caracteres < > / ' `. Debe tener un guion (-), con 3 a 8 letras o números en mayúsculas después.";
+      : "❌No se permiten los caracteres < > / ' `., con 3 a 8 letras o números en mayúsculas después.";
   };
 
   const phoneValid = (params) => {
