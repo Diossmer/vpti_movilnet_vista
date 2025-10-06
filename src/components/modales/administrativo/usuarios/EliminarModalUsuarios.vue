@@ -43,7 +43,7 @@ const avisosAlert = ref(null);
               <div class="row">
                 <div class="col-12 text-center">
                   <p class="text-dark badge fs-6">
-                    ¿Estas seguro <span class="text-secondary">{{dataPerfil.usuario}}</span> que quieres eliminar <span class="text-red">{{paramsE.nombre}}</span>?
+                    ¿Estas seguro <span class="text-secondary">{{dataPerfil?.usuario}}</span> que quieres eliminar <span class="text-red">{{paramsE.nombre}}</span>?
                   </p>
                 </div>
               </div>
