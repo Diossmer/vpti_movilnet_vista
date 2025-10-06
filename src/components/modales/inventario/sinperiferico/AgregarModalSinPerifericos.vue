@@ -31,13 +31,15 @@ const { dataPerfil } = storeToRefs(useLoginStore());
 const modalAgregar = ref(null);
 const avisos = ref(null);
 const avisosAlert = ref(null);
-const paramsA = ref({
+const INITIAL_PARAMS = {
   producto_id: [],
   descripcion_id: [],
-});
-
+  seleccion: null,
+};
+const paramsA = ref({ ...INITIAL_PARAMS });
 const resetParams = () => {
-  paramsA.value = null;
+  // Reinicia a una COPIA del objeto inicial, no a null
+  paramsA.value = { ...INITIAL_PARAMS }; 
   avisos.value = null;
   avisosAlert.value = null;
 };
@@ -92,7 +94,7 @@ const filtereddescripcion = computed(() => {
               <form @submit.prevent="handleData('create', paramsA)">
                 <div class="modal-body">
                   <div class="row">
-                    <span class="text-red">cantidad seleccionada: <b>{{ paramsA.descripcion_id.length }}</b></span>
+                    <span class="text-red">cantidad seleccionada: <b>{{ paramsA?.descripcion_id?.length }}</b></span>
                     <div class="col-12">
                       <label for="" class="badge text-secondary">Descripción del productos<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.descripcion_id" multiple required>
@@ -103,7 +105,7 @@ const filtereddescripcion = computed(() => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">estatus<span class="text-danger">*</span></label>
                       <select class="form-select" v-model="paramsA.estatus_id" required>
-                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus.nombre }}</option>
+                        <option v-for="(estatus, index) in relations[0]" :key="index" :value="estatus.id">{{ estatus?.nombre }}</option>
                       </select>
                     </div>
                     <!-- <div class="col-4">

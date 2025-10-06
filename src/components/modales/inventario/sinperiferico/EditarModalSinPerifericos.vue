@@ -28,9 +28,8 @@ const props = defineProps({
     required: true,
   },
   response: {
-    type: Object,
+    type: [Object, null], 
     default: null,
-    required: false,
   },
 });
 
