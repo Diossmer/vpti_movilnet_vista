@@ -144,8 +144,8 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">sistema operativo(compatibilidad)</label>
                       <!-- 5. USAMOS formData.compatibilidad para el v-model y las validaciones -->
-                      <input type="text" v-if="dataPerfil?.rol?.id === 2" disabled disabledmaxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad),'is-valid': formData.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad)}" v-model="formData.compatibilidad" placeholder="Compatibilidad"  />
-                      <input type="text" v-else maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': formData.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad),'is-valid': formData.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(formData.compatibilidad)}" v-model="formData.compatibilidad" placeholder="Compatibilidad"  />
+                      <input type="text" v-if="dataPerfil?.rol?.id === 2" disabled disabledmaxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$" class="form-control" :class="{'is-invalid': formData.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$/.test(formData.compatibilidad),'is-valid': formData.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$/.test(formData.compatibilidad)}" v-model="formData.compatibilidad" placeholder="Compatibilidad"  />
+                      <input type="text" v-else maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$" class="form-control" :class="{'is-invalid': formData.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$/.test(formData.compatibilidad),'is-valid': formData.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$/.test(formData.compatibilidad)}" v-model="formData.compatibilidad" placeholder="Compatibilidad"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">reemplazo</label>

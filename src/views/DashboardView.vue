@@ -136,7 +136,7 @@ onMounted(() => {
   <div>
     <button @click="goBack" class="btn btn-outline-red-m btn-lg"><i class="bi bi-arrow-left-circle"></i> Regresar</button>
     <span class="badge fs-1"><i class="bi bi-search mr-3"></i> Buscador De Inventario</span>
-    <button class="btn btn-outline-red-m btn-lg" data-bs-toggle="modal" data-bs-target="#staticAgregar"><i class="bi bi-circle"></i> Registrar</button>
+    <button class="btn btn-outline-red-m btn-lg" data-bs-toggle="modal" data-bs-target="#staticAgregar" v-if="dataPerfil?.rol?.id == 1 || dataPerfil?.rol?.id == 3"><i class="bi bi-circle"></i> Registrar</button>
     <hr class="border-5 border-red-m opacity-75">
     <div class="card w-100">
       <div class="card-body p-5">

@@ -116,7 +116,7 @@ watch(() => props.response, (newResponse) => {
                     <div class="col-4">
                       <label for="" class="badge text-secondary">sistema operativo(compatibilidad)</label>
                       <!-- Regex corrected to escape special characters -->
-                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$" class="form-control" :class="{'is-invalid': paramsA.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.compatibilidad),'is-valid': paramsA.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*]+$/.test(paramsA.compatibilidad)}" v-model="paramsA.compatibilidad" placeholder="Compatibilidad"  />
+                      <input type="text" maxlength="25" pattern="^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$" class="form-control" :class="{'is-invalid': paramsA.compatibilidad && !/^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$/.test(paramsA.compatibilidad),'is-valid': paramsA.compatibilidad && /^[A-Za-zÁ-Úá-úñÑ\s\(\)\+\*\d]+$/.test(paramsA.compatibilidad)}" v-model="paramsA.compatibilidad" placeholder="Compatibilidad"  />
                     </div>
                     <div class="col-4">
                       <label for="" class="badge text-secondary">reemplazo</label>
